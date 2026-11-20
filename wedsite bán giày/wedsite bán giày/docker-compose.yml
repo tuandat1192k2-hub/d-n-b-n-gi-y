@@ -1,0 +1,14 @@
+services:
+  swoosh-store:
+    build: .
+    container_name: swoosh-store
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - SWOOSH_HOST=0.0.0.0
+      - SWOOSH_COOKIE_SECURE=0 # Đổi thành 1 khi chạy với domain HTTPS công khai
+      - TRUST_PROXY=1
+    volumes:
+      - ./data:/app/data

@@ -1,0 +1,765 @@
+[
+ {
+  "stt": 1,
+  "name": "Đăng ký tài khoản khách hàng",
+  "owner": "Đỗ Thế Anh",
+  "sql": "BEGIN TRAN;\nIF EXISTS (SELECT 1 FROM users WHERE email = @email OR phone_number = @phone_number)\nBEGIN ROLLBACK; THROW 50001, N'Email hoặc số điện thoại đã tồn tại', 1; END;\n\nINSERT INTO users (email, phone_number, password_hash, full_name)\nVALUES (@email, @phone_number, @password_hash, @full_name);\n\nDECLARE @new_user_id INT = SCOPE_IDENTITY();\n\nINSERT INTO user_verifications (user_id, [type], code, expires_at)\nVALUES (@new_user_id, 'EMAIL', @code, DATEADD(MINUTE, 15, GETDATE()));\nCOMMIT;",
+  "note": null
+ },
+ {
+  "stt": 2,
+  "name": "Đăng nhập bằng email",
+  "owner": "Đoàn Đức Việt Anh",
+  "sql": "SELECT user_id, full_name, avatar_url, password_hash, status\nFROM users\nWHERE email = @email AND status = 'ACTIVE';\n-- So khớp password_hash ở tầng ứng dụng",
+  "note": null
+ },
+ {
+  "stt": 3,
+  "name": "Đăng nhập bằng số điện thoại",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "SELECT user_id, full_name, avatar_url, password_hash, status\nFROM users\nWHERE phone_number = @phone_number AND status = 'ACTIVE';",
+  "note": null
+ },
+ {
+  "stt": 4,
+  "name": "Đăng xuất tài khoản",
+  "owner": "Dương Minh Hiếu",
+  "sql": "-- Phiên đăng nhập (JWT/session) quản lý ở tầng ứng dụng; chỉ ghi vết khi là nhân viên\nINSERT INTO staff_audit_logs (staff_id, action, target_table, target_id, description)\nSELECT ur.user_id, 'LOGOUT', 'users', ur.user_id, N'Đăng xuất hệ thống'\nFROM user_roles ur\nWHERE ur.user_id = @user_id;\n\nUPDATE users SET updated_at = GETDATE() WHERE user_id = @user_id;",
+  "note": "Schema không có bảng session; đăng xuất xử lý ở app, SQL chỉ ghi log cho nhân viên."
+ },
+ {
+  "stt": 5,
+  "name": "Xác thực tài khoản bằng email",
+  "owner": "Bùi Quang Trường",
+  "sql": "UPDATE user_verifications\nSET is_verified = 1\nWHERE user_id = @user_id AND [type] = 'EMAIL'\n  AND code = @code AND is_verified = 0 AND expires_at > GETDATE();\n\nIF @@ROWCOUNT > 0\n    UPDATE users SET status = 'ACTIVE', updated_at = GETDATE() WHERE user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 6,
+  "name": "Xác thực số điện thoại bằng OTP",
+  "owner": "Đoàn Đức Việt Anh",
+  "sql": "-- Gửi OTP\nINSERT INTO user_verifications (user_id, [type], code, expires_at)\nVALUES (@user_id, 'PHONE', @otp_code, DATEADD(MINUTE, 5, GETDATE()));\n\n-- Kiểm tra OTP\nUPDATE user_verifications\nSET is_verified = 1\nWHERE verification_id = (\n    SELECT TOP 1 verification_id FROM user_verifications\n    WHERE user_id = @user_id AND [type] = 'PHONE' AND code = @otp_code\n      AND is_verified = 0 AND expires_at > GETDATE()\n    ORDER BY verification_id DESC);",
+  "note": null
+ },
+ {
+  "stt": 7,
+  "name": "Quên mật khẩu",
+  "owner": "Đỗ Thế Anh",
+  "sql": "DECLARE @uid INT = (SELECT user_id FROM users WHERE email = @email AND status = 'ACTIVE');\n\nIF @uid IS NOT NULL\n    INSERT INTO user_verifications (user_id, [type], code, expires_at)\n    VALUES (@uid, 'RECOVERY', @recovery_code, DATEADD(MINUTE, 15, GETDATE()));",
+  "note": null
+ },
+ {
+  "stt": 8,
+  "name": "Đặt lại mật khẩu",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "BEGIN TRAN;\nDECLARE @vid INT = (\n    SELECT TOP 1 v.verification_id\n    FROM user_verifications v JOIN users u ON u.user_id = v.user_id\n    WHERE u.email = @email AND v.[type] = 'RECOVERY' AND v.code = @recovery_code\n      AND v.is_verified = 0 AND v.expires_at > GETDATE()\n    ORDER BY v.verification_id DESC);\n\nIF @vid IS NULL BEGIN ROLLBACK; THROW 50002, N'Mã không hợp lệ hoặc đã hết hạn', 1; END;\n\nUPDATE users SET password_hash = @new_password_hash, updated_at = GETDATE() WHERE email = @email;\nUPDATE user_verifications SET is_verified = 1 WHERE verification_id = @vid;\nCOMMIT;",
+  "note": null
+ },
+ {
+  "stt": 9,
+  "name": "Thay đổi mật khẩu",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "-- Lấy hash cũ để ứng dụng đối chiếu\nSELECT password_hash FROM users WHERE user_id = @user_id;\n\n-- Sau khi đối chiếu đúng mật khẩu cũ\nUPDATE users\nSET password_hash = @new_password_hash, updated_at = GETDATE()\nWHERE user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 10,
+  "name": "Xem thông tin tài khoản",
+  "owner": "Đoàn Đức Việt Anh",
+  "sql": "SELECT user_id, email, phone_number, full_name, avatar_url, status, created_at, updated_at\nFROM users\nWHERE user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 11,
+  "name": "Cập nhật thông tin cá nhân",
+  "owner": "Đỗ Thế Anh",
+  "sql": "UPDATE users\nSET full_name = @full_name,\n    email = @email,\n    phone_number = @phone_number,\n    updated_at = GETDATE()\nWHERE user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 12,
+  "name": "Cập nhật ảnh đại diện",
+  "owner": "Dương Minh Hiếu",
+  "sql": "UPDATE users\nSET avatar_url = @avatar_url, updated_at = GETDATE()\nWHERE user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 13,
+  "name": "Quản lý địa chỉ giao hàng",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "SELECT address_id, recipient_name, phone, province, district, ward, detailed_address, is_default\nFROM shipping_addresses\nWHERE user_id = @user_id\nORDER BY is_default DESC, address_id DESC;",
+  "note": null
+ },
+ {
+  "stt": 14,
+  "name": "Thêm địa chỉ giao hàng",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "BEGIN TRAN;\nIF @is_default = 1\n    UPDATE shipping_addresses SET is_default = 0 WHERE user_id = @user_id;\n\nINSERT INTO shipping_addresses (user_id, recipient_name, phone, province, district, ward, detailed_address, is_default)\nVALUES (@user_id, @recipient_name, @phone, @province, @district, @ward, @detailed_address, @is_default);\nCOMMIT;",
+  "note": null
+ },
+ {
+  "stt": 15,
+  "name": "Chỉnh sửa địa chỉ giao hàng",
+  "owner": "Đỗ Thế Anh",
+  "sql": "UPDATE shipping_addresses\nSET recipient_name = @recipient_name, phone = @phone, province = @province,\n    district = @district, ward = @ward, detailed_address = @detailed_address\nWHERE address_id = @address_id AND user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 16,
+  "name": "Xóa địa chỉ giao hàng",
+  "owner": "Bùi Quang Trường",
+  "sql": "DELETE FROM shipping_addresses\nWHERE address_id = @address_id AND user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 17,
+  "name": "Thiết lập địa chỉ giao hàng mặc định",
+  "owner": "Dương Minh Hiếu",
+  "sql": "UPDATE shipping_addresses\nSET is_default = CASE WHEN address_id = @address_id THEN 1 ELSE 0 END\nWHERE user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 18,
+  "name": "Xem lịch sử mua hàng",
+  "owner": "Bùi Quang Trường",
+  "sql": "SELECT o.order_id, o.order_code, o.created_at, o.order_status, o.final_amount,\n       COUNT(oi.order_item_id) AS so_dong_san_pham,\n       SUM(oi.quantity)        AS tong_so_doi\nFROM orders o\nLEFT JOIN order_items oi ON oi.order_id = o.order_id\nWHERE o.user_id = @user_id\nGROUP BY o.order_id, o.order_code, o.created_at, o.order_status, o.final_amount\nORDER BY o.created_at DESC;",
+  "note": null
+ },
+ {
+  "stt": 19,
+  "name": "Xem danh sách giày yêu thích",
+  "owner": "Đoàn Đức Việt Anh",
+  "sql": "SELECT w.wishlist_id, rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name,\n       rs.base_price, rs.sale_price, w.created_at\nFROM user_wishlists w\nJOIN running_shoes rs ON rs.shoe_id = w.shoe_id\nJOIN brands b         ON b.brand_id = rs.brand_id\nWHERE w.user_id = @user_id\nORDER BY w.created_at DESC;",
+  "note": null
+ },
+ {
+  "stt": 20,
+  "name": "Xem lịch sử giày đã xem",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "-- Schema hiện chưa có bảng lưu lượt xem. Đề xuất bổ sung:\n-- CREATE TABLE user_view_history (\n--     view_id INT IDENTITY(1,1) PRIMARY KEY,\n--     user_id INT NOT NULL FOREIGN KEY REFERENCES users(user_id) ON DELETE CASCADE,\n--     shoe_id INT NOT NULL FOREIGN KEY REFERENCES running_shoes(shoe_id) ON DELETE CASCADE,\n--     viewed_at DATETIME2 NOT NULL DEFAULT GETDATE());\nSELECT TOP 20 rs.shoe_id, rs.shoe_name, rs.base_price, rs.sale_price, MAX(vh.viewed_at) AS lan_xem_cuoi\nFROM user_view_history vh\nJOIN running_shoes rs ON rs.shoe_id = vh.shoe_id\nWHERE vh.user_id = @user_id\nGROUP BY rs.shoe_id, rs.shoe_name, rs.base_price, rs.sale_price\nORDER BY lan_xem_cuoi DESC;",
+  "note": "CẦN THÊM BẢNG user_view_history (file SQL chưa có)."
+ },
+ {
+  "stt": 21,
+  "name": "Quản lý Phí vận chuyển theo khu vực",
+  "owner": "Dương Minh Hiếu",
+  "sql": "-- Schema chỉ có orders.shipping_fee (chưa có bảng phí theo khu vực). Đề xuất bổ sung:\n-- CREATE TABLE shipping_zones (zone_id INT IDENTITY(1,1) PRIMARY KEY, province NVARCHAR(100) NOT NULL UNIQUE,\n--     base_fee DECIMAL(18,2) NOT NULL, free_ship_threshold DECIMAL(18,2) NULL, is_active BIT DEFAULT 1);\nSELECT zone_id, province, base_fee, free_ship_threshold, is_active FROM shipping_zones;\nINSERT INTO shipping_zones (province, base_fee, free_ship_threshold) VALUES (@province, @base_fee, @free_ship_threshold);\nUPDATE shipping_zones SET base_fee = @base_fee, free_ship_threshold = @free_ship_threshold WHERE zone_id = @zone_id;\nDELETE FROM shipping_zones WHERE zone_id = @zone_id;\n\n-- Dùng dữ liệu hiện có: phí ship đã áp theo từng tỉnh\nSELECT sa.province, AVG(o.shipping_fee) AS phi_ship_trung_binh, COUNT(*) AS so_don\nFROM orders o\nJOIN shipping_addresses sa ON sa.user_id = o.user_id AND sa.is_default = 1\nGROUP BY sa.province;",
+  "note": "CẦN THÊM BẢNG shipping_zones; truy vấn cuối dùng bảng hiện có."
+ },
+ {
+  "stt": 22,
+  "name": "Quản lý Chương trình Flash Sale",
+  "owner": "Đỗ Thế Anh",
+  "sql": "-- Flash Sale dùng running_shoes.sale_price (schema chưa có bảng thời gian Flash Sale)\n-- Xem giày đang sale\nSELECT shoe_id, shoe_code, shoe_name, base_price, sale_price,\n       CAST((base_price - sale_price) * 100.0 / base_price AS DECIMAL(5,2)) AS ty_le_giam\nFROM running_shoes\nWHERE sale_price IS NOT NULL AND sale_price < base_price AND status = 'ACTIVE';\n\n-- Tạo / cập nhật giá sale\nUPDATE running_shoes SET sale_price = @sale_price WHERE shoe_id = @shoe_id AND @sale_price < base_price;\n\n-- Kết thúc sale\nUPDATE running_shoes SET sale_price = NULL WHERE shoe_id = @shoe_id;",
+  "note": "Chưa có bảng lưu khung giờ Flash Sale; nếu cần nên thêm flash_sales(start_time, end_time)."
+ },
+ {
+  "stt": 23,
+  "name": "Quản lý Hạng thành viên & Điểm tích lũy",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "-- Schema chưa có bảng điểm/hạng: tính động từ tổng chi tiêu đơn hoàn tất (10.000đ = 1 điểm)\nSELECT u.user_id, u.full_name,\n       ISNULL(SUM(o.final_amount), 0)                       AS tong_chi_tieu,\n       CAST(ISNULL(SUM(o.final_amount), 0) / 10000 AS INT)  AS diem_tich_luy,\n       CASE WHEN ISNULL(SUM(o.final_amount), 0) >= 20000000 THEN N'Kim cương'\n            WHEN ISNULL(SUM(o.final_amount), 0) >= 10000000 THEN N'Vàng'\n            WHEN ISNULL(SUM(o.final_amount), 0) >= 5000000  THEN N'Bạc'\n            ELSE N'Đồng' END                                AS hang_thanh_vien\nFROM users u\nLEFT JOIN orders o ON o.user_id = u.user_id AND o.order_status = 'COMPLETED'\nGROUP BY u.user_id, u.full_name\nORDER BY tong_chi_tieu DESC;",
+  "note": "Ngưỡng hạng/điểm là giả định, chỉnh theo nghiệp vụ. Muốn lưu thực tế cần thêm bảng membership."
+ },
+ {
+  "stt": 24,
+  "name": "Quản lý Đánh giá & Bình luận sản phẩm",
+  "owner": "Dương Minh Hiếu",
+  "sql": "-- Danh sách đánh giá chờ duyệt\nSELECT r.review_id, rs.shoe_name, u.full_name, r.star_rating, r.running_feeling_comment, r.status, r.created_at\nFROM shoe_reviews r\nJOIN running_shoes rs ON rs.shoe_id = r.shoe_id\nJOIN users u          ON u.user_id = r.user_id\nWHERE r.status = 'PENDING'\nORDER BY r.created_at;\n\n-- Duyệt / từ chối\nUPDATE shoe_reviews SET status = @status WHERE review_id = @review_id;  -- 'APPROVED' | 'REJECTED'\n\n-- Xóa đánh giá\nDELETE FROM shoe_reviews WHERE review_id = @review_id;\n\n-- Khách gửi đánh giá\nINSERT INTO shoe_reviews (shoe_id, user_id, order_id, star_rating, cushion_rating, stability_rating,\n    grip_rating, breathability_rating, fit_true_to_size_rating, forefoot_width_rating, running_feeling_comment, status)\nVALUES (@shoe_id, @user_id, @order_id, @star_rating, @cushion_rating, @stability_rating,\n    @grip_rating, @breathability_rating, @fit_rating, @forefoot_rating, @comment, 'PENDING');",
+  "note": "Lưu ý: shoe_reviews.review_media xóa cascade; xóa review cần quyền quản trị."
+ },
+ {
+  "stt": 25,
+  "name": "Quản lý Danh sách giày yêu thích",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "-- Thêm vào yêu thích\nIF NOT EXISTS (SELECT 1 FROM user_wishlists WHERE user_id = @user_id AND shoe_id = @shoe_id)\n    INSERT INTO user_wishlists (user_id, shoe_id) VALUES (@user_id, @shoe_id);\n\n-- Bỏ yêu thích\nDELETE FROM user_wishlists WHERE user_id = @user_id AND shoe_id = @shoe_id;\n\n-- Thống kê giày được yêu thích nhiều nhất\nSELECT TOP 10 rs.shoe_id, rs.shoe_name, COUNT(*) AS so_luot_thich\nFROM user_wishlists w JOIN running_shoes rs ON rs.shoe_id = w.shoe_id\nGROUP BY rs.shoe_id, rs.shoe_name\nORDER BY so_luot_thich DESC;",
+  "note": null
+ },
+ {
+  "stt": 26,
+  "name": "Quản lý Địa chỉ giao hàng của người dùng",
+  "owner": "Đỗ Thế Anh",
+  "sql": "-- Quản trị xem địa chỉ của mọi khách\nSELECT sa.address_id, u.user_id, u.full_name, u.email, sa.recipient_name, sa.phone,\n       sa.province, sa.district, sa.ward, sa.detailed_address, sa.is_default\nFROM shipping_addresses sa\nJOIN users u ON u.user_id = sa.user_id\nWHERE (@keyword IS NULL OR u.full_name LIKE N'%' + @keyword + N'%' OR u.email LIKE '%' + @keyword + '%')\nORDER BY u.user_id, sa.is_default DESC;\n\nDELETE FROM shipping_addresses WHERE address_id = @address_id;",
+  "note": null
+ },
+ {
+  "stt": 27,
+  "name": "Quản lý Đơn hàng",
+  "owner": "Đoàn Đức Việt Anh",
+  "sql": "-- Danh sách & lọc đơn\nSELECT o.order_id, o.order_code, u.full_name, o.recipient_name, o.recipient_phone,\n       o.final_amount, o.order_status, p.payment_method, p.payment_status, o.created_at\nFROM orders o\nJOIN users u        ON u.user_id = o.user_id\nLEFT JOIN payments p ON p.order_id = o.order_id\nWHERE (@status IS NULL OR o.order_status = @status)\n  AND (@from_date IS NULL OR o.created_at >= @from_date)\n  AND (@to_date   IS NULL OR o.created_at <  DATEADD(DAY, 1, @to_date))\nORDER BY o.created_at DESC;\n\n-- Đổi trạng thái đơn + ghi lịch sử\nBEGIN TRAN;\nDECLARE @old_status NVARCHAR(30) = (SELECT order_status FROM orders WHERE order_id = @order_id);\nUPDATE orders SET order_status = @new_status WHERE order_id = @order_id;\nINSERT INTO order_status_logs (order_id, old_status, new_status, note, changed_by)\nVALUES (@order_id, @old_status, @new_status, @note, @staff_id);\nCOMMIT;",
+  "note": null
+ },
+ {
+  "stt": 28,
+  "name": "Quản lý Tồn kho & Nhập kho giày",
+  "owner": "Bùi Quang Trường",
+  "sql": "-- Tồn kho theo SKU\nSELECT w.warehouse_name, rs.shoe_name, c.color_name, sc.size_eu, v.sku,\n       s.stock_quantity, s.reserved_quantity, s.stock_quantity - s.reserved_quantity AS co_the_ban\nFROM inventory_stocks s\nJOIN warehouses w      ON w.warehouse_id = s.warehouse_id\nJOIN shoe_variants v   ON v.variant_id = s.variant_id\nJOIN running_shoes rs  ON rs.shoe_id = v.shoe_id\nJOIN shoe_colors c     ON c.color_id = v.color_id\nJOIN size_charts sc    ON sc.size_id = v.size_id\nORDER BY rs.shoe_name, sc.size_eu;\n\n-- Nhập kho\nBEGIN TRAN;\nUPDATE inventory_stocks SET stock_quantity = stock_quantity + @qty, updated_at = GETDATE()\nWHERE warehouse_id = @warehouse_id AND variant_id = @variant_id;\nINSERT INTO inventory_transactions (stock_id, [type], quantity, note, created_by)\nSELECT stock_id, 'IMPORT', @qty, @note, @staff_id\nFROM inventory_stocks WHERE warehouse_id = @warehouse_id AND variant_id = @variant_id;\nCOMMIT;\n\n-- Cảnh báo sắp hết hàng\nSELECT v.sku, SUM(s.stock_quantity - s.reserved_quantity) AS con_lai, a.min_threshold\nFROM stock_alerts a\nJOIN shoe_variants v   ON v.variant_id = a.variant_id\nJOIN inventory_stocks s ON s.variant_id = v.variant_id\nWHERE a.is_resolved = 0\nGROUP BY v.sku, a.min_threshold\nHAVING SUM(s.stock_quantity - s.reserved_quantity) <= a.min_threshold;",
+  "note": null
+ },
+ {
+  "stt": 29,
+  "name": "Bộ lọc & Tìm kiếm nâng cao (Lọc theo hãng, size, màu, giá)",
+  "owner": "Dương Minh Hiếu",
+  "sql": "SELECT DISTINCT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name,\n       rs.base_price, rs.sale_price, COALESCE(rs.sale_price, rs.base_price) AS gia_hien_tai\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND (@brand_id IS NULL OR rs.brand_id = @brand_id)\n  AND (@size_id  IS NULL OR EXISTS (SELECT 1 FROM shoe_variants v WHERE v.shoe_id = rs.shoe_id AND v.size_id  = @size_id  AND v.is_active = 1))\n  AND (@color_id IS NULL OR EXISTS (SELECT 1 FROM shoe_variants v WHERE v.shoe_id = rs.shoe_id AND v.color_id = @color_id AND v.is_active = 1))\n  AND COALESCE(rs.sale_price, rs.base_price) BETWEEN ISNULL(@min_price, 0) AND ISNULL(@max_price, 999999999)\n  AND (@keyword IS NULL OR rs.shoe_name LIKE N'%' + @keyword + N'%')\nORDER BY gia_hien_tai;",
+  "note": null
+ },
+ {
+  "stt": 30,
+  "name": "Quản lý Danh mục & Thương hiệu giày",
+  "owner": "Đỗ Thế Anh",
+  "sql": "-- Thương hiệu\nSELECT brand_id, brand_name, logo_url, country FROM brands;\nINSERT INTO brands (brand_name, logo_url, country) VALUES (@brand_name, @logo_url, @country);\nUPDATE brands SET brand_name = @brand_name, logo_url = @logo_url, country = @country WHERE brand_id = @brand_id;\nDELETE FROM brands WHERE brand_id = @brand_id\n  AND NOT EXISTS (SELECT 1 FROM running_shoes WHERE brand_id = @brand_id);\n\n-- Dòng sản phẩm (danh mục)\nSELECT ps.series_id, b.brand_name, ps.series_name, ps.description\nFROM product_series ps JOIN brands b ON b.brand_id = ps.brand_id;\nINSERT INTO product_series (brand_id, series_name, description) VALUES (@brand_id, @series_name, @description);\nUPDATE product_series SET series_name = @series_name, description = @description WHERE series_id = @series_id;\nDELETE FROM product_series WHERE series_id = @series_id\n  AND NOT EXISTS (SELECT 1 FROM running_shoes WHERE series_id = @series_id);",
+  "note": null
+ },
+ {
+  "stt": 31,
+  "name": "Quản lý Bảng quy đổi size giày",
+  "owner": "Nguyễn Đức Tuấn Đạt",
+  "sql": "SELECT size_id, size_eu, size_us, size_cm FROM size_charts ORDER BY size_eu;\nINSERT INTO size_charts (size_eu, size_us, size_cm) VALUES (@size_eu, @size_us, @size_cm);\nUPDATE size_charts SET size_eu = @size_eu, size_us = @size_us, size_cm = @size_cm WHERE size_id = @size_id;\nDELETE FROM size_charts WHERE size_id = @size_id\n  AND NOT EXISTS (SELECT 1 FROM shoe_variants WHERE size_id = @size_id);\n\n-- Gợi ý size theo chiều dài bàn chân (mm), chừa ~10mm\nSELECT TOP 1 size_id, size_eu, size_us, size_cm\nFROM size_charts\nWHERE size_cm * 10 >= @foot_length_mm + 10\nORDER BY size_cm;",
+  "note": null
+ },
+ {
+  "stt": 32,
+  "name": "Tích hợp Cổng thanh toán trực tuyến (VNPay / Momo / ZaloPay)",
+  "owner": "Đoàn Đức Việt Anh",
+  "sql": "-- Tạo giao dịch thanh toán khi đặt hàng\nINSERT INTO payments (order_id, payment_method, payment_status)\nVALUES (@order_id, @payment_method, 'PENDING');  -- 'VNPAY' | 'MOMO' | 'ZALOPAY'\n\n-- Callback từ cổng thanh toán: thành công\nUPDATE payments\nSET payment_status = 'PAID', transaction_code = @transaction_code, paid_at = GETDATE()\nWHERE order_id = @order_id AND payment_status = 'PENDING';\n\nIF @@ROWCOUNT > 0\n    UPDATE orders SET order_status = 'CONFIRMED' WHERE order_id = @order_id AND order_status = 'PENDING';\n\n-- Callback: thất bại\nUPDATE payments SET payment_status = 'FAILED', transaction_code = @transaction_code\nWHERE order_id = @order_id AND payment_status = 'PENDING';",
+  "note": null
+ },
+ {
+  "stt": 33,
+  "name": "Thanh toán & Đối soát giao dịch",
+  "owner": null,
+  "sql": "SELECT p.payment_id, o.order_code, p.payment_method, p.transaction_code, p.payment_status, p.paid_at, o.final_amount\nFROM payments p JOIN orders o ON o.order_id = p.order_id\nWHERE (@method IS NULL OR p.payment_method = @method)\n  AND (@from_date IS NULL OR p.paid_at >= @from_date)\n  AND (@to_date   IS NULL OR p.paid_at <  DATEADD(DAY, 1, @to_date))\nORDER BY p.paid_at DESC;\n\n-- Đối soát: đơn đã thanh toán nhưng chưa có mã giao dịch / số tiền không khớp\nSELECT o.order_code, p.payment_method, p.transaction_code, o.final_amount\nFROM payments p JOIN orders o ON o.order_id = p.order_id\nWHERE p.payment_status = 'PAID' AND (p.transaction_code IS NULL OR p.paid_at IS NULL);\n\n-- Tổng tiền theo cổng\nSELECT payment_method, COUNT(*) AS so_gd, SUM(o.final_amount) AS tong_tien\nFROM payments p JOIN orders o ON o.order_id = p.order_id\nWHERE p.payment_status = 'PAID' GROUP BY payment_method;",
+  "note": null
+ },
+ {
+  "stt": 34,
+  "name": "Hệ thống Gửi thông báo / Email xác nhận đơn hàng",
+  "owner": null,
+  "sql": "-- Schema chưa có bảng hàng đợi thông báo: lấy dữ liệu để gửi mail xác nhận đơn\nSELECT u.email, o.order_code, o.recipient_name, o.shipping_address, o.final_amount,\n       rs.shoe_name, sc.size_eu, c.color_name, oi.quantity, oi.unit_price\nFROM orders o\nJOIN users u          ON u.user_id = o.user_id\nJOIN order_items oi   ON oi.order_id = o.order_id\nJOIN shoe_variants v  ON v.variant_id = oi.variant_id\nJOIN running_shoes rs ON rs.shoe_id = v.shoe_id\nJOIN size_charts sc   ON sc.size_id = v.size_id\nJOIN shoe_colors c    ON c.color_id = v.color_id\nWHERE o.order_id = @order_id;\n\n-- Ghi nhận đã gửi thông báo vào lịch sử trạng thái đơn\nINSERT INTO order_status_logs (order_id, old_status, new_status, note)\nSELECT order_id, order_status, order_status, N'Đã gửi email xác nhận đơn hàng' FROM orders WHERE order_id = @order_id;",
+  "note": "Chưa có bảng notifications; SQL dùng order_status_logs làm nơi ghi vết."
+ },
+ {
+  "stt": 35,
+  "name": "Quản lý Danh sách đơn hàng",
+  "owner": null,
+  "sql": "SELECT o.order_id, o.order_code, u.full_name, o.final_amount, o.order_status, o.created_at,\n       (SELECT SUM(quantity) FROM order_items WHERE order_id = o.order_id) AS tong_so_doi\nFROM orders o JOIN users u ON u.user_id = o.user_id\nWHERE (@status IS NULL OR o.order_status = @status)\n  AND (@keyword IS NULL OR o.order_code LIKE '%' + @keyword + '%' OR o.recipient_phone LIKE '%' + @keyword + '%')\nORDER BY o.created_at DESC\nOFFSET (@page - 1) * @page_size ROWS FETCH NEXT @page_size ROWS ONLY;\n\n-- Chi tiết đơn\nSELECT oi.order_item_id, rs.shoe_name, v.sku, sc.size_eu, c.color_name, oi.quantity, oi.unit_price,\n       oi.quantity * oi.unit_price AS thanh_tien\nFROM order_items oi\nJOIN shoe_variants v  ON v.variant_id = oi.variant_id\nJOIN running_shoes rs ON rs.shoe_id = v.shoe_id\nJOIN size_charts sc   ON sc.size_id = v.size_id\nJOIN shoe_colors c    ON c.color_id = v.color_id\nWHERE oi.order_id = @order_id;",
+  "note": null
+ },
+ {
+  "stt": 36,
+  "name": "Thống kê & Báo cáo doanh thu",
+  "owner": null,
+  "sql": "-- Doanh thu theo ngày (từ bảng thống kê)\nSELECT stat_date, SUM(total_shoes_sold) AS so_doi, SUM(total_revenue) AS doanh_thu\nFROM daily_sales_analytics\nWHERE stat_date BETWEEN @from_date AND @to_date\nGROUP BY stat_date ORDER BY stat_date;\n\n-- Doanh thu theo thương hiệu\nSELECT b.brand_name, SUM(d.total_shoes_sold) AS so_doi, SUM(d.total_revenue) AS doanh_thu\nFROM daily_sales_analytics d JOIN brands b ON b.brand_id = d.brand_id\nWHERE d.stat_date BETWEEN @from_date AND @to_date\nGROUP BY b.brand_name ORDER BY doanh_thu DESC;\n\n-- Doanh thu theo tháng (tính trực tiếp từ đơn hàng)\nSELECT FORMAT(created_at, 'yyyy-MM') AS thang, COUNT(*) AS so_don, SUM(final_amount) AS doanh_thu\nFROM orders\nWHERE order_status IN ('DELIVERED', 'COMPLETED')\nGROUP BY FORMAT(created_at, 'yyyy-MM') ORDER BY thang;",
+  "note": null
+ },
+ {
+  "stt": 37,
+  "name": "Quản lý Chat hỗ trợ trực tuyến / Liên hệ",
+  "owner": null,
+  "sql": "-- Schema chưa có bảng chat; dùng customer_complaints làm kênh liên hệ/hỗ trợ\nSELECT c.complaint_id, u.full_name, u.phone_number, c.complaint_type, c.content, c.status, c.created_at\nFROM customer_complaints c JOIN users u ON u.user_id = c.user_id\nWHERE (@status IS NULL OR c.status = @status)\nORDER BY c.created_at DESC;\n\nINSERT INTO customer_complaints (user_id, shoe_id, order_id, complaint_type, content)\nVALUES (@user_id, @shoe_id, @order_id, @complaint_type, @content);\n\nUPDATE customer_complaints SET status = @status WHERE complaint_id = @complaint_id;",
+  "note": "Chưa có bảng chat realtime; dùng customer_complaints thay thế."
+ },
+ {
+  "stt": 38,
+  "name": "Quản lý Quà tặng & Mã giảm giá nhóm",
+  "owner": null,
+  "sql": "SELECT coupon_id, code, discount_type, discount_value, min_order_value, start_date, end_date, usage_limit\nFROM coupons ORDER BY end_date DESC;\n\nINSERT INTO coupons (code, discount_type, discount_value, min_order_value, start_date, end_date, usage_limit)\nVALUES (@code, @discount_type, @discount_value, @min_order_value, @start_date, @end_date, @usage_limit);\n\nUPDATE coupons SET discount_value = @discount_value, min_order_value = @min_order_value,\n       start_date = @start_date, end_date = @end_date, usage_limit = @usage_limit\nWHERE coupon_id = @coupon_id;\n\nDELETE FROM coupons WHERE coupon_id = @coupon_id;\n\n-- Kiểm tra mã hợp lệ khi áp dụng\nSELECT coupon_id, discount_type, discount_value\nFROM coupons\nWHERE code = @code AND GETDATE() BETWEEN start_date AND end_date\n  AND min_order_value <= @subtotal AND usage_limit > 0;",
+  "note": "Chưa có bảng lưu lượt dùng coupon (usage_limit không tự giảm) và bảng quà tặng."
+ },
+ {
+  "stt": 39,
+  "name": "Quản lý Hình ảnh & Thư viện Media sản phẩm",
+  "owner": null,
+  "sql": "-- Ảnh theo biến thể giày\nSELECT v.variant_id, rs.shoe_name, c.color_name, v.sku, v.image_url\nFROM shoe_variants v\nJOIN running_shoes rs ON rs.shoe_id = v.shoe_id\nJOIN shoe_colors c    ON c.color_id = v.color_id\nWHERE v.shoe_id = @shoe_id;\n\nUPDATE shoe_variants SET image_url = @image_url WHERE variant_id = @variant_id;\n\n-- Ảnh đính kèm đánh giá\nSELECT m.media_id, m.media_url, r.review_id, rs.shoe_name\nFROM review_media m\nJOIN shoe_reviews r   ON r.review_id = m.review_id\nJOIN running_shoes rs ON rs.shoe_id = r.shoe_id;\nINSERT INTO review_media (review_id, media_url) VALUES (@review_id, @media_url);\nDELETE FROM review_media WHERE media_id = @media_id;",
+  "note": null
+ },
+ {
+  "stt": 40,
+  "name": "Quản lý Phí vận chuyển & Đơn vị giao hàng",
+  "owner": null,
+  "sql": "-- Schema chưa có bảng đơn vị vận chuyển/phí; truy vấn trên orders.shipping_fee\nSELECT order_id, order_code, shipping_fee, order_status FROM orders\nWHERE (@status IS NULL OR order_status = @status);\n\nUPDATE orders SET shipping_fee = @shipping_fee, final_amount = subtotal_amount - ISNULL(discount_amount, 0) + @shipping_fee\nWHERE order_id = @order_id AND order_status IN ('PENDING', 'CONFIRMED');\n\n-- Thống kê tổng phí ship\nSELECT CAST(created_at AS DATE) AS ngay, COUNT(*) AS so_don, SUM(shipping_fee) AS tong_phi_ship\nFROM orders GROUP BY CAST(created_at AS DATE) ORDER BY ngay;",
+  "note": "Chưa có bảng carriers/shipping_zones; xem thêm mục 'Phí vận chuyển theo khu vực'."
+ },
+ {
+  "stt": 41,
+  "name": "Quản lý Trạng thái Hoàn tiền & Hủy đơn hàng",
+  "owner": null,
+  "sql": "-- Hủy đơn\nBEGIN TRAN;\nDECLARE @old NVARCHAR(30) = (SELECT order_status FROM orders WHERE order_id = @order_id);\nUPDATE orders SET order_status = 'CANCELLED' WHERE order_id = @order_id AND order_status IN ('PENDING', 'CONFIRMED');\nIF @@ROWCOUNT > 0\n    INSERT INTO order_status_logs (order_id, old_status, new_status, note, changed_by)\n    VALUES (@order_id, @old, 'CANCELLED', @note, @staff_id);\nCOMMIT;\n\n-- Danh sách yêu cầu trả hàng\nSELECT r.return_id, o.order_code, u.full_name, r.reason, r.refund_amount, r.status, r.created_at\nFROM order_returns r\nJOIN orders o ON o.order_id = r.order_id\nJOIN users u  ON u.user_id = r.user_id\nWHERE (@status IS NULL OR r.status = @status);\n\n-- Duyệt / từ chối\nUPDATE order_returns SET status = @status, refund_amount = @refund_amount WHERE return_id = @return_id;\n\n-- Ghi nhận hoàn tiền\nBEGIN TRAN;\nINSERT INTO refund_transactions (return_id, amount, gateway_transaction_id)\nVALUES (@return_id, @amount, @gateway_transaction_id);\nUPDATE order_returns SET status = 'REFUNDED' WHERE return_id = @return_id;\nCOMMIT;",
+  "note": null
+ },
+ {
+  "stt": 42,
+  "name": "Quản lý Nhật ký kiểm toán hệ thống",
+  "owner": null,
+  "sql": "SELECT a.log_id, u.full_name AS nhan_vien, a.action, a.target_table, a.target_id, a.description, a.created_at\nFROM staff_audit_logs a JOIN users u ON u.user_id = a.staff_id\nWHERE (@staff_id IS NULL OR a.staff_id = @staff_id)\n  AND (@action IS NULL OR a.action = @action)\n  AND (@from_date IS NULL OR a.created_at >= @from_date)\n  AND (@to_date   IS NULL OR a.created_at <  DATEADD(DAY, 1, @to_date))\nORDER BY a.created_at DESC;\n\nINSERT INTO staff_audit_logs (staff_id, action, target_table, target_id, description)\nVALUES (@staff_id, @action, @target_table, @target_id, @description);",
+  "note": null
+ },
+ {
+  "stt": 43,
+  "name": "Quản lý Chương trình Giới thiệu bạn bè",
+  "owner": null,
+  "sql": "-- Schema chưa có bảng referral. Đề xuất bổ sung:\n-- CREATE TABLE referrals (referral_id INT IDENTITY(1,1) PRIMARY KEY,\n--     referrer_user_id INT NOT NULL FOREIGN KEY REFERENCES users(user_id),\n--     referred_user_id INT NOT NULL UNIQUE FOREIGN KEY REFERENCES users(user_id),\n--     reward_coupon_id INT NULL FOREIGN KEY REFERENCES coupons(coupon_id),\n--     created_at DATETIME2 NOT NULL DEFAULT GETDATE());\nSELECT r.referral_id, a.full_name AS nguoi_gioi_thieu, b.full_name AS nguoi_duoc_gioi_thieu, r.created_at\nFROM referrals r\nJOIN users a ON a.user_id = r.referrer_user_id\nJOIN users b ON b.user_id = r.referred_user_id;",
+  "note": "CẦN THÊM BẢNG referrals."
+ },
+ {
+  "stt": 44,
+  "name": "Top sản phẩm bán chạy",
+  "owner": null,
+  "sql": "SELECT TOP 10 rs.shoe_id, rs.shoe_name, b.brand_name,\n       SUM(oi.quantity) AS so_doi_ban, SUM(oi.quantity * oi.unit_price) AS doanh_thu\nFROM order_items oi\nJOIN orders o         ON o.order_id = oi.order_id\nJOIN shoe_variants v  ON v.variant_id = oi.variant_id\nJOIN running_shoes rs ON rs.shoe_id = v.shoe_id\nJOIN brands b         ON b.brand_id = rs.brand_id\nWHERE o.order_status IN ('DELIVERED', 'COMPLETED')\n  AND (@from_date IS NULL OR o.created_at >= @from_date)\nGROUP BY rs.shoe_id, rs.shoe_name, b.brand_name\nORDER BY so_doi_ban DESC;",
+  "note": null
+ },
+ {
+  "stt": 45,
+  "name": "Quản lý Chương trình Khách hàng thân thiết & Đổi quà",
+  "owner": null,
+  "sql": "-- Schema chưa có bảng điểm/đổi quà: tính điểm theo chi tiêu, quà quy đổi bằng coupon\nSELECT u.user_id, u.full_name, CAST(SUM(o.final_amount) / 10000 AS INT) AS diem\nFROM users u JOIN orders o ON o.user_id = u.user_id AND o.order_status = 'COMPLETED'\nGROUP BY u.user_id, u.full_name\nHAVING SUM(o.final_amount) / 10000 >= @diem_can_doi;\n\n-- Quà đổi = coupon còn hiệu lực\nSELECT coupon_id, code, discount_type, discount_value, end_date\nFROM coupons WHERE GETDATE() BETWEEN start_date AND end_date;",
+  "note": "Thiếu bảng lưu điểm và lịch sử đổi quà; xem mục Hạng thành viên."
+ },
+ {
+  "stt": 46,
+  "name": "Hệ thống Gợi ý sản phẩm thông minh",
+  "owner": null,
+  "sql": "-- Lưu phiên tư vấn\nINSERT INTO recommendation_sessions (user_id, profile_id, input_weight_kg, selected_distance_id,\n    selected_terrain_id, selected_arch_id, selected_budget_id)\nVALUES (@user_id, @profile_id, @weight_kg, @distance_id, @terrain_id, @arch_id, @budget_id);\nDECLARE @session_id INT = SCOPE_IDENTITY();\n\n-- Chấm điểm theo trọng số recommendation_rules\nSELECT TOP 10 rs.shoe_id, rs.shoe_name, rs.base_price,\n  CAST(r.weight_weight_percent    * CASE WHEN rs.suitable_weight_group_id = wg.weight_group_id THEN 1 ELSE 0 END\n     + r.distance_weight_percent  * CASE WHEN rs.suitable_distance_id = @distance_id THEN 1 ELSE 0 END\n     + r.terrain_weight_percent   * CASE WHEN EXISTS (SELECT 1 FROM shoe_suitable_terrains st\n                                        WHERE st.shoe_id = rs.shoe_id AND st.terrain_id = @terrain_id) THEN 1 ELSE 0 END\n     + r.foot_arch_weight_percent * CASE WHEN rs.suitable_arch_id = @arch_id THEN 1 ELSE 0 END\n     + r.budget_weight_percent    * CASE WHEN COALESCE(rs.sale_price, rs.base_price) BETWEEN br.min_price AND br.max_price THEN 1 ELSE 0 END\n     AS DECIMAL(5,2)) AS match_score\nFROM running_shoes rs\nCROSS JOIN (SELECT TOP 1 * FROM recommendation_rules WHERE is_active = 1 ORDER BY rule_id DESC) r\nCROSS JOIN (SELECT TOP 1 weight_group_id FROM weight_groups WHERE @weight_kg BETWEEN min_weight_kg AND max_weight_kg) wg\nCROSS JOIN (SELECT min_price, max_price FROM budget_ranges WHERE budget_id = @budget_id) br\nWHERE rs.status = 'ACTIVE' AND rs.is_beginner_friendly = 1\nORDER BY match_score DESC;\n\n-- Lưu kết quả\nINSERT INTO recommendation_results (session_id, shoe_id, match_score, rank_position, match_reason_arch)\nVALUES (@session_id, @shoe_id, @match_score, @rank_position, @reason_arch);",
+  "note": null
+ },
+ {
+  "stt": 47,
+  "name": "Quản lý Trang nội dung & Banner Quảng cáo động",
+  "owner": null,
+  "sql": "-- Banner\nSELECT banner_id, title, image_url, target_url, display_order, is_active FROM cms_banners ORDER BY display_order;\nINSERT INTO cms_banners (title, image_url, target_url, display_order) VALUES (@title, @image_url, @target_url, @display_order);\nUPDATE cms_banners SET title = @title, image_url = @image_url, target_url = @target_url,\n       display_order = @display_order, is_active = @is_active WHERE banner_id = @banner_id;\nDELETE FROM cms_banners WHERE banner_id = @banner_id;\n\n-- Trang nội dung (bài viết & hướng dẫn)\nSELECT article_id, title, slug, category, created_at FROM running_articles ORDER BY created_at DESC;\nUPDATE running_articles SET title = @title, content = @content, category = @category WHERE article_id = @article_id;\nUPDATE guidance_contents SET title = @title, content_html = @content_html, updated_at = GETDATE()\nWHERE guide_type = @guide_type;",
+  "note": null
+ },
+ {
+  "stt": 48,
+  "name": "Quản lý Sao lưu & Phục hồi dữ liệu hệ thống",
+  "owner": null,
+  "sql": "-- Sao lưu đầy đủ\nBACKUP DATABASE [BeginnerRunningShoesDB]\nTO DISK = N'D:\\Backup\\BeginnerRunningShoesDB_Full.bak' WITH INIT, COMPRESSION, STATS = 10;\n\n-- Sao lưu chênh lệch\nBACKUP DATABASE [BeginnerRunningShoesDB]\nTO DISK = N'D:\\Backup\\BeginnerRunningShoesDB_Diff.bak' WITH DIFFERENTIAL, COMPRESSION;\n\n-- Phục hồi\nUSE master;\nALTER DATABASE [BeginnerRunningShoesDB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\nRESTORE DATABASE [BeginnerRunningShoesDB]\nFROM DISK = N'D:\\Backup\\BeginnerRunningShoesDB_Full.bak' WITH REPLACE;\nALTER DATABASE [BeginnerRunningShoesDB] SET MULTI_USER;",
+  "note": "Azure SQL Database không hỗ trợ BACKUP/RESTORE thủ công; chỉnh đường dẫn đĩa cho phù hợp."
+ },
+ {
+  "stt": 49,
+  "name": "Quản lý Bảo mật & Chống gian lận đơn hàng",
+  "owner": null,
+  "sql": "-- Khách hủy đơn nhiều lần trong 30 ngày\nSELECT user_id, COUNT(*) AS so_don_huy\nFROM orders WHERE order_status = 'CANCELLED' AND created_at >= DATEADD(DAY, -30, GETDATE())\nGROUP BY user_id HAVING COUNT(*) >= 3;\n\n-- Một số điện thoại nhận hàng dùng bởi nhiều tài khoản\nSELECT recipient_phone, COUNT(DISTINCT user_id) AS so_tai_khoan\nFROM orders GROUP BY recipient_phone HAVING COUNT(DISTINCT user_id) >= 3;\n\n-- Đơn giá trị lớn thanh toán thất bại\nSELECT o.order_code, o.final_amount, p.payment_status\nFROM orders o JOIN payments p ON p.order_id = o.order_id\nWHERE p.payment_status = 'FAILED' AND o.final_amount >= 10000000;\n\n-- Khóa tài khoản nghi vấn\nUPDATE users SET status = 'LOCKED', updated_at = GETDATE() WHERE user_id = @user_id;",
+  "note": null
+ },
+ {
+  "stt": 50,
+  "name": "Quản lý Phản hồi Khách hàng & Hỗ trợ kỹ thuật",
+  "owner": null,
+  "sql": "SELECT c.complaint_id, u.full_name, rs.shoe_name, o.order_code, c.complaint_type, c.content, c.status, c.created_at\nFROM customer_complaints c\nJOIN users u               ON u.user_id = c.user_id\nLEFT JOIN running_shoes rs ON rs.shoe_id = c.shoe_id\nLEFT JOIN orders o         ON o.order_id = c.order_id\nWHERE (@status IS NULL OR c.status = @status)\nORDER BY c.created_at DESC;\n\nUPDATE customer_complaints SET status = @status WHERE complaint_id = @complaint_id;  -- OPEN|PROCESSING|RESOLVED|REJECTED",
+  "note": null
+ },
+ {
+  "stt": 51,
+  "name": "Hệ thống Gửi thông báo đẩy & Tin nhắn SMS",
+  "owner": null,
+  "sql": "-- Schema chưa có bảng thông báo/thiết bị. Truy vấn lấy danh sách nhận SMS\nSELECT u.user_id, u.full_name, u.phone_number\nFROM users u\nWHERE u.status = 'ACTIVE' AND u.phone_number IS NOT NULL\n  AND EXISTS (SELECT 1 FROM orders o WHERE o.user_id = u.user_id AND o.order_status = 'SHIPPING');\n\n-- OTP SMS dùng user_verifications\nINSERT INTO user_verifications (user_id, [type], code, expires_at)\nVALUES (@user_id, 'PHONE', @otp_code, DATEADD(MINUTE, 5, GETDATE()));",
+  "note": "Chưa có bảng notifications/device_tokens; nên thêm nếu cần push."
+ },
+ {
+  "stt": 52,
+  "name": "Quản lý Bộ sưu tập & Chiến dịch Mùa vụ",
+  "owner": null,
+  "sql": "-- Schema chưa có bảng bộ sưu tập. Tạm dùng product_series làm bộ sưu tập, banner làm chiến dịch\nSELECT ps.series_id, ps.series_name, b.brand_name, COUNT(rs.shoe_id) AS so_mau_giay\nFROM product_series ps\nJOIN brands b ON b.brand_id = ps.brand_id\nLEFT JOIN running_shoes rs ON rs.series_id = ps.series_id AND rs.status = 'ACTIVE'\nGROUP BY ps.series_id, ps.series_name, b.brand_name;\n\nSELECT banner_id, title, target_url FROM cms_banners WHERE is_active = 1 ORDER BY display_order;",
+  "note": "Chưa có bảng collections/campaigns."
+ },
+ {
+  "stt": 53,
+  "name": "Lọc giày chạy bộ đường nhựa (Road Running)",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, st.suitability_score\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_suitable_terrains st ON st.shoe_id = rs.shoe_id\nJOIN terrain_types t ON t.terrain_id = st.terrain_id\nWHERE rs.status = 'ACTIVE'\n  AND st.suitability_score >= 3 AND t.terrain_code = 'ROAD'\nORDER BY st.suitability_score DESC, rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 54,
+  "name": "Lọc giày chạy bộ địa hình (Trail Running)",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, st.suitability_score\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_suitable_terrains st ON st.shoe_id = rs.shoe_id\nJOIN terrain_types t ON t.terrain_id = st.terrain_id\nWHERE rs.status = 'ACTIVE'\n  AND st.suitability_score >= 3 AND t.terrain_code = 'TRAIL'\nORDER BY st.suitability_score DESC, rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 55,
+  "name": "Lọc giày chạy bộ trên máy (Treadmill Running)",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, st.suitability_score\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_suitable_terrains st ON st.shoe_id = rs.shoe_id\nJOIN terrain_types t ON t.terrain_id = st.terrain_id\nWHERE rs.status = 'ACTIVE'\n  AND st.suitability_score >= 3 AND t.terrain_code = 'TREADMILL'\nORDER BY st.suitability_score DESC, rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 56,
+  "name": "Lọc giày chạy bộ đa địa hình",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, st.suitability_score\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_suitable_terrains st ON st.shoe_id = rs.shoe_id\nJOIN terrain_types t ON t.terrain_id = st.terrain_id\nWHERE rs.status = 'ACTIVE'\n  AND st.suitability_score >= 3 AND t.terrain_code = 'MIXED'\nORDER BY st.suitability_score DESC, rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 57,
+  "name": "Lọc giày theo độ bám mặt đường",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, t.terrain_name, t.grip_requirement, st.suitability_score\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_suitable_terrains st ON st.shoe_id = rs.shoe_id\nJOIN terrain_types t ON t.terrain_id = st.terrain_id\nWHERE rs.status = 'ACTIVE'\n  AND t.terrain_code = @terrain_code\n  AND st.suitability_score >= @min_score\nORDER BY st.suitability_score DESC;",
+  "note": "Độ bám lấy từ yêu cầu bám của địa hình + điểm phù hợp (suitability_score)."
+ },
+ {
+  "stt": 58,
+  "name": "Lọc giày theo cấu trúc đế ngoài",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, tt.tech_name AS cau_truc_de_ngoai, rs.outsole_durability_score\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_tech_mappings m ON m.shoe_id = rs.shoe_id\nJOIN shoe_technologies tt ON tt.tech_id = m.tech_id\nWHERE rs.status = 'ACTIVE'\n  AND tt.tech_type = 'OUTSOLE'\nORDER BY rs.outsole_durability_score DESC;",
+  "note": null
+ },
+ {
+  "stt": 59,
+  "name": "Lọc giày theo khả năng chống trượt",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, AVG(CAST(r.grip_rating AS DECIMAL(3,2))) AS diem_bam_tb\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_reviews r ON r.shoe_id = rs.shoe_id AND r.status = 'APPROVED' AND r.grip_rating IS NOT NULL\nWHERE rs.status = 'ACTIVE'\nGROUP BY rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nHAVING AVG(CAST(r.grip_rating AS DECIMAL(3,2))) >= @min_grip\nORDER BY diem_bam_tb DESC;",
+  "note": "Dùng điểm grip_rating trung bình từ đánh giá đã duyệt."
+ },
+ {
+  "stt": 60,
+  "name": "Lọc giày theo khả năng chống mài mòn",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.outsole_durability_score\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.outsole_durability_score >= @min_durability\nORDER BY rs.outsole_durability_score DESC;",
+  "note": null
+ },
+ {
+  "stt": 61,
+  "name": "Lọc giày theo khả năng bảo vệ bàn chân",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.midsole_thickness_mm, rs.cushion_level, rs.stability_level\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.midsole_thickness_mm >= @min_midsole_mm\n  AND rs.stability_level IN (N'Stability', N'Motion Control')\nORDER BY rs.midsole_thickness_mm DESC;",
+  "note": "Bảo vệ bàn chân quy đổi từ độ dày đế giữa + mức ổn định."
+ },
+ {
+  "stt": 62,
+  "name": "Lọc giày theo khả năng chống nước",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.waterproof_capability = 1;",
+  "note": null
+ },
+ {
+  "stt": 63,
+  "name": "Lọc giày theo độ linh hoạt của đế",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.midsole_thickness_mm, rs.weight_gram, rs.cushion_level\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.cushion_level = @cushion_level\nORDER BY rs.midsole_thickness_mm ASC, rs.weight_gram ASC;",
+  "note": "Schema chưa có cột độ linh hoạt; dùng đế mỏng/nhẹ + cushion_level (Soft/Medium/Firm) để suy ra."
+ },
+ {
+  "stt": 64,
+  "name": "Chọn kiểu bàn chân bình thường (Normal Arch)",
+  "owner": null,
+  "sql": "-- Thông tin kiểu bàn chân + giày phù hợp\nSELECT a.arch_code, a.arch_name, a.support_feature_needed\nFROM foot_arch_types a WHERE a.arch_code = 'NORMAL_ARCH';\n\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.arch_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND a.arch_code = 'NORMAL_ARCH'\nORDER BY rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 65,
+  "name": "Chọn kiểu bàn chân vòm thấp (Low Arch)",
+  "owner": null,
+  "sql": "-- Thông tin kiểu bàn chân + giày phù hợp\nSELECT a.arch_code, a.arch_name, a.support_feature_needed\nFROM foot_arch_types a WHERE a.arch_code = 'LOW_ARCH';\n\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.arch_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND a.arch_code = 'LOW_ARCH'\nORDER BY rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 66,
+  "name": "Chọn kiểu bàn chân vòm cao (High Arch)",
+  "owner": null,
+  "sql": "-- Thông tin kiểu bàn chân + giày phù hợp\nSELECT a.arch_code, a.arch_name, a.support_feature_needed\nFROM foot_arch_types a WHERE a.arch_code = 'HIGH_ARCH';\n\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.arch_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND a.arch_code = 'HIGH_ARCH'\nORDER BY rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 67,
+  "name": "Chọn kiểu bàn chân bẹt (Flat Feet)",
+  "owner": null,
+  "sql": "-- Thông tin kiểu bàn chân + giày phù hợp\nSELECT a.arch_code, a.arch_name, a.support_feature_needed\nFROM foot_arch_types a WHERE a.arch_code = 'FLAT_FEET';\n\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.arch_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND a.arch_code = 'FLAT_FEET'\nORDER BY rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 68,
+  "name": "Chọn kiểu bàn chân rộng (Wide Feet)",
+  "owner": null,
+  "sql": "-- Thông tin kiểu bàn chân + giày phù hợp\nSELECT a.arch_code, a.arch_name, a.support_feature_needed\nFROM foot_arch_types a WHERE a.arch_code = 'WIDE_FEET';\n\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.arch_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND a.arch_code = 'WIDE_FEET'\nORDER BY rs.base_price;\n\n-- Hoặc theo biến thể bản rộng\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND EXISTS (SELECT 1 FROM shoe_variants v WHERE v.shoe_id = rs.shoe_id AND v.width_option IN (N'Wide', N'Extra Wide'));",
+  "note": null
+ },
+ {
+  "stt": 69,
+  "name": "Chọn kiểu bàn chân hẹp (Narrow Feet)",
+  "owner": null,
+  "sql": "-- Thông tin kiểu bàn chân + giày phù hợp\nSELECT a.arch_code, a.arch_name, a.support_feature_needed\nFROM foot_arch_types a WHERE a.arch_code = 'NARROW_FEET';\n\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.arch_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND a.arch_code = 'NARROW_FEET'\nORDER BY rs.base_price;\n\n-- Hoặc theo biến thể bản hẹp\nSELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND EXISTS (SELECT 1 FROM shoe_variants v WHERE v.shoe_id = rs.shoe_id AND v.width_option = N'Narrow');",
+  "note": null
+ },
+ {
+  "stt": 70,
+  "name": "Chọn kiểu bàn chân có độ bè lớn ở mũi",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price,\n       (SELECT AVG(CAST(forefoot_width_rating AS DECIMAL(3,2))) FROM shoe_reviews WHERE shoe_id = rs.shoe_id AND status = 'APPROVED') AS diem_rong_mui\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND EXISTS (SELECT 1 FROM shoe_variants v WHERE v.shoe_id = rs.shoe_id AND v.width_option IN (N'Wide', N'Extra Wide'));\n\n-- Lưu số đo của khách\nUPDATE runner_foot_measurements SET forefoot_width_type = N'Wide', measured_at = GETDATE() WHERE profile_id = @profile_id;",
+  "note": null
+ },
+ {
+  "stt": 71,
+  "name": "Chọn kiểu bàn chân có gót chân hẹp",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND EXISTS (SELECT 1 FROM shoe_variants v WHERE v.shoe_id = rs.shoe_id AND v.width_option = N'Narrow');\n\n-- Lưu số đo của khách\nUPDATE runner_foot_measurements SET heel_width_type = N'Narrow', measured_at = GETDATE() WHERE profile_id = @profile_id;",
+  "note": null
+ },
+ {
+  "stt": 72,
+  "name": "Xem hướng dẫn xác định kiểu bàn chân",
+  "owner": null,
+  "sql": "SELECT guide_type, title, content_html, updated_at\nFROM guidance_contents\nWHERE guide_type = 'HOW_TO_DETERMINE_ARCH';",
+  "note": null
+ },
+ {
+  "stt": 73,
+  "name": "Xem hướng dẫn kiểm tra độ cao vòm chân",
+  "owner": null,
+  "sql": "SELECT guide_type, title, content_html, updated_at\nFROM guidance_contents\nWHERE guide_type = 'HOW_TO_DETERMINE_ARCH';",
+  "note": "Dùng chung guide_type với mục trên (guide_type UNIQUE). Nếu cần tách, thêm guide mới như HOW_TO_CHECK_ARCH_HEIGHT."
+ },
+ {
+  "stt": 74,
+  "name": "Xem hướng dẫn đo chiều dài bàn chân",
+  "owner": null,
+  "sql": "SELECT guide_type, title, content_html, updated_at\nFROM guidance_contents\nWHERE guide_type = 'HOW_TO_MEASURE_FOOT';",
+  "note": "Dùng chung HOW_TO_MEASURE_FOOT với đo chiều rộng."
+ },
+ {
+  "stt": 75,
+  "name": "Xem hướng dẫn đo chiều rộng bàn chân",
+  "owner": null,
+  "sql": "SELECT guide_type, title, content_html, updated_at\nFROM guidance_contents\nWHERE guide_type = 'HOW_TO_MEASURE_FOOT';",
+  "note": "Dùng chung HOW_TO_MEASURE_FOOT với đo chiều dài."
+ },
+ {
+  "stt": 76,
+  "name": "Lọc giày theo kiểu bàn chân",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.arch_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.suitable_arch_id = @arch_type_id\nORDER BY rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 77,
+  "name": "Lọc giày theo độ rộng mũi giày",
+  "owner": null,
+  "sql": "SELECT DISTINCT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_variants v ON v.shoe_id = rs.shoe_id AND v.is_active = 1\nWHERE rs.status = 'ACTIVE'\n  AND v.width_option = @width_option;\n-- @width_option: Narrow | Standard | Wide | Extra Wide",
+  "note": "Độ rộng lấy từ shoe_variants.width_option."
+ },
+ {
+  "stt": 78,
+  "name": "Lọc giày theo độ rộng thân giày",
+  "owner": null,
+  "sql": "SELECT DISTINCT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_variants v ON v.shoe_id = rs.shoe_id AND v.is_active = 1\nWHERE rs.status = 'ACTIVE'\n  AND v.width_option = @width_option;",
+  "note": "Schema chỉ có width_option chung cho cả giày (không tách mũi/thân)."
+ },
+ {
+  "stt": 79,
+  "name": "Lọc giày theo cấu trúc hỗ trợ vòm chân",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, a.support_feature_needed\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN foot_arch_types a ON a.arch_type_id = rs.suitable_arch_id\nWHERE rs.status = 'ACTIVE'\n  AND a.arch_type_id = @arch_type_id\nORDER BY rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 80,
+  "name": "Lọc giày theo khả năng ổn định bàn chân",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.stability_level\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.stability_level = @stability_level\nORDER BY rs.base_price;\n-- @stability_level: Neutral | Stability | Motion Control",
+  "note": null
+ },
+ {
+  "stt": 81,
+  "name": "Lọc giày theo cấu trúc hỗ trợ gót chân",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, tt.tech_name AS cong_nghe_ho_tro_got\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_tech_mappings m ON m.shoe_id = rs.shoe_id\nJOIN shoe_technologies tt ON tt.tech_id = m.tech_id\nWHERE rs.status = 'ACTIVE'\n  AND tt.tech_type = 'STABILITY'\nORDER BY rs.base_price;",
+  "note": null
+ },
+ {
+  "stt": 82,
+  "name": "Gợi ý giày theo kiểu bàn chân",
+  "owner": null,
+  "sql": "SELECT TOP 10 rs.shoe_id, rs.shoe_name, b.brand_name, rs.base_price, a.arch_name\nFROM runner_foot_measurements m\nJOIN foot_arch_types a  ON a.arch_code = REPLACE(UPPER(m.arch_type), ' ', '_')\nJOIN running_shoes rs   ON rs.suitable_arch_id = a.arch_type_id\nJOIN brands b           ON b.brand_id = rs.brand_id\nWHERE m.profile_id = @profile_id AND rs.status = 'ACTIVE' AND rs.is_beginner_friendly = 1\nORDER BY rs.energy_return_percent DESC, rs.base_price;",
+  "note": "Join qua REPLACE(UPPER(arch_type)) vì arch_type là text tự do (vd 'Flat Feet' -> FLAT_FEET)."
+ },
+ {
+  "stt": 83,
+  "name": "Xem lý do giày phù hợp với kiểu bàn chân",
+  "owner": null,
+  "sql": "SELECT rs.shoe_name, a.arch_name, a.support_feature_needed, rr.match_reason_arch, rr.match_score\nFROM recommendation_results rr\nJOIN running_shoes rs  ON rs.shoe_id = rr.shoe_id\nJOIN recommendation_sessions s ON s.session_id = rr.session_id\nJOIN foot_arch_types a ON a.arch_type_id = s.selected_arch_id\nWHERE rr.session_id = @session_id AND rr.shoe_id = @shoe_id;",
+  "note": null
+ },
+ {
+  "stt": 84,
+  "name": "Lọc giày theo khoảng giá",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, COALESCE(rs.sale_price, rs.base_price) AS gia_hien_tai\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND COALESCE(rs.sale_price, rs.base_price) BETWEEN @min_price AND @max_price\nORDER BY gia_hien_tai;",
+  "note": null
+ },
+ {
+  "stt": 85,
+  "name": "Lọc giày theo giá thấp nhất",
+  "owner": null,
+  "sql": "SELECT TOP (@top) rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, COALESCE(rs.sale_price, rs.base_price) AS gia_hien_tai\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\nORDER BY gia_hien_tai ASC;",
+  "note": null
+ },
+ {
+  "stt": 86,
+  "name": "Lọc giày theo giá cao nhất",
+  "owner": null,
+  "sql": "SELECT TOP (@top) rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, COALESCE(rs.sale_price, rs.base_price) AS gia_hien_tai\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\nORDER BY gia_hien_tai DESC;",
+  "note": null
+ },
+ {
+  "stt": 87,
+  "name": "Lọc giày đang giảm giá",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.base_price - rs.sale_price AS so_tien_giam\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.sale_price IS NOT NULL AND rs.sale_price < rs.base_price\nORDER BY so_tien_giam DESC;",
+  "note": null
+ },
+ {
+  "stt": 88,
+  "name": "Lọc giày theo tỷ lệ giảm giá",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, CAST((rs.base_price - rs.sale_price) * 100.0 / rs.base_price AS DECIMAL(5,2)) AS ty_le_giam\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.sale_price IS NOT NULL AND (rs.base_price - rs.sale_price) * 100.0 / rs.base_price >= @min_discount_percent\nORDER BY ty_le_giam DESC;",
+  "note": null
+ },
+ {
+  "stt": 89,
+  "name": "Gợi ý giày theo ngân sách",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, br.range_label\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nCROSS JOIN budget_ranges br\nWHERE rs.status = 'ACTIVE'\n  AND br.budget_id = @budget_id\n  AND COALESCE(rs.sale_price, rs.base_price) BETWEEN br.min_price AND br.max_price\nORDER BY rs.is_beginner_friendly DESC, COALESCE(rs.sale_price, rs.base_price) DESC;",
+  "note": null
+ },
+ {
+  "stt": 90,
+  "name": "Gợi ý giày có hiệu năng tốt trong ngân sách",
+  "owner": null,
+  "sql": "SELECT TOP 10 rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.energy_return_percent, rs.cushion_level, rs.weight_gram\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nCROSS JOIN budget_ranges br\nWHERE rs.status = 'ACTIVE'\n  AND br.budget_id = @budget_id\n  AND COALESCE(rs.sale_price, rs.base_price) BETWEEN br.min_price AND br.max_price\n  AND rs.energy_return_percent IS NOT NULL\nORDER BY rs.energy_return_percent DESC, rs.weight_gram ASC;",
+  "note": null
+ },
+ {
+  "stt": 91,
+  "name": "Sắp xếp giày theo giá tăng dần",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, COALESCE(rs.sale_price, rs.base_price) AS gia_hien_tai\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\nORDER BY gia_hien_tai ASC;",
+  "note": null
+ },
+ {
+  "stt": 92,
+  "name": "Sắp xếp giày theo giá giảm dần",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, COALESCE(rs.sale_price, rs.base_price) AS gia_hien_tai\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\nORDER BY gia_hien_tai DESC;",
+  "note": null
+ },
+ {
+  "stt": 93,
+  "name": "Tìm kiếm giày theo tên sản phẩm",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.shoe_name LIKE N'%' + @keyword + N'%';",
+  "note": null
+ },
+ {
+  "stt": 94,
+  "name": "Tìm kiếm giày theo thương hiệu",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND b.brand_name LIKE N'%' + @keyword + N'%';",
+  "note": null
+ },
+ {
+  "stt": 95,
+  "name": "Tìm kiếm giày theo mã sản phẩm",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.shoe_code LIKE '%' + @keyword + '%';",
+  "note": null
+ },
+ {
+  "stt": 96,
+  "name": "Tìm kiếm giày theo dòng sản phẩm",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, ps.series_name\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN product_series ps ON ps.series_id = rs.series_id\nWHERE rs.status = 'ACTIVE'\n  AND ps.series_name LIKE N'%' + @keyword + N'%';",
+  "note": null
+ },
+ {
+  "stt": 97,
+  "name": "Tìm kiếm giày theo mục đích sử dụng",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, d.distance_label, d.purpose_type\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN running_distances d ON d.distance_id = rs.suitable_distance_id\nWHERE rs.status = 'ACTIVE'\n  AND (d.purpose_type LIKE N'%' + @keyword + N'%' OR d.distance_label LIKE N'%' + @keyword + N'%');",
+  "note": null
+ },
+ {
+  "stt": 98,
+  "name": "Lọc giày theo thương hiệu",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.brand_id = @brand_id;",
+  "note": null
+ },
+ {
+  "stt": 99,
+  "name": "Lọc giày theo giới tính",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.gender_target\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.gender_target IN (@gender, N'Unisex');",
+  "note": "@gender: Nam | Nữ | Unisex"
+ },
+ {
+  "stt": 100,
+  "name": "Lọc giày theo kích thước",
+  "owner": null,
+  "sql": "SELECT DISTINCT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_variants v ON v.shoe_id = rs.shoe_id AND v.is_active = 1\nWHERE rs.status = 'ACTIVE'\n  AND v.size_id = @size_id;",
+  "note": null
+ },
+ {
+  "stt": 101,
+  "name": "Lọc giày theo màu sắc",
+  "owner": null,
+  "sql": "SELECT DISTINCT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_variants v ON v.shoe_id = rs.shoe_id AND v.is_active = 1\nWHERE rs.status = 'ACTIVE'\n  AND v.color_id = @color_id;",
+  "note": null
+ },
+ {
+  "stt": 102,
+  "name": "Lọc giày theo loại đế",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, tt.tech_name, tt.tech_type\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_tech_mappings m ON m.shoe_id = rs.shoe_id\nJOIN shoe_technologies tt ON tt.tech_id = m.tech_id\nWHERE rs.status = 'ACTIVE'\n  AND tt.tech_type IN ('OUTSOLE', 'MIDSOLE') AND tt.tech_id = @tech_id;",
+  "note": null
+ },
+ {
+  "stt": 103,
+  "name": "Lọc giày theo công nghệ đệm",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, tt.tech_name, rs.cushion_level\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN shoe_tech_mappings m ON m.shoe_id = rs.shoe_id\nJOIN shoe_technologies tt ON tt.tech_id = m.tech_id\nWHERE rs.status = 'ACTIVE'\n  AND tt.tech_type = 'MIDSOLE' AND tt.tech_id = @tech_id;",
+  "note": null
+ },
+ {
+  "stt": 104,
+  "name": "Lọc giày theo trọng lượng giày",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.weight_gram\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.weight_gram BETWEEN @min_gram AND @max_gram\nORDER BY rs.weight_gram;",
+  "note": null
+ },
+ {
+  "stt": 105,
+  "name": "Lọc giày theo độ dày đế",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.midsole_thickness_mm\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.midsole_thickness_mm BETWEEN @min_mm AND @max_mm\nORDER BY rs.midsole_thickness_mm;",
+  "note": null
+ },
+ {
+  "stt": 106,
+  "name": "Lọc giày theo độ chênh lệch gót và mũi (Drop)",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.heel_to_toe_drop_mm\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.heel_to_toe_drop_mm BETWEEN @min_drop AND @max_drop\nORDER BY rs.heel_to_toe_drop_mm;",
+  "note": null
+ },
+ {
+  "stt": 107,
+  "name": "Lọc giày theo chất liệu thân giày",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, rs.upper_material\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.upper_material LIKE N'%' + @material + N'%';",
+  "note": null
+ },
+ {
+  "stt": 108,
+  "name": "Lọc giày theo mục đích tập luyện",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, d.distance_label, d.purpose_type\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nJOIN running_distances d ON d.distance_id = rs.suitable_distance_id\nWHERE rs.status = 'ACTIVE'\n  AND rs.suitable_distance_id = @distance_id;",
+  "note": null
+ },
+ {
+  "stt": 109,
+  "name": "Lọc giày theo tình trạng còn hàng",
+  "owner": null,
+  "sql": "SELECT rs.shoe_id, rs.shoe_code, rs.shoe_name, b.brand_name, rs.base_price, rs.sale_price, (SELECT SUM(s.stock_quantity - s.reserved_quantity) FROM shoe_variants v JOIN inventory_stocks s ON s.variant_id = v.variant_id WHERE v.shoe_id = rs.shoe_id) AS ton_kha_dung\nFROM running_shoes rs\nJOIN brands b ON b.brand_id = rs.brand_id\nWHERE rs.status = 'ACTIVE'\n  AND EXISTS (SELECT 1 FROM shoe_variants v JOIN inventory_stocks s ON s.variant_id = v.variant_id\n              WHERE v.shoe_id = rs.shoe_id AND v.is_active = 1 AND s.stock_quantity - s.reserved_quantity > 0);",
+  "note": null
+ }
+]

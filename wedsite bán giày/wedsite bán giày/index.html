@@ -1,0 +1,2370 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swoosh Store - Cửa Hàng Giày Thể Thao Chính Hãng</title>
+<meta name="description" content="Khám phá bộ sưu tập giày thể thao chính hãng tại Swoosh Store. Tìm mẫu Air Jordan, Dunk Low, Air Force 1 yêu thích và đặt hàng trực tuyến nhanh chóng.">
+<meta name="keywords" content="giày thể thao, swoosh store, sneakers, jordan, air force 1, dunk low, mua giày online">
+<meta name="author" content="Swoosh Store">
+<meta name="theme-color" content="#111111">
+
+<!-- Open Graph / Facebook / Zalo -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="/">
+<meta property="og:title" content="Swoosh Store - Cửa Hàng Giày Thể Thao Chính Hãng">
+<meta property="og:description" content="Khám phá các mẫu Air Jordan, Dunk Low, Air Force 1 với thiết kế thời thượng và trải nghiệm mua sắm tuyệt vời.">
+<meta property="og:image" content="images/shoes/af1-0.png">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Swoosh Store - Cửa Hàng Giày Thể Thao Chính Hãng">
+<meta name="twitter:description" content="Khám phá các mẫu giày thể thao đỉnh cao tại Swoosh Store.">
+<meta name="twitter:image" content="images/shoes/af1-0.png">
+
+<!-- Favicon (Inline SVG) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><path d='M4 18c6 6 18 8 24-10-8 6-16 6-24 10z' fill='%23111'/></svg>">
+<style>
+:root{--bg:#f1efec;--ink:#111;--mute:#777;--acc:#111}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+
+.nav{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px 40px}
+.nav nav{display:flex;gap:28px;font-size:13px}
+.nav nav a{opacity:.55;transition:.2s}
+.nav nav a:hover,.nav nav a.on{opacity:1}
+.auth-link{padding:9px 13px;border:1px solid #0002;border-radius:99px;background:#fff;font-size:12px;white-space:nowrap}
+.site-search{display:flex;align-items:center;width:210px;height:38px;padding:0 5px 0 13px;border:1px solid #00000018;border-radius:99px;background:#fff;box-shadow:0 2px 12px #00000008}
+.site-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:12px}
+.site-search input::placeholder{color:#888}
+.site-search button{display:grid;place-items:center;flex:0 0 30px;height:30px;border-radius:50%;background:#111;color:#fff}
+.site-search button svg{width:15px;height:15px}
+.bag{font-size:13px;padding:8px 16px;border-radius:99px;background:#fff;box-shadow:0 2px 12px #0001;transition:transform .2s,box-shadow .2s}
+.bag:hover{transform:translateY(-2px);box-shadow:0 6px 18px #0002}
+.bag span{display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:4px;border-radius:9px;background:var(--ink);color:#fff;font-size:11px}
+
+.cart-backdrop{position:fixed;inset:0;z-index:29;background:#1118;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.cart-backdrop.open{opacity:1;visibility:visible}
+.cart-drawer{position:fixed;inset:0 0 0 auto;z-index:30;display:flex;flex-direction:column;width:min(460px,100%);padding:28px;background:#faf9f7;box-shadow:-16px 0 50px #0002;transform:translateX(105%);transition:transform .38s cubic-bezier(.2,.8,.2,1)}
+.cart-drawer.open{transform:translateX(0)}
+.cart-head{display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid #e8e5e1}
+.cart-kicker{font-size:10px;letter-spacing:.18em;color:var(--mute);text-transform:uppercase}
+.cart-head h2{margin-top:5px;font-size:28px;letter-spacing:-.04em}
+.cart-close{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#fff;font-size:22px;transition:background .2s,transform .2s}
+.cart-close:hover{background:#eae7e2;transform:rotate(90deg)}
+.cart-content{flex:1;overflow:auto;padding:8px 0}
+.cart-empty{height:100%;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.cart-empty-icon{display:grid;place-items:center;width:76px;height:76px;border-radius:50%;background:#eeece8;font-size:30px}
+.cart-empty h3{margin-top:20px;font-size:20px}
+.cart-empty p{max-width:250px;margin-top:8px;color:var(--mute);font-size:13px;line-height:1.6}
+.cart-continue{margin-top:20px;padding:12px 20px;border:1px solid #ccc;border-radius:99px;font-size:13px;font-weight:600;transition:background .2s,color .2s}
+.cart-continue:hover{background:var(--ink);color:#fff}
+.cart-row{display:grid;grid-template-columns:94px 1fr auto;gap:14px;align-items:center;padding:18px 0;border-bottom:1px solid #e8e5e1}
+.cart-thumb{display:grid;place-items:center;width:94px;height:90px;overflow:hidden;border-radius:12px;background:#eeece8}
+.cart-thumb img{width:100%;height:100%;object-fit:contain}
+.cart-thumb span{font-size:28px}
+.cart-item-name{font-size:14px;font-weight:650}
+.cart-item-option{margin-top:5px;color:var(--mute);font-size:12px}
+.cart-item-price{margin-top:9px;font-size:13px;font-weight:600}
+.cart-quantity{display:flex;align-items:center;gap:10px;margin-top:11px}
+.cart-quantity button{display:grid;place-items:center;width:25px;height:25px;border:1px solid #ddd;border-radius:50%;background:#fff;font-size:15px}
+.cart-quantity button:hover{border-color:var(--ink)}
+.cart-quantity span{min-width:12px;text-align:center;font-size:12px}
+.cart-remove{align-self:start;padding:5px;color:#888;font-size:18px}
+.cart-remove:hover{color:#b42318}
+.cart-footer{padding-top:18px;border-top:1px solid #e8e5e1}
+.cart-summary{display:flex;justify-content:space-between;margin-bottom:12px;color:#555;font-size:13px}
+.cart-summary.grand{margin-top:16px;color:var(--ink);font-size:17px;font-weight:700}
+.cart-shipping{color:#50805b}
+.cart-checkout{width:100%;margin-top:10px;padding:16px;border-radius:99px;background:var(--ink);color:#fff;font-weight:650;transition:transform .2s,box-shadow .2s}
+.cart-checkout:hover{transform:translateY(-2px);box-shadow:0 8px 20px #0003}
+.cart-note{margin-top:11px;color:var(--mute);font-size:11px;text-align:center}
+body.cart-open{overflow:hidden}
+
+.view{min-height:100vh;padding:90px 40px 40px;animation:in .5s ease}
+.shoe-view{padding-bottom:0;transition:background-color .65s ease}
+@keyframes in{from{opacity:0;transform:translateY(12px)}}
+
+/* ---------- Sneakers carousel ---------- */
+.stage{position:relative;height:calc(100vh - 130px);display:flex;align-items:center;justify-content:center}
+.carousel{position:relative;width:100%;height:100%}
+.item{position:absolute;top:50%;left:50%;width:360px;cursor:pointer;
+  transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .6s,filter .6s;will-change:transform}
+.item .float{animation:float 4s ease-in-out infinite;animation-delay:var(--d)}
+.item .shadow{height:14px;margin:-6px 12% 0;border-radius:50%;background:radial-gradient(#0003,transparent 70%);animation:sh 4s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes float{50%{transform:translateY(-16px) rotate(-2deg)}}
+@keyframes sh{50%{transform:scale(.8);opacity:.6}}
+.title-big{position:absolute;left:40px;top:40%;font-size:clamp(40px,7vw,96px);font-weight:800;letter-spacing:-.04em;line-height:.9;z-index:1;pointer-events:none;transition:.4s}
+.arrows{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center}
+.arrows button{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 2px 12px #0002;font-size:18px;transition:.2s}
+.arrows button:hover{transform:scale(1.1)}
+.dots{display:flex;gap:6px;margin:0 14px}
+.dots i{width:7px;height:7px;border-radius:50%;background:#bbb;transition:.3s}
+.dots i.on{background:var(--ink);width:22px;border-radius:4px}
+
+/* ---------- Detail ---------- */
+.detail{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:center;min-height:calc(100vh - 130px)}
+.detail .pic{display:grid;place-items:center;position:relative}
+.detail .pic .float{width:min(620px,90%);animation:float 5s ease-in-out infinite}
+.info h1{font-size:34px;letter-spacing:-.03em;text-transform:uppercase}
+.info .price{margin:6px 0 20px;color:var(--mute)}
+.info h4{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--mute);margin:18px 0 8px}
+.sizes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:320px}
+.sizes button{padding:10px 0;border:1px solid #ccc;border-radius:6px;font-size:13px;transition:.15s}
+.sizes button:hover{border-color:var(--ink)}
+.sizes button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.cta{margin-top:24px;width:100%;max-width:320px;padding:15px;border-radius:99px;background:var(--ink);color:#fff;font-weight:600;transition:.2s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 8px 20px #0003}
+.back{margin-bottom:16px;font-size:13px;color:var(--mute)}
+.thumbs{display:flex;gap:10px;position:absolute;bottom:0}
+.thumbs button{width:64px;padding:6px;border-radius:10px;background:#fff8;border:1px solid transparent}
+.thumbs button.on{border-color:var(--ink);background:#fff}
+
+.shoe-hero{position:relative;margin:-90px -40px 0;padding:90px 40px 24px;transition:background-color .65s ease}
+.hero-copy{position:absolute;top:17%;left:7%;z-index:2;max-width:330px}
+.hero-kicker,.section-kicker{font-size:10px;letter-spacing:.2em;font-weight:700}
+.hero-copy h1{margin-top:12px;font-size:clamp(24px,3vw,38px);line-height:1.04;letter-spacing:-.055em}
+.hero-copy p{max-width:270px;margin-top:10px;color:#444;font-size:13px;line-height:1.6}
+.hero-link{display:inline-flex;align-items:center;gap:12px;margin-top:16px;padding:11px 17px;border-radius:99px;background:#111;color:#fff;font-size:12px;font-weight:600;transition:transform .2s,box-shadow .2s}
+.hero-link:hover{transform:translateY(-2px);box-shadow:0 8px 18px #0002}
+.stage{z-index:1}
+.hero-note{display:flex;justify-content:space-between;padding:0 4px;color:#555;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.collection-section{padding:88px 0 76px;scroll-margin-top:82px}
+.section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.section-heading h2{margin-top:8px;font-size:clamp(32px,5vw,54px);letter-spacing:-.06em;line-height:1}
+.section-heading p{max-width:320px;color:var(--mute);font-size:13px;line-height:1.6}
+.collection-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.product-card{overflow:hidden;border:1px solid #0000000b;border-radius:18px;background:#fff;transition:transform .25s,box-shadow .25s}
+.product-card:hover{transform:translateY(-5px);box-shadow:0 18px 36px #00000012}
+.product-art{position:relative;display:grid;place-items:center;height:260px;overflow:hidden;background:var(--card-bg)}
+.product-art .asset{display:grid;place-items:center;width:100%;height:100%;min-width:0;min-height:0;overflow:hidden;transition:transform .35s}
+.product-card:hover .product-art .asset{transform:scale(1.045) rotate(-2deg)}
+.product-art .asset img{width:100%;height:100%;min-width:0;min-height:0;object-fit:contain;padding:12px;filter:drop-shadow(0 14px 13px #0002)}
+.product-label{position:absolute;top:14px;left:14px;padding:7px 10px;border-radius:99px;background:#fff9;font-size:9px;font-weight:700;letter-spacing:.1em}
+.product-info{padding:17px}
+.product-info h3{font-size:16px;letter-spacing:-.025em}
+.product-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px}
+.product-price{font-size:14px;font-weight:700}
+.product-colors{display:flex;gap:5px}
+.product-colors i{width:11px;height:11px;border:1px solid #0002;border-radius:50%}
+.product-open{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:15px;padding-top:13px;border-top:1px solid #eee;font-size:11px;font-weight:650}
+.product-open span:last-child{font-size:16px;transition:transform .2s}
+.product-open:hover span:last-child{transform:translateX(4px)}
+.search-page .collection-section{padding-top:20px}
+.search-query{color:var(--mute)}
+.search-empty{display:grid;place-items:center;min-height:260px;padding:32px;border:1px dashed #ccc;border-radius:18px;background:#fff;text-align:center}
+.search-empty h3{font-size:20px}
+.search-empty p{margin-top:8px;color:var(--mute);font-size:13px}
+.story-section{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:center;padding:44px;border-radius:24px;background:#151515;color:#fff;scroll-margin-top:88px}
+.story-copy .section-kicker{color:#c7c1ad}
+.story-copy h2{max-width:490px;margin-top:18px;font-size:clamp(34px,5vw,58px);letter-spacing:-.06em;line-height:.98}
+.story-copy p{max-width:420px;margin-top:16px;color:#bbb;font-size:13px;line-height:1.8}
+.story-link{display:inline-block;margin-top:22px;padding:12px 18px;border:1px solid #ffffff55;border-radius:99px;font-size:12px;transition:background .2s,color .2s}
+.story-link:hover{background:#fff;color:#111}
+.story-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat-card{min-height:130px;padding:18px;border:1px solid #ffffff22;border-radius:16px;background:#ffffff09}
+.stat-card strong{display:block;font-size:27px;letter-spacing:-.05em}
+.stat-card span{display:block;margin-top:7px;color:#bbb;font-size:11px;line-height:1.5}
+.store-footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:34px 0 8px;color:#666;font-size:11px}
+.store-footer strong{color:#111;font-size:14px;letter-spacing:.1em}
+.store-footer a:hover{color:#111}
+.site-footer{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:28px;padding:38px 40px 22px;background:#151515;color:#fff}
+.site-footer[hidden]{display:none}
+.site-footer-brand p,.site-footer-contact p{margin-top:9px;color:#bbb;font-size:12px;line-height:1.7}
+.site-footer h2{font-size:13px}
+.site-footer-links{display:grid;gap:10px;margin-top:12px}
+.site-footer-links a{width:max-content;color:#bbb;font-size:12px}
+.site-footer-links a:hover{color:#fff}
+.site-footer-bottom{grid-column:1/-1;padding-top:16px;border-top:1px solid #ffffff22;color:#999;font-size:11px}
+.site-footer-bottom a{color:#ddd;text-decoration:underline;text-underline-offset:3px}
+.info-page{max-width:920px;margin:0 auto}
+.info-page>h1{font-size:clamp(34px,5vw,52px);letter-spacing:-.06em}
+.info-lead{max-width:680px;margin-top:10px;color:var(--mute);font-size:14px;line-height:1.7}
+.info-notice{margin-top:22px;padding:16px 18px;border:1px solid #e6d3a8;border-radius:12px;background:#fff8e8;color:#5e4b22;font-size:12px;line-height:1.7}
+.info-list{display:grid;gap:12px;margin-top:24px}
+.info-card{padding:20px;border:1px solid #0000000b;border-radius:14px;background:#fff}
+.info-card h2{font-size:16px}
+.info-card p{margin-top:8px;color:#666;font-size:13px;line-height:1.8}
+.info-card a{font-weight:650;text-decoration:underline;text-underline-offset:3px}
+.blog-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
+.blog-card{overflow:hidden;border:1px solid #0000000b;border-radius:18px;background:#fff}
+.blog-card img{display:block;width:100%;height:190px;object-fit:cover;background:#eeece8}
+.blog-card-copy{padding:18px}
+.blog-card-copy small{color:var(--mute);font-size:11px}
+.blog-card-copy h2{margin-top:9px;font-size:19px;line-height:1.25}
+.blog-card-copy p{margin-top:9px;color:#666;font-size:12px;line-height:1.7}
+.blog-card-copy a{display:inline-block;margin-top:14px;font-size:12px;font-weight:700}
+.blog-article{max-width:820px;margin:0 auto}
+.blog-article h1{margin-top:10px;font-size:clamp(34px,5vw,56px);letter-spacing:-.06em;line-height:1.05}
+.blog-article-meta{margin-top:12px;color:var(--mute);font-size:12px}
+.blog-article img{display:block;width:100%;max-height:440px;margin:26px 0;border-radius:18px;object-fit:cover}
+.blog-article-content{margin-top:24px;color:#444;font-size:15px;line-height:1.9;white-space:pre-wrap;overflow-wrap:anywhere}
+.blog-admin-list{display:grid;gap:10px;margin-top:16px}
+.blog-admin-item{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px;border:1px solid #eeeee9;border-radius:12px}
+.blog-admin-item h3{font-size:14px}
+.blog-admin-item p{margin-top:5px;color:#777;font-size:11px}
+.blog-admin-actions{display:flex;gap:8px}
+.blog-editor-form{grid-template-columns:repeat(2,minmax(0,1fr))}
+.blog-editor-form .blog-editor-wide{grid-column:1/-1}
+.portal-field textarea{width:100%;min-height:180px;padding:12px;border:1px solid #ddd;border-radius:9px;background:#fff;font:inherit;font-size:13px;line-height:1.6;resize:vertical}
+.portal-field textarea:focus{border-color:#a5c948;outline:0;box-shadow:0 0 0 3px #a5c94830}
+@media(max-width:760px){.blog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.blog-grid{grid-template-columns:1fr}.blog-editor-form{grid-template-columns:1fr}.blog-editor-form .blog-editor-wide{grid-column:auto}.blog-admin-item{align-items:flex-start;flex-direction:column}}
+.auth-page,.portal-page{max-width:1180px;margin:0 auto}
+.portal-page{--portal-accent:#d5f36a}
+.auth-card{max-width:480px;margin:25px auto;padding:28px;border:1px solid #0000000b;border-radius:18px;background:#fff}
+.auth-card h1,.portal-page>h1{font-size:clamp(30px,5vw,44px);letter-spacing:-.055em}
+.auth-card>p,.portal-subtitle{margin-top:8px;color:var(--mute);font-size:13px;line-height:1.7}
+.auth-form{display:grid;gap:15px;margin-top:22px}
+.auth-form label,.portal-field label{display:grid;gap:7px;font-size:12px;font-weight:650}
+.auth-form input,.portal-field input,.portal-field select{width:100%;padding:12px;border:1px solid #ddd;border-radius:9px;background:#fff;font:inherit;font-size:13px}
+.auth-form input:focus,.portal-field input:focus,.portal-field select:focus{outline:2px solid #111;outline-offset:1px}
+.auth-submit,.portal-button{padding:12px 16px;border-radius:99px;background:#111;color:#fff;font-size:13px;font-weight:650}
+.auth-error,.portal-message{margin-top:14px;color:#a32920;font-size:12px;line-height:1.6}
+.auth-error:empty,.portal-message:empty{display:none}
+.portal-hero{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:190px;overflow:hidden;padding:32px 38px;border-radius:24px;background:radial-gradient(ellipse at 92% 10%,#ffffff24,transparent 35%),linear-gradient(125deg,#151714,#292e25);color:#fff;box-shadow:0 18px 44px #12150f20}
+.portal-hero:after{position:absolute;right:13%;bottom:-102px;width:230px;height:230px;border:1px solid #ffffff20;border-radius:50%;content:"";box-shadow:0 0 0 28px #ffffff08,0 0 0 56px #ffffff06}
+.portal-eyebrow{margin-bottom:12px;color:var(--portal-accent);font-size:10px;font-weight:750;letter-spacing:.2em;text-transform:uppercase}
+.portal-hero h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.06em;line-height:1.05}
+.portal-intro{max-width:580px;margin-top:11px;color:#ffffffa8;font-size:13px;line-height:1.7}
+.portal-mark{z-index:1;display:grid;place-items:center;flex:0 0 72px;width:72px;height:72px;border:1px solid #ffffff30;border-radius:22px;background:#ffffff10;color:var(--portal-accent);font-size:18px;font-weight:800;letter-spacing:-.08em;transform:rotate(5deg)}
+.portal-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:18px 0 20px;padding:12px 15px;border:1px solid #0000000b;border-radius:15px;background:#fff}
+.portal-toolbar p{display:flex;align-items:center;gap:8px;color:var(--mute);font-size:12px}
+.portal-toolbar p:before{display:grid;place-items:center;width:34px;height:34px;border-radius:11px;background:#f0f1eb;color:#353b2f;content:"S";font-size:14px;font-weight:800}
+.portal-toolbar p strong{color:var(--ink);font-weight:700}
+.portal-role{padding:6px 9px;border-radius:99px;background:#f0f1eb;color:#444;font-size:10px;font-weight:700}
+.portal-button{transition:transform .18s,background .18s,box-shadow .18s}
+.portal-button:hover{transform:translateY(-1px);background:#333;box-shadow:0 5px 14px #0002}
+.portal-admin-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:18px;align-items:start}
+.portal-admin-content{min-width:0}
+.portal-nav{position:sticky;top:18px;display:flex;flex-direction:column;gap:4px;overflow:visible;margin:0;padding:6px;border:1px solid #0000000b;border-radius:15px;background:#e8e6e1}
+.portal-nav a{display:flex;align-items:center;gap:8px;padding:11px 16px;border:1px solid transparent;border-radius:11px;color:#62625d;font-size:12px;font-weight:650;white-space:nowrap;transition:background .18s,color .18s,box-shadow .18s}
+.portal-nav a:before{width:6px;height:6px;border-radius:50%;background:currentColor;content:"";opacity:.5}
+.portal-nav a:hover{background:#ffffffa6;color:#111}
+.portal-nav a[aria-current="page"]{border-color:#ffffff;background:#fff;color:#171914;box-shadow:0 3px 10px #0000000c}
+.portal-nav a[aria-current="page"]:before{background:#78992d;opacity:1}
+.portal-section{margin-top:18px;padding:26px;border:1px solid #0000000b;border-radius:20px;background:#fff;box-shadow:0 9px 28px #14130f08}
+.portal-section h2{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:20px;letter-spacing:-.03em}
+.portal-section h2:before{width:4px;height:21px;border-radius:4px;background:#a5c948;content:""}
+.portal-table-wrap{overflow-x:auto}
+.portal-table{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;text-align:left}
+.portal-table th,.portal-table td{padding:13px 12px;border-bottom:1px solid #efefec;vertical-align:middle}
+.portal-table th{background:#f7f7f4;color:#72726b;font-size:10px;font-weight:750;letter-spacing:.07em;text-transform:uppercase}
+.portal-table th:first-child{border-radius:10px 0 0 10px}
+.portal-table th:last-child{border-radius:0 10px 10px 0}
+.portal-table tbody tr{transition:background .15s}
+.portal-table tbody tr:hover{background:#fafbf6}
+.portal-table input[type="text"],.portal-table input[type="number"],.portal-table input[type="password"],.portal-table input[type="date"],.portal-table input[type="datetime-local"],.portal-table select{min-height:38px;padding:8px 10px;border:1px solid #e4e4df;border-radius:8px;background:#fcfcfa;font:inherit;transition:border-color .15s,box-shadow .15s}
+.portal-table input[type="text"],.portal-table input[type="number"],.portal-table input[type="date"],.portal-table input[type="datetime-local"],.portal-table select{width:100%;min-width:90px}
+.portal-table input[type="password"]{width:100%;min-width:150px}
+.portal-staff-table{min-width:1180px}
+.portal-table input:focus,.portal-field input:focus,.portal-field select:focus{border-color:#a5c948;outline:0;box-shadow:0 0 0 3px #a5c94830}
+.portal-user-actions{display:flex;gap:7px;align-items:center}
+.portal-user-actions .portal-button{padding:9px 11px;font-size:11px;white-space:nowrap}
+.portal-add-form{display:grid;grid-template-columns:1fr 2fr 1fr 1fr auto;gap:12px;align-items:end;margin-top:22px;padding:18px;border:1px solid #eeeee9;border-radius:15px;background:#f8f8f5}
+.revenue-filter{grid-template-columns:repeat(3,minmax(0,1fr))}
+.portal-note{margin-top:12px;color:#77786f;font-size:11px;line-height:1.6}
+.revenue-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
+.revenue-card{display:flex;min-height:145px;flex-direction:column;justify-content:space-between;padding:18px;border:1px solid #ecece7;border-radius:16px;background:linear-gradient(145deg,#fff,#fafaf7)}
+.revenue-card span{color:#696a63;font-size:11px;font-weight:650}
+.revenue-card strong{margin:16px 0 8px;font-size:clamp(19px,2.1vw,27px);letter-spacing:-.045em;line-height:1.15}
+.revenue-card small{color:#85857e;font-size:10px;line-height:1.5}
+.revenue-card.primary{border-color:#30352b;background:linear-gradient(135deg,#252a21,#11130f);color:#fff}
+.revenue-card.primary span,.revenue-card.primary small{color:#ffffffa8}
+.revenue-card.primary strong{color:#d5f36a}
+.revenue-export{display:flex;justify-content:flex-end;margin-top:16px}
+.revenue-chart{display:grid;gap:12px;max-height:520px;overflow:auto;padding-right:4px}
+.revenue-day{display:grid;grid-template-columns:82px minmax(60px,1fr) minmax(130px,auto);gap:14px;align-items:center;font-size:11px}
+.revenue-day time{color:#686961;font-variant-numeric:tabular-nums}
+.revenue-bar{height:10px;overflow:hidden;border-radius:99px;background:#f0f0eb}
+.revenue-bar i{display:block;height:100%;min-width:0;border-radius:inherit;background:linear-gradient(90deg,#96b63d,#d5f36a)}
+.revenue-day-total{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.revenue-day-total small{display:block;margin-top:3px;color:#8a8a82;font-size:9px;font-weight:400}
+.portal-staff-form{grid-template-columns:repeat(3,minmax(0,1fr))}
+.portal-staff-form .portal-field:nth-child(2){grid-column:span 2}
+.portal-staff-form button{min-height:42px}
+.portal-field{display:grid;gap:7px}
+.portal-field>span{color:#55564f;font-size:11px;font-weight:650}
+.portal-field input,.portal-field select{min-height:42px;border-color:#e4e4df;border-radius:9px;background:#fff}
+.portal-order{margin-top:12px;padding:19px;border:1px solid #ecece7;border-radius:15px;background:linear-gradient(115deg,#fff,#fbfbf8);transition:border-color .18s,transform .18s}
+.portal-order:hover{transform:translateY(-1px);border-color:#d6dfbd}
+.portal-order-head{display:flex;justify-content:space-between;gap:12px;font-size:13px}
+.portal-order-head strong:last-child{color:#586c2d}
+.portal-order-meta,.portal-order-items{margin-top:9px;color:#666;font-size:12px;line-height:1.7}
+.portal-order-items{padding-top:8px;border-top:1px solid #eee}
+.portal-order-controls{display:flex;align-items:end;gap:10px;margin-top:12px}
+.portal-order-controls .portal-field{width:min(230px,100%)}
+.portal-empty{padding:34px 20px;border:1px dashed #deded7;border-radius:13px;background:#fafaf7;color:var(--mute);font-size:13px;text-align:center}
+.portal-warning{margin-top:18px;padding:15px;border:1px solid #e6d3a8;border-radius:12px;background:#fff8e8;color:#5e4b22;font-size:12px;line-height:1.7}
+
+.checkout-page{max-width:1120px;margin:0 auto}
+.checkout-page>h1{font-size:clamp(34px,5vw,52px);letter-spacing:-.06em}
+.checkout-intro{margin-top:8px;color:var(--mute);font-size:14px}
+.checkout-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:start;margin-top:30px}
+.checkout-form,.checkout-summary{padding:26px;border:1px solid #0000000b;borfder-radius:18px;background:#fff}
+.checkout-form h2,.checkout-summary h2{margin-bottom:20px;font-size:20px;letter-spacing:-.03em}
+.checkout-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.checkout-field{display:flex;flex-direction:column;gap:7px}
+.checkout-field.full{grid-column:1/-1}
+.checkout-field label,.payment-label{font-size:12px;font-weight:650}
+.checkout-field input,.checkout-field textarea{width:100%;padding:12px 13px;border:1px solid #ddd;border-radius:9px;background:#fff;font:inherit;font-size:13px}
+.checkout-field input:focus,.checkout-field textarea:focus{outline:2px solid #111;outline-offset:1px}
+.checkout-field textarea{min-height:84px;resize:vertical}
+.payment-option{display:flex;align-items:flex-start;gap:11px;margin-top:10px;padding:14px;border:1px solid #111;border-radius:10px;background:#faf9f7}
+.payment-option input{margin-top:3px;accent-color:#111}
+.payment-option strong,.payment-option span{display:block}
+.payment-option strong{font-size:13px}
+.payment-option span{margin-top:4px;color:var(--mute);font-size:11px;line-height:1.5}
+.checkout-items{display:grid;gap:14px}
+.checkout-item{display:grid;grid-template-columns:58px 1fr auto;gap:12px;align-items:center}
+.checkout-thumb{display:grid;place-items:center;width:58px;height:58px;overflow:hidden;border-radius:10px;background:#eeece8}
+.checkout-thumb img{width:100%;height:100%;object-fit:contain}
+.checkout-item-name{font-size:12px;font-weight:650}
+.checkout-item-option{margin-top:4px;color:var(--mute);font-size:11px}
+.checkout-item-price{font-size:12px;font-weight:600;white-space:nowrap}
+.checkout-totals{margin-top:20px;padding-top:16px;border-top:1px solid #eee}
+.checkout-submit{width:100%;margin-top:18px;padding:15px;border-radius:99px;background:var(--ink);color:#fff;font-weight:650;transition:transform .2s,box-shadow .2s}
+.checkout-submit:hover{transform:translateY(-2px);box-shadow:0 8px 20px #0003}
+.checkout-disclaimer{margin-top:12px;color:var(--mute);font-size:11px;line-height:1.6}
+.checkout-empty,.checkout-success{max-width:620px;margin:40px auto;padding:36px;border-radius:20px;background:#fff;text-align:center}
+.checkout-empty h1,.checkout-success h1{margin-top:12px;font-size:30px;letter-spacing:-.04em}
+.checkout-empty p,.checkout-success p{margin-top:10px;color:var(--mute);font-size:13px;line-height:1.7}
+.checkout-success-icon{display:grid;place-items:center;width:64px;height:64px;margin:0 auto;border-radius:50%;background:#e8f3e8;color:#26703b;font-size:30px}
+.checkout-order-id{display:inline-block;margin-top:18px;padding:9px 13px;border-radius:99px;background:#f1efec;font-size:12px;font-weight:650}
+.checkout-success-items{display:grid;gap:8px;margin-top:20px;text-align:left}
+.checkout-success-items p{display:flex;justify-content:space-between;gap:12px;margin:0;padding:10px 0;border-bottom:1px solid #eee;color:var(--ink);font-size:12px}
+.checkout-success .hero-link,.checkout-empty .hero-link{margin-top:22px}
+
+.toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,40px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:99px;font-size:13px;opacity:0;transition:.35s;z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:800px){
+  .nav{padding:14px 16px}.nav nav{gap:14px}.view{padding:80px 16px 24px}
+  .portal-admin-layout{grid-template-columns:1fr}
+  .portal-nav{position:static}
+  .site-search{width:170px}
+  .auth-link{padding:8px 10px;font-size:11px}
+  .detail{grid-template-columns:1fr}.item{width:240px}.title-big{top:12%}
+  .cart-drawer{padding:22px}
+  .shoe-hero{margin:-80px -16px 0;padding:80px 16px 18px}
+  .hero-copy{top:15%;left:7%;max-width:230px}
+  .hero-copy h1{font-size:25px}
+  .hero-copy p{font-size:11px}
+  .hero-copy .hero-link{margin-top:10px;padding:9px 13px}
+  .stage{height:calc(100vh - 108px)}
+  .hero-note{font-size:8px}
+  .collection-section{padding:64px 0 54px}
+  .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .product-art{height:210px}
+  .product-info{padding:13px}
+  .product-info h3{font-size:14px}
+  .section-heading{align-items:flex-start;flex-direction:column;gap:10px}
+  .story-section{grid-template-columns:1fr;padding:26px 20px}
+  .store-footer{align-items:flex-start;flex-direction:column;padding-top:26px}
+  .checkout-layout{grid-template-columns:1fr}
+  .revenue-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .revenue-filter{grid-template-columns:1fr 1fr}
+  .revenue-filter button{grid-column:1/-1}
+  .site-footer{grid-template-columns:1fr 1fr;padding:30px 16px 18px}
+  .site-footer-brand{grid-column:1/-1}
+}
+@media(max-width:480px){
+  .nav{flex-wrap:wrap;gap:8px;padding:10px 12px}
+  .nav nav{order:4;flex-basis:100%;justify-content:center}
+  .auth-link{order:3}
+  .site-search{flex:1;width:auto;max-width:220px}
+  .view{padding-top:112px}
+  .shoe-hero{margin:-112px -12px 0;padding:112px 12px 18px}
+  .stage{height:calc(100vh - 140px)}
+  .nav nav{gap:10px;font-size:11px}
+  .bag{padding:7px 10px;font-size:11px}
+  .hero-copy{top:14%;max-width:200px}
+  .hero-copy h1{font-size:22px}
+  .hero-copy p{max-width:200px;font-size:10px}
+  .title-big{left:16px;font-size:42px}
+  .collection-grid{grid-template-columns:1fr}
+  .product-art{height:250px}
+  .hero-note span:last-child{display:none}
+  .checkout-form,.checkout-summary{padding:20px}
+  .checkout-fields{grid-template-columns:1fr}
+  .checkout-field.full{grid-column:auto}
+  .site-footer{grid-template-columns:1fr;gap:20px}
+  .site-footer-brand{grid-column:auto}
+  .site-footer-bottom{grid-column:auto}
+  .portal-hero{min-height:160px;padding:25px 22px;border-radius:19px}
+  .portal-mark{flex-basis:54px;width:54px;height:54px;border-radius:17px;font-size:15px}
+  .portal-section{padding:17px}
+  .portal-add-form{grid-template-columns:1fr 1fr}
+  .revenue-metrics{grid-template-columns:1fr}
+  .revenue-filter{grid-template-columns:1fr}
+  .revenue-filter button{grid-column:auto}
+  .revenue-card{min-height:120px}
+  .revenue-day{grid-template-columns:54px minmax(35px,1fr) 112px;gap:8px;font-size:10px}
+  .revenue-day-total{font-size:10px}
+  .revenue-day-total small{font-size:8px}
+  .portal-add-form .portal-field:nth-child(2){grid-column:1/-1}
+  .portal-staff-form{grid-template-columns:1fr 1fr}
+  .portal-staff-form .portal-field:nth-child(2){grid-column:1/-1}
+  .portal-order-head{flex-direction:column}
+  .portal-user-actions{align-items:flex-start;flex-direction:column}
+  .portal-table{min-width:680px}
+  .portal-user-actions{flex-direction:row}
+  .portal-staff-form{grid-template-columns:1fr}
+  .portal-staff-form .portal-field:nth-child(2){grid-column:auto}
+}
+#pic{width:100%;display:grid;place-items:center}
+.detail .pic{min-height:60vh;padding-bottom:70px}
+
+.asset{display:contents}
+.asset img{width:100%;height:auto;display:block;user-select:none;-webkit-user-drag:none;filter:drop-shadow(0 18px 18px #0003)}
+.asset .shoe-fallback{display:block;width:100%;height:100%}
+.asset .shoe-fallback[hidden]{display:none}
+.asset .shoe-fallback svg{display:block;width:100%;height:100%}
+.carousel{perspective:1100px}
+.item .tilt{transform:rotateY(calc(var(--mx,0)*14deg)) rotateX(calc(var(--my,0)*-8deg));transition:transform .25s;transform-style:preserve-3d}
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="logo" href="#shoes" aria-label="Trang chủ">
+    <svg viewBox="0 0 100 36" width="56"><path d="M2 24c10 9 26 6 50-6 14-7 30-14 46-17-22 12-40 28-56 33C24 38 8 34 2 24z" fill="currentColor"/></svg>
+  </a>
+  <nav>
+    <a href="#shoes" data-route="shoes">Giày thể thao</a>
+    <a href="#collection" data-route="collection">Bộ sưu tập</a>
+    <a href="#blog" data-route="blog">Blog</a>
+    <a href="#runner" data-route="runner">Tư vấn chạy</a>
+    <a href="#about" data-route="about">Về cửa hàng</a>
+  </nav>
+  <a class="auth-link" id="authLink" href="#login">Đăng nhập</a>
+  <form class="site-search" id="siteSearchForm" role="search" aria-label="Tìm giày">
+    <input id="siteSearch" type="search" name="q" placeholder="Tìm giày..." aria-label="Tìm theo tên hoặc mã giày" autocomplete="off">
+    <button type="submit" aria-label="Tìm kiếm">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8" stroke="currentColor" stroke-width="2"></circle><path d="m16 16 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+    </button>
+  </form>
+  <button id="bagBtn" class="bag" aria-controls="cartDrawer" aria-expanded="false">Giỏ hàng <span id="bagCount">0</span></button>
+</header>
+
+<main id="app"></main>
+<footer class="site-footer" id="siteFooter">
+  <section class="site-footer-brand">
+    <h2>SWOOSH STORE</h2>
+    <p>Chọn đôi giày. Tạo dấu ấn riêng.<br>Đặt hàng trực tuyến · Thanh toán COD.</p>
+  </section>
+  <section>
+    <h2>Hỗ trợ khách hàng</h2>
+    <nav class="site-footer-links" aria-label="Liên kết hỗ trợ">
+      <a href="#support">Câu hỏi thường gặp</a>
+      <a href="#policies">Giao hàng &amp; đổi trả</a>
+      <a href="#wishlist">Danh sách yêu thích</a>
+      <a href="#runner">Tư vấn giày chạy bộ</a>
+      <a href="#size-chart">Bảng quy đổi size</a>
+      <a href="#top-products">Sản phẩm bán chạy</a>
+      <a href="#loyalty">Hạng thành viên &amp; điểm</a>
+      <a href="#about">Về cửa hàng</a>
+    </nav>
+  </section>
+  <section class="site-footer-contact">
+    <h2>Thông tin cửa hàng</h2>
+    <p>Thông tin liên hệ chính thức cần được cửa hàng bổ sung trước khi website hoạt động thực tế.</p>
+    <nav class="site-footer-links" aria-label="Điều khoản">
+      <a href="#policies">Chính sách &amp; quyền riêng tư</a>
+    </nav>
+  </section>
+  <div class="site-footer-bottom">© <span id="footerYear"></span> Swoosh Store · <a href="#shoes">Về đầu trang</a></div>
+</footer>
+<div id="toast" class="toast"></div>
+<div class="cart-backdrop" id="cartBackdrop"></div>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
+  <header class="cart-head">
+    <div><p class="cart-kicker">Swoosh Store</p><h2 id="cartTitle">Giỏ hàng <span id="cartItemCount">(0)</span></h2></div>
+    <button class="cart-close" id="cartClose" aria-label="Đóng giỏ hàng">×</button>
+  </header>
+  <div class="cart-content" id="cartContent"></div>
+  <footer class="cart-footer" id="cartFooter"></footer>
+</aside>
+<script>
+/* ===================== DATA ===================== */
+const SHOES = [
+  { id:'aj5',  name:'Air Jordan 5',        price:210, bg:'#e5e0f0', colors:[['#2b4a9a','#111','#fff'],['#111','#c4161c','#eee'],['#e8e8e8','#222','#777']] },
+  { id:'aj1',  name:'Air Jordan 1 Low',    price:149, bg:'#f2e0eb', colors:[['#d9d9d9','#111','#fff'],['#f5f5f5','#1b3a8a','#fff'],['#111','#e03a2f','#eee']] },
+  { id:'aj12', name:'Air Jordan 12 Retro', price:189, bg:'#edf2d7', colors:[['#f1f1f1','#111','#c9a227']] },
+  { id:'dunk', name:'Dunk Low',            price:115, bg:'#e5e5e5', colors:[['#fff','#1e7a46','#fff'],['#fff','#111','#fff']] },
+  { id:'af1',  name:'Air Force 1',         price:125, bg:'#e8e0e9', colors:[['#fff','#fff','#ddd'],['#111','#111','#333']] },
+];
+const SHOE_IMAGES = {
+  aj5: 'images/shoes/aj5-0.png',
+  aj1: 'images/shoes/aj1-0.png',
+  aj12: 'images/shoes/aj12-0.png',
+  dunk: 'images/shoes/dunk-0.png',
+  af1: 'images/shoes/af1-0.png'
+};
+const SIZES = [38,39,40,41,42,43,44,45];
+let bag = [];
+const WISHLIST_KEY='swoosh-store-wishlist';
+function loadWishlist(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(WISHLIST_KEY)||'[]');
+    return Array.isArray(saved)?saved.filter(id=>typeof id==='string'&&SHOES.some(shoe=>shoe.id===id)):[];
+  }catch(error){
+    console.error('Không thể tải danh sách yêu thích:',error);
+    return [];
+  }
+}
+let wishlist=loadWishlist();
+let wishlistOwnerCustomer='';
+let customerWishlistLoaded=false;
+let customerWishlistProducts=[];
+async function toggleWishlist(id){
+  const removing=wishlist.includes(id);
+  const next=wishlist.includes(id)?wishlist.filter(item=>item!==id):[...wishlist,id];
+  if(currentUser?.role==='customer'){
+    if(!backendOnline){toast('Không kết nối được máy chủ. Hãy thử lại sau.');return}
+    const options={method:removing?'DELETE':'POST'};
+    if(!removing)options.body=JSON.stringify({shoeCode:id});
+    await apiRequest(removing?`/api/customer/wishlist/${encodeURIComponent(id)}`:'/api/customer/wishlist',options);
+    wishlistOwnerCustomer=String(currentUser.username);
+    customerWishlistLoaded=false;
+    customerWishlistProducts=[];
+  }else{
+    try{localStorage.setItem(WISHLIST_KEY,JSON.stringify(next))}
+    catch(error){console.error('Không thể lưu danh sách yêu thích:',error);toast('Không thể lưu danh sách yêu thích trên trình duyệt này');return}
+  }
+  wishlist=next;
+  route();
+}
+
+/* ===================== SVG helpers ===================== */
+function shoeSVG([upper,accent,sole]){
+  return `<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 112c0-12 6-22 16-26l56-24c10-4 18-14 22-26l8-14c3-5 10-5 14-1l30 30c8 8 20 14 32 16l52 10c12 3 20 12 20 24v20H20z" fill="${upper}"/>
+    <path d="M118 34l30 30c8 8 20 14 32 16l40 8-6 14-68-14-28-22z" fill="${accent}" opacity=".9"/>
+    <path d="M36 86l56-24" stroke="${accent}" stroke-width="5" stroke-linecap="round"/>
+    <path d="M190 70c20 4 40 14 58 22-26 6-52-2-66-14z" fill="${accent}"/>
+    <path d="M14 112h274c6 0 10 4 10 10v6c0 8-6 14-14 14H26c-8 0-14-6-14-14v-6c0-6 2-10 2-10z" fill="${sole}" stroke="#0002"/>
+    <path d="M30 134h250" stroke="#0002" stroke-width="3" stroke-dasharray="6 5"/>
+  </svg>`;
+}
+/* ===== Ảnh tĩnh tối ưu, tải theo URL tĩnh và fallback về SVG nếu lỗi ===== */
+const shoeImage=(s,ci=0)=>ci===0?(SHOE_IMAGES[s.id]||`images/shoes/${s.id}-${ci}.png`):'';
+const shoeEl=(s,ci=0)=>ci===0
+  ?`<div class="asset"><img data-shoe-image="${s.id}" src="${shoeImage(s,ci)}" alt="${escapeHtml(s.name)}" loading="lazy"><span class="shoe-fallback" hidden>${shoeSVG(s.colors[ci])}</span></div>`
+  :`<div class="asset"><span class="shoe-fallback">${shoeSVG(s.colors[ci])}</span></div>`;
+document.addEventListener('error',event=>{
+  const image=event.target;
+  if(!(image instanceof HTMLImageElement)||!image.dataset.shoeImage)return;
+  image.hidden=true;
+  const fallback=image.nextElementSibling;
+  if(fallback)fallback.hidden=false;
+},true);
+
+/* ===================== UI helpers ===================== */
+const $ = (s,r=document)=>r.querySelector(s);
+const app = $('#app');
+app.addEventListener('click',async event=>{
+  const favorite=event.target.closest('[data-wishlist]');
+  if(favorite){
+    event.preventDefault();
+    try{await toggleWishlist(favorite.dataset.wishlist)}
+    catch(error){toast(error.message)}
+  }
+});
+const money = n=>new Intl.NumberFormat('vi-VN').format(n*1000)+' ₫';
+const moneyVnd=n=>new Intl.NumberFormat('vi-VN').format(n)+' ₫';
+const dateTimeLocal=value=>{
+  if(!value)return '';
+  const date=new Date(value);
+  return Number.isNaN(date.getTime())?'':new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,16);
+};
+const dateTimeUtc=value=>value?new Date(value).toISOString():'';
+let csrfToken='';
+let currentUser=null;
+let backendOnline=false;
+let appReady=false;
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),1800)}
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+}
+async function apiRequest(path,options={}){
+  const method=options.method||'GET';
+  const headers=new Headers(options.headers||{});
+  if(options.body!==undefined)headers.set('Content-Type','application/json');
+  if(method!=='GET'&&csrfToken)headers.set('X-CSRF-Token',csrfToken);
+  const response=await fetch(path,{method,headers,body:options.body,credentials:'same-origin'});
+  let payload={};
+  try{payload=await response.json()}catch(error){throw new Error('Máy chủ trả về dữ liệu không hợp lệ.')}
+  if(!response.ok)throw new Error(payload.error||'Không thể hoàn tất yêu cầu.');
+  return payload;
+}
+function adoptCurrentUser(user){
+  const previousCustomer=currentUser?.role==='customer'?String(currentUser.username):'';
+  const nextCustomer=user?.role==='customer'?String(user.username):'';
+  if(previousCustomer&&previousCustomer!==nextCustomer){
+    wishlistOwnerCustomer='';
+    customerWishlistLoaded=false;
+    customerWishlistProducts=[];
+    wishlist=loadWishlist();
+  }
+  currentUser=user;
+}
+async function syncCustomerWishlist(){
+  if(currentUser?.role!=='customer')return [];
+  const customerKey=String(currentUser.username);
+  if(wishlistOwnerCustomer===customerKey&&customerWishlistLoaded)return customerWishlistProducts;
+  const guestFavorites=wishlistOwnerCustomer?[]:[...wishlist];
+  for(const shoeCode of guestFavorites){
+    await apiRequest('/api/customer/wishlist',{
+      method:'POST',
+      body:JSON.stringify({shoeCode}),
+    });
+  }
+  const result=await apiRequest('/api/customer/wishlist');
+  customerWishlistProducts=result.products;
+  wishlist=result.products.map(product=>String(product.id));
+  wishlistOwnerCustomer=customerKey;
+  customerWishlistLoaded=true;
+  try{localStorage.removeItem(WISHLIST_KEY)}
+  catch(error){console.error('Không thể xóa danh sách yêu thích tạm:',error);toast('Không thể xóa danh sách yêu thích tạm trên trình duyệt này.')}
+  return customerWishlistProducts;
+}
+function updateAuthLink(){
+  const link=$('#authLink');
+  if(currentUser){
+    link.href=currentUser.role==='admin'?'#admin':currentUser.role==='customer'?'#customer':'#staff';
+    link.textContent=currentUser.role==='admin'?'Quản trị':currentUser.role==='customer'?'Tài khoản':'Nhân viên';
+  }else{
+    link.href='#login';
+    link.textContent='Đăng nhập';
+  }
+}
+async function logoutCurrentUser(){
+  await apiRequest('/api/logout',{method:'POST',body:'{}'});
+  adoptCurrentUser(null);
+  csrfToken='';
+  const anonymousSession=await apiRequest('/api/session');
+  csrfToken=anonymousSession.csrfToken;
+  currentUser=anonymousSession.user;
+  updateAuthLink();
+}
+function loadBag(){
+  try{
+    const stored=localStorage.getItem('swoosh-store-cart');
+    if(!stored)return [];
+    const parsed=JSON.parse(stored);
+    if(!Array.isArray(parsed))throw new TypeError('Giỏ hàng đã lưu không đúng định dạng');
+    const valid=parsed.flatMap(item=>{
+      const shoe=SHOES.find(product=>product.id===item.id)
+        ||SHOES.find(product=>product.name===item.name&&product.price===item.price);
+      if(!shoe||!SIZES.includes(Number(item.opt))||!Number.isInteger(item.qty)||item.qty<1||item.qty>99)return [];
+      if(item.image&&item.image!==shoeImage(shoe)&&item.image!==''&&!item.image.startsWith('data:'))return [];
+      return [{...item,id:shoe.id,name:shoe.name,price:shoe.price}];
+    });
+    if(valid.length!==parsed.length)console.warn('Một số sản phẩm giỏ hàng không hợp lệ đã bị bỏ qua');
+    return valid;
+  }catch(error){
+    console.error('Không thể khôi phục giỏ hàng đã lưu:',error);
+    return [];
+  }
+}
+function saveBag(){
+  try{
+    localStorage.setItem('swoosh-store-cart',JSON.stringify(bag));
+    return true;
+  }catch(error){
+    console.error('Không thể lưu giỏ hàng:',error);
+    toast('Không thể lưu giỏ hàng trên trình duyệt này');
+    return false;
+  }
+}
+bag=loadBag();
+$('#footerYear').textContent=new Date().getFullYear();
+$('#siteSearchForm').onsubmit=e=>{
+  e.preventDefault();
+  const query=$('#siteSearch').value.trim();
+  location.hash=query?`#search?q=${encodeURIComponent(query)}`:'#search';
+};
+function renderCart(){
+  const count=bag.reduce((sum,item)=>sum+item.qty,0);
+  const subtotal=bag.reduce((sum,item)=>sum+item.price*item.qty,0);
+  $('#bagCount').textContent=count;
+  $('#cartItemCount').textContent=`(${count})`;
+  $('#cartContent').innerHTML=bag.length?bag.map((item,i)=>`
+    <article class="cart-row">
+      <div class="cart-thumb">${item.image?`<img src="${item.image}" alt="">`:'<span>✦</span>'}</div>
+      <div>
+        <div class="cart-item-name">${item.name}</div>
+        ${item.opt?`<div class="cart-item-option">Cỡ: ${item.opt}</div>`:''}
+        <div class="cart-item-price">${money(item.price)}</div>
+        <div class="cart-quantity">
+          <button data-cart-action="decrease" data-index="${i}" aria-label="Giảm số lượng">−</button>
+          <span>${item.qty}</span>
+          <button data-cart-action="increase" data-index="${i}" aria-label="Tăng số lượng">+</button>
+        </div>
+      </div>
+      <button class="cart-remove" data-cart-action="remove" data-index="${i}" aria-label="Xóa ${item.name}">×</button>
+    </article>`).join(''):`<div class="cart-empty"><div class="cart-empty-icon">♧</div><h3>Giỏ hàng đang trống</h3><p>Chọn món bạn thích và quay lại đây để xem đơn hàng.</p><a class="cart-continue" href="#shoes">Khám phá sản phẩm</a></div>`;
+  $('#cartFooter').innerHTML=bag.length?`
+    <div class="cart-summary"><span>Tạm tính</span><span>${money(subtotal)}</span></div>
+    <div class="cart-summary"><span>Phí vận chuyển</span><span class="cart-shipping">Miễn phí</span></div>
+    <div class="cart-summary grand"><span>Tổng cộng</span><span>${money(subtotal)}</span></div>
+    <button class="cart-checkout" id="cartCheckout">Tiến hành thanh toán <span>→</span></button>
+    <p class="cart-note">Giá đã bao gồm phí vận chuyển</p>`:'';
+}
+function setCartOpen(open){
+  const drawer=$('#cartDrawer');
+  drawer.classList.toggle('open',open);
+  $('#cartBackdrop').classList.toggle('open',open);
+  drawer.setAttribute('aria-hidden',String(!open));
+  $('#bagBtn').setAttribute('aria-expanded',String(open));
+  document.body.classList.toggle('cart-open',open);
+  if(open) $('#cartClose').focus();
+  else $('#bagBtn').focus();
+}
+function addToBag(name,opt,price,image=''){
+  const shoe=SHOES.find(item=>item.name===name&&item.price===price);
+  const existing=bag.find(item=>item.name===name&&item.opt===opt&&item.price===price);
+  if(backendOnline&&shoe&&(!shoe.stock||(existing&&existing.qty>=shoe.stock))){
+    toast('Sản phẩm hiện đã hết hàng');
+    return;
+  }
+  if(existing) existing.qty++;
+  else{
+    bag.push({id:shoe?.id||'',name,opt,price,image,qty:1});
+  }
+  saveBag();
+  renderCart();
+  toast(`Đã thêm ${name} ${opt?'· '+opt:''}`);
+}
+$('#bagBtn').onclick=()=>{renderCart();setCartOpen(true)};
+$('#cartDrawer').onclick=e=>{
+  const action=e.target.closest('[data-cart-action]');
+  if(action){
+    const item=bag[Number(action.dataset.index)];
+    if(!item)return;
+    if(action.dataset.cartAction==='increase')item.qty++;
+    if(action.dataset.cartAction==='decrease')item.qty--;
+    if(action.dataset.cartAction==='remove'||item.qty<=0)bag.splice(Number(action.dataset.index),1);
+    saveBag();
+    renderCart();
+    return;
+  }
+  if(e.target.closest('#cartCheckout')){
+    setCartOpen(false);
+    location.hash='#checkout';
+  }
+  if(e.target.closest('.cart-continue'))setCartOpen(false);
+};
+$('#cartClose').onclick=()=>setCartOpen(false);
+$('#cartBackdrop').onclick=()=>setCartOpen(false);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#cartDrawer').classList.contains('open'))setCartOpen(false)});
+renderCart();
+
+/* ===================== VIEWS ===================== */
+// 1) Sneakers carousel -------------------------------------------------
+let idx = 0;
+function viewShoes(){
+  if(!SHOES.length){
+    app.innerHTML='<section class="view search-empty"><h2>Hiện chưa có sản phẩm đang bán.</h2></section>';
+    return;
+  }
+  app.innerHTML = `<div class="view shoe-view">
+    <section class="shoe-hero" id="shoeHero">
+      <div class="hero-copy"><span class="hero-kicker">SWOOSH STORE · BỘ SƯU TẬP GIÀY</span><h1>Mỗi bước chân,<br>một dấu ấn riêng.</h1><p>Khám phá những đôi giày mang đậm cá tính của bạn.</p><a class="hero-link" href="#collection">Khám phá bộ sưu tập <span>↓</span></a></div>
+      <div class="stage">
+        <div class="title-big" id="big"></div>
+        <div class="carousel" id="car"></div>
+        <div class="arrows"><button id="prev" aria-label="Đôi trước">←</button><div class="dots" id="dots"></div><button id="next" aria-label="Đôi tiếp theo">→</button></div>
+      </div>
+      <div class="hero-note"><span>Chọn đôi bạn yêu thích</span><span>Di chuyển bằng phím ← →</span></div>
+    </section>
+  </div>`;
+  const car=$('#car');
+  SHOES.forEach((s,i)=>{
+    const d=document.createElement('div');d.className='item';
+    d.innerHTML=`<div class="tilt"><div class="float" style="--d:${-i*.7}s">${shoeEl(s,0)}</div></div><div class="shadow" style="--d:${-i*.7}s"></div>`;
+    d.onclick=()=> i===idx ? (location.hash='#shoe/'+s.id) : (idx=i,layout());
+    car.appendChild(d);
+  });
+  $('#dots').innerHTML=SHOES.map(()=>'<i></i>').join('');
+  $('#prev').onclick=()=>{idx=(idx-1+SHOES.length)%SHOES.length;layout()};
+  $('#next').onclick=()=>{idx=(idx+1)%SHOES.length;layout()};
+  car.onmousemove=e=>{car.style.setProperty('--mx',(e.clientX/innerWidth-.5)*2);car.style.setProperty('--my',(e.clientY/innerHeight-.5)*2)};
+  layout();
+}
+function productCards(shoes=SHOES){
+  return shoes.map((s,i)=>`
+    <article class="product-card">
+      <a class="product-art" href="#shoe/${s.id}" style="--card-bg:${s.bg}" aria-label="Xem ${s.name}">
+        ${shoeEl(s,0)}<span class="product-label">MẪU ${String(i+1).padStart(2,'0')}</span>
+      </a>
+      <div class="product-info"><h3>${s.name}</h3>
+        <div class="product-meta"><span class="product-price">${money(s.price)}</span>
+          <span class="product-colors" aria-label="Có ${s.colors.length} phối màu">${s.colors.map(color=>`<i style="background:${color[0]}"></i>`).join('')}</span>
+        </div>
+        <button class="portal-button" data-wishlist="${s.id}" aria-pressed="${wishlist.includes(s.id)}">${wishlist.includes(s.id)?'♥ Đã yêu thích':'♡ Yêu thích'}</button>
+        <a class="product-open" href="#shoe/${s.id}"><span>Xem chi tiết</span><span>↗</span></a>
+      </div>
+    </article>`).join('');
+}
+async function viewCollection(){
+  app.innerHTML=`<div class="view">
+    <section class="collection-section">
+      <div class="section-heading"><div><span class="section-kicker">TÌM ĐÔI GIÀY CỦA BẠN</span><h2>Bộ sưu tập</h2></div><p>Lọc theo địa hình, mục đích, màu sắc, cân nặng, cỡ giày hoặc ngân sách.</p></div>
+      <form class="portal-add-form" id="catalogFilterForm">
+        <label class="portal-field"><span>Tên giày hoặc mã</span><input name="name" maxlength="100" placeholder="Air Jordan, Dunk..."></label>
+        <label class="portal-field"><span>Mục đích / phong cách chạy</span><input name="purpose" maxlength="100" placeholder="Chạy trail, chạy dài..."></label>
+        <label class="portal-field"><span>Địa hình</span><select name="terrain"><option value="">Tất cả</option></select></label>
+        <label class="portal-field"><span>Kiểu bàn chân</span><select name="arch"><option value="">Tất cả</option></select></label>
+        <label class="portal-field"><span>Màu sắc</span><input name="color" maxlength="50" placeholder="Đen, trắng..."></label>
+        <label class="portal-field"><span>Độ ổn định</span><select name="stability"><option value="">Tất cả</option><option value="Neutral">Trung tính</option><option value="Stability">Ổn định</option><option value="Motion Control">Kiểm soát chuyển động</option></select></label>
+        <label class="portal-field"><span>Ngân sách tối đa (₫)</span><input name="maxPrice" type="number" min="0" step="100000"></label>
+        <label class="portal-field"><span>Cân nặng tối đa (g)</span><input name="maxWeight" type="number" min="0"></label>
+        <label class="portal-field"><span>Cỡ EU</span><input name="sizeEU" type="number" min="15" max="55" step="0.5"></label>
+        <button class="portal-button" type="submit">Lọc sản phẩm</button><button class="portal-button" type="reset">Xóa bộ lọc</button>
+      </form>
+      <p class="portal-message" id="catalogFilterMessage" role="status"></p>
+      <div class="collection-grid" id="collectionProducts">${productCards()}</div>
+    </section>
+  </div>`;
+  const form=$('#catalogFilterForm');
+  try{
+    const catalogs=await apiRequest('/api/runner/catalogs');
+    form.elements.terrain.insertAdjacentHTML('beforeend',catalogs.terrains.map(item=>`<option value="${escapeHtml(item.code)}">${escapeHtml(item.name)}</option>`).join(''));
+    form.elements.arch.insertAdjacentHTML('beforeend',catalogs.arches.map(item=>`<option value="${escapeHtml(item.code)}">${escapeHtml(item.name)}</option>`).join(''));
+  }catch(error){$('#catalogFilterMessage').textContent=error.message}
+  const loadProducts=async()=>{
+    const params=new URLSearchParams();
+    for(const [key,value] of new FormData(form)){
+      if(value.trim())params.set(key,value.trim());
+    }
+    try{
+      const query=params.toString();
+      const result=await apiRequest(`/api/products${query?'?'+query:''}`);
+      const appearance=new Map(SHOES.map(shoe=>[shoe.id,{bg:shoe.bg,colors:shoe.colors}]));
+      const products=result.products.map(shoe=>({...shoe,...appearance.get(shoe.id)}));
+      $('#collectionProducts').innerHTML=products.length?productCards(products):'<p class="portal-empty">Không tìm thấy sản phẩm phù hợp.</p>';
+      $('#catalogFilterMessage').textContent=`${products.length} sản phẩm phù hợp.`;
+    }catch(error){$('#catalogFilterMessage').textContent=error.message}
+  };
+  form.onsubmit=event=>{event.preventDefault();loadProducts()};
+  form.onreset=()=>setTimeout(loadProducts,0);
+}
+function viewWishlist(){
+  const favorites=SHOES.filter(shoe=>wishlist.includes(shoe.id));
+  app.innerHTML=`<div class="view"><section class="collection-section">
+    <div class="section-heading"><div><span class="section-kicker">BỘ SƯU TẬP CỦA BẠN</span><h2>Danh sách yêu thích</h2></div>
+      <p>${currentUser?.role==='customer'?'Danh sách yêu thích đã đồng bộ với tài khoản.':'Danh sách được lưu trên trình duyệt này.'}</p></div>
+    ${favorites.length?`<div class="collection-grid">${productCards(favorites)}</div>`:'<div class="search-empty"><div><h3>Chưa có đôi giày yêu thích</h3><p>Thêm sản phẩm vào danh sách để xem lại sau.</p><a class="hero-link" href="#collection">Khám phá sản phẩm <span>→</span></a></div></div>'}
+  </section></div>`;
+}
+async function viewTopProducts(){
+  app.innerHTML='<section class="view"><div class="portal-section"><h1>Sản phẩm bán chạy</h1><p class="portal-empty">Đang tải thống kê...</p></div></section>';
+  const target=app.querySelector('.portal-empty');
+  try{
+    const result=await apiRequest('/api/top-products');
+    if(!target.isConnected)return;
+    const rows=result.products;
+    target.outerHTML=rows.length
+      ?`<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Sản phẩm</th><th>Số lượng đã bán</th><th>Doanh thu sản phẩm (trước giảm giá)</th></tr></thead><tbody>${rows.map(item=>`<tr><td>${escapeHtml(item.name)}</td><td>${item.quantity}</td><td>${moneyVnd(item.revenue)}</td></tr>`).join('')}</tbody></table></div>`
+      :'<p class="portal-empty">Chưa có đơn hàng được xác nhận.</p>';
+  }catch(error){if(target.isConnected)target.textContent=error.message}
+}
+async function viewSizeChart(){
+  app.innerHTML='<section class="view"><div class="portal-section"><h1>Bảng quy đổi size giày</h1><p class="portal-empty">Đang tải bảng size...</p></div></section>';
+  const target=app.querySelector('.portal-empty');
+  try{
+    const result=await apiRequest('/api/size-chart');
+    if(!target.isConnected)return;
+    target.outerHTML=result.sizes.length?`<div class="portal-table-wrap"><table class="portal-table">
+      <thead><tr><th>EU</th><th>US</th><th>UK</th><th>Chiều dài bàn chân (cm)</th></tr></thead>
+      <tbody>${result.sizes.map(size=>`<tr><td>${escapeHtml(size.eu)}</td><td>${escapeHtml(size.us??'—')}</td><td>${escapeHtml(size.uk??'—')}</td><td>${escapeHtml(size.cm)}</td></tr>`).join('')}</tbody>
+      </table></div><p class="portal-note">Bảng size chỉ mang tính tham khảo. Nên đo cả hai chân và chọn theo số đo chân lớn hơn.</p>`
+      :'<p class="portal-empty">Chưa có dữ liệu bảng size.</p>';
+  }catch(error){if(target.isConnected)target.textContent=error.message}
+}
+function viewLoyalty(){
+  app.innerHTML=`<section class="view auth-page"><div class="auth-card">
+    <h1>Hạng thành viên & điểm tích lũy</h1>
+    <p>Điểm được cộng khi đơn hàng hoàn tất. Để bảo vệ thông tin, cần nhập số điện thoại và mã của đơn hàng đã hoàn tất.</p>
+    <form class="auth-form" id="loyaltyForm">
+      <label>Số điện thoại<input name="phone" inputmode="numeric" pattern="[0-9]{9,12}" maxlength="12" required></label>
+      <label>Mã đơn hàng hoàn tất<input name="order" pattern="SW-[A-Fa-f0-9]{8}" required placeholder="SW-XXXXXXXX"></label>
+      <button class="auth-submit" type="submit">Tra cứu điểm</button>
+    </form>
+    <div id="loyaltyResult" role="status"></div><p class="auth-error" id="loyaltyError" role="alert"></p>
+  </div></section>`;
+  $('#loyaltyForm').onsubmit=async event=>{
+    event.preventDefault();
+    const form=event.currentTarget;
+    try{
+      const params=new URLSearchParams({phone:form.elements.phone.value,order:form.elements.order.value.toUpperCase()});
+      const result=await apiRequest(`/api/loyalty?${params}`);
+      const tier=result.tier?`${escapeHtml(result.tier.name)} — ${escapeHtml(result.tier.benefits)}`:'Chưa xếp hạng';
+      $('#loyaltyResult').innerHTML=`<p><strong>${result.account.points} điểm</strong> · ${tier}</p><p>Cứ mỗi 10.000 ₫ thanh toán, bạn nhận 1 điểm.</p>`;
+      $('#loyaltyError').textContent='';
+    }catch(error){$('#loyaltyError').textContent=error.message;$('#loyaltyResult').textContent=''}
+  };
+}
+function viewAbout(){
+  app.innerHTML=`<div class="view">
+    <section class="story-section">
+      <div class="story-copy"><span class="section-kicker">VỀ SWOOSH STORE</span><h2>Phong cách bắt đầu từ mỗi bước chân.</h2><p>Khám phá bộ sưu tập giày thể thao với nhiều sắc màu và kiểu dáng. Tìm đôi phù hợp, chọn cỡ yêu thích và thêm ngay vào giỏ hàng.</p><a class="story-link" href="#collection">Chọn giày ngay <span>→</span></a></div>
+      <div class="story-stats"><div class="stat-card"><strong>05</strong><span>Mẫu giày nổi bật<br>đang chờ bạn khám phá</span></div><div class="stat-card"><strong>38–45</strong><span>Dải cỡ giày EU<br>dễ dàng lựa chọn</span></div><div class="stat-card"><strong>01</strong><span>Phong cách riêng<br>cho mỗi hành trình</span></div><div class="stat-card"><strong>∞</strong><span>Bước chân mới<br>bắt đầu từ hôm nay</span></div></div>
+    </section>
+  </div>`;
+}
+async function viewBlog(slug=''){
+  app.innerHTML='<section class="view info-page"><p class="portal-empty">Đang tải bài viết...</p></section>';
+  try{
+    if(slug){
+      const {article}=await apiRequest(`/api/blog/${encodeURIComponent(slug)}`);
+      app.innerHTML=`<section class="view info-page">
+        <article class="blog-article">
+          <a class="back" href="#blog">← Tất cả bài viết</a>
+          <p class="section-kicker">${escapeHtml(article.category)}</p>
+          <h1>${escapeHtml(article.title)}</h1>
+          <p class="blog-article-meta">${escapeHtml(article.author_name)} · ${escapeHtml(new Date(article.created_at).toLocaleDateString('vi-VN'))}</p>
+          ${article.thumbnail_url?`<img src="${escapeHtml(article.thumbnail_url)}" alt="${escapeHtml(article.title)}">`:''}
+          <div class="blog-article-content">${escapeHtml(article.content)}</div>
+        </article>
+      </section>`;
+      return;
+    }
+    const {articles}=await apiRequest('/api/blog');
+    app.innerHTML=`<section class="view info-page">
+      <span class="section-kicker">SWOOSH STORE · BLOG</span>
+      <h1>Chuyện chạy bộ & chọn giày</h1>
+      <p class="info-lead">Bài viết hướng dẫn, kinh nghiệm luyện tập và cách chọn giày phù hợp cho mỗi hành trình.</p>
+      ${articles.length?`<div class="blog-grid">${articles.map(article=>`<article class="blog-card">
+        ${article.thumbnail_url?`<img src="${escapeHtml(article.thumbnail_url)}" alt="" loading="lazy">`:''}
+        <div class="blog-card-copy">
+          <small>${escapeHtml(article.category)} · ${escapeHtml(new Date(article.created_at).toLocaleDateString('vi-VN'))}</small>
+          <h2>${escapeHtml(article.title)}</h2>
+          <p>${escapeHtml(article.content_preview||'')}</p>
+          <a href="#blog/${encodeURIComponent(article.slug)}">Đọc bài viết →</a>
+        </div>
+      </article>`).join('')}</div>`:'<div class="info-notice">Chưa có bài blog nào được đăng. Hãy quay lại sau nhé.</div>'}
+    </section>`;
+  }catch(error){
+    app.innerHTML=`<section class="view info-page"><h1>Không tải được Blog</h1><p class="info-notice">${escapeHtml(error.message)}</p><a class="hero-link" href="#shoes">Về cửa hàng</a></section>`;
+  }
+}
+function viewSupport(){
+  app.innerHTML=`<section class="view info-page">
+    <h1>Hỗ trợ khách hàng</h1>
+    <p class="info-lead">Các thông tin dưới đây mô tả đúng trạng thái hiện tại của website mẫu, giúp bạn biết những gì đã sẵn sàng và những gì cần cấu hình trước khi bán hàng thật.</p>
+    <div class="info-notice"><strong>Website không có hotline hoặc email hỗ trợ đã xác minh.</strong> Đơn hàng được lưu trên máy chủ để nhân viên xử lý; vui lòng chỉ triển khai khi đã bổ sung thông tin liên hệ và chính sách chính thức.</div>
+    <div class="info-list">
+      <article class="info-card"><h2>Làm sao để đặt hàng?</h2><p>Chọn mẫu giày và cỡ phù hợp, thêm vào giỏ hàng rồi điền thông tin ở trang thanh toán. Đơn sẽ xuất hiện trong trang quản lý để nhân viên xác nhận.</p></article>
+      <article class="info-card"><h2>Có những phương thức thanh toán nào?</h2><p>Giao diện hiện chỉ có lựa chọn thanh toán khi nhận hàng (COD). Thanh toán trực tuyến cần tích hợp cổng thanh toán và máy chủ bảo mật trước khi sử dụng.</p></article>
+      <article class="info-card"><h2>Phí vận chuyển là bao nhiêu?</h2><p>Giỏ hàng hiện hiển thị miễn phí vận chuyển. Cửa hàng cần xác nhận khu vực giao hàng, điều kiện và phí thực tế trước khi mở bán.</p></article>
+      <article class="info-card"><h2>Tôi cần liên hệ cửa hàng ở đâu?</h2><p>Hotline, email hỗ trợ và địa chỉ cửa hàng chưa được cung cấp. Hãy bổ sung thông tin liên hệ chính thức để khách hàng có thể hỏi về sản phẩm, giao hàng và đổi trả.</p><p><a href="#policies">Xem các chính sách cần hoàn thiện</a></p></article>
+    </div>
+  </section>`;
+}
+function viewPolicies(){
+  app.innerHTML=`<section class="view info-page">
+    <h1>Chính sách cửa hàng</h1>
+    <p class="info-lead">Trang này tổng hợp các mục cần công bố để khách hàng hiểu cách đặt hàng, nhận hàng và xử lý dữ liệu.</p>
+    <div class="info-notice"><strong>Thông tin mẫu — chưa phải điều khoản bán hàng.</strong> Cần cửa hàng xác nhận và cập nhật điều kiện, thời hạn, khu vực áp dụng cùng kênh liên hệ thật trước khi nhận đơn.</div>
+    <div class="info-list">
+      <article class="info-card"><h2>Đặt hàng và thanh toán</h2><p>Đơn đặt hàng được lưu trên máy chủ để nhân viên xử lý. Website hiện chỉ hỗ trợ thanh toán khi nhận hàng (COD), chưa có thanh toán trực tuyến.</p></article>
+      <article class="info-card"><h2>Giao hàng</h2><p>Giỏ hàng đang hiển thị miễn phí vận chuyển theo cấu hình demo. Cần bổ sung khu vực phục vụ, đơn vị giao hàng, thời gian dự kiến và điều kiện phí ship.</p></article>
+      <article class="info-card"><h2>Đổi, trả và hoàn tiền</h2><p>Chưa có điều kiện đổi trả hoặc hoàn tiền được cửa hàng cung cấp. Hãy công bố thời hạn, tình trạng sản phẩm được chấp nhận, quy trình và đầu mối hỗ trợ trước khi bán.</p></article>
+      <article class="info-card"><h2>Quyền riêng tư</h2><p>Thông tin liên hệ và địa chỉ giao hàng được lưu trong cơ sở dữ liệu của cửa hàng để xử lý đơn. Cần công bố thời hạn lưu trữ và đầu mối tiếp nhận yêu cầu xóa dữ liệu.</p></article>
+    </div>
+    <p class="info-lead"><a href="#support">Cần hỗ trợ? Xem câu hỏi thường gặp.</a></p>
+  </section>`;
+}
+function viewRegister(){
+  if(!backendOnline)return viewLogin('customer');
+  if(currentUser){
+    location.hash=currentUser.role==='customer'?'#customer':'#';
+    return;
+  }
+  app.innerHTML=`<section class="view auth-page"><div class="auth-card">
+    <h1>Đăng ký thành viên</h1><p>Tạo tài khoản để lưu thông tin mua hàng và tích điểm thành viên.</p>
+    <form class="auth-form" id="registerForm">
+      <label>Họ và tên<input name="fullName" autocomplete="name" required minlength="2" maxlength="100"></label>
+      <label>Số điện thoại<input name="phone" inputmode="numeric" autocomplete="tel" required maxlength="12" pattern="[0-9]{9,12}"></label>
+      <label>Mật khẩu<input name="password" type="password" autocomplete="new-password" required minlength="8" maxlength="256"></label>
+      <label>Nhập lại mật khẩu<input name="confirmPassword" type="password" autocomplete="new-password" required minlength="8" maxlength="256"></label>
+      <button class="auth-submit" type="submit">Tạo tài khoản</button>
+    </form>
+    <p class="auth-error" id="registerError" role="alert"></p>
+    <p class="auth-error"><a href="#login?role=customer">Đã có tài khoản? Đăng nhập</a></p>
+  </div></section>`;
+  $('#registerForm').onsubmit=async event=>{
+    event.preventDefault();
+    const form=event.currentTarget;
+    const error=$('#registerError');
+    const submit=form.querySelector('button');
+    submit.disabled=true;
+    error.textContent='';
+    if(form.elements.password.value!==form.elements.confirmPassword.value){
+      error.textContent='Mật khẩu nhập lại không khớp.';
+      submit.disabled=false;
+      return;
+    }
+    try{
+      const result=await apiRequest('/api/register',{
+        method:'POST',
+        body:JSON.stringify({
+          fullName:form.elements.fullName.value,
+          phone:form.elements.phone.value,
+          password:form.elements.password.value,
+        }),
+      });
+      csrfToken=result.csrfToken;
+      adoptCurrentUser(result.user);
+      updateAuthLink();
+      location.hash='#customer';
+    }catch(errorValue){
+      error.textContent=errorValue.message;
+      submit.disabled=false;
+    }
+  };
+}
+async function viewCustomer(){
+  if(!backendOnline)return viewLogin('customer');
+  if(!currentUser)return viewLogin('customer');
+  if(currentUser.role!=='customer'){
+    location.hash=currentUser.role==='admin'?'#admin':'#staff';
+    return;
+  }
+  app.innerHTML='<section class="view portal-page"><p class="portal-empty">Đang tải tài khoản...</p></section>';
+  try{
+    const [profileResult,addressResult,orderResult,favorites]=await Promise.all([
+      apiRequest('/api/customer/profile'),
+      apiRequest('/api/customer/addresses'),
+      apiRequest('/api/customer/orders'),
+      syncCustomerWishlist(),
+    ]);
+    const profile=profileResult.profile||profileResult;
+    const addresses=addressResult.addresses||[];
+    const orders=orderResult.orders||[];
+    app.innerHTML=`<section class="view portal-page">
+      <div class="portal-hero">
+        <div><p class="portal-eyebrow">Tài khoản khách hàng</p><h1>Xin chào, ${escapeHtml(profile.full_name||currentUser.fullName||'Khách hàng')}</h1>
+        <p class="portal-intro">Quản lý hồ sơ, địa chỉ giao hàng, đơn hàng và sản phẩm yêu thích.</p></div>
+        <a class="portal-button" href="#runner">Tư vấn giày chạy bộ</a>
+      </div>
+      <div class="portal-toolbar"><p><strong>${escapeHtml(currentUser.phone||profile.phone_number||'')}</strong><span class="portal-role">Khách hàng</span></p><button class="portal-button" id="customerLogout" type="button">Đăng xuất</button></div>
+      <section class="portal-section"><h2>Thông tin cá nhân</h2>
+        <form class="portal-add-form" id="customerProfileForm">
+          <label class="portal-field"><span>Họ và tên</span><input name="fullName" required minlength="2" maxlength="100" value="${escapeHtml(profile.full_name||'')}"></label>
+          <label class="portal-field"><span>Email</span><input name="email" type="email" maxlength="255" value="${escapeHtml(profile.email||'')}"></label>
+          <label class="portal-field"><span>Số điện thoại</span><input name="phone" inputmode="numeric" pattern="[0-9]{9,12}" required value="${escapeHtml(profile.phone_number||'')}"></label>
+          <button class="portal-button" type="submit">Lưu thông tin</button>
+        </form>
+        <p class="portal-message" id="customerMessage" role="status"></p>
+      </section>
+      <section class="portal-section"><h2>Địa chỉ giao hàng</h2>
+        ${addresses.length?`<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Người nhận</th><th>Điện thoại</th><th>Địa chỉ</th><th></th></tr></thead><tbody>${addresses.map(address=>`<tr>
+          <td>${escapeHtml(address.recipient_name)}${address.is_default?'<br><strong>Mặc định</strong>':''}</td><td>${escapeHtml(address.phone)}</td>
+          <td>${escapeHtml([address.detailed_address,address.ward,address.district,address.province].filter(Boolean).join(', '))}</td>
+          <td>${address.is_default?'':`<button class="portal-button" data-address-default="${address.id}">Đặt mặc định</button>`}
+          <button class="portal-button" data-address-delete="${address.id}">Xóa</button></td></tr>`).join('')}</tbody></table></div>`:'<p class="portal-empty">Bạn chưa lưu địa chỉ giao hàng.</p>'}
+        <form class="portal-add-form" id="customerAddressForm">
+          <label class="portal-field"><span>Người nhận</span><input name="recipientName" required minlength="2" maxlength="100"></label>
+          <label class="portal-field"><span>Số điện thoại</span><input name="phone" required inputmode="numeric" pattern="[0-9]{9,12}"></label>
+          <label class="portal-field"><span>Tỉnh/thành</span><input name="province" required maxlength="100"></label>
+          <label class="portal-field"><span>Quận/huyện</span><input name="district" required maxlength="100"></label>
+          <label class="portal-field"><span>Phường/xã</span><input name="ward" required maxlength="100"></label>
+          <label class="portal-field"><span>Địa chỉ cụ thể</span><input name="detail" required minlength="5" maxlength="255"></label>
+          <label class="portal-field"><span><input name="isDefault" type="checkbox"> Đặt làm mặc định</span></label>
+          <button class="portal-button" type="submit">Thêm địa chỉ</button>
+        </form>
+      </section>
+      <section class="portal-section"><h2>Đơn hàng của tôi</h2>
+        ${orders.length?orders.map(order=>`<article class="portal-order">
+          <div class="portal-order-head"><strong>${escapeHtml(order.number)}</strong><strong>${moneyVnd(order.total)}</strong></div>
+          <div class="portal-order-meta">Trạng thái: ${escapeHtml(ORDER_STATUS_LABELS[order.status]||order.status)} · ${escapeHtml(order.createdAt||'')}</div>
+          <div class="portal-order-items">${(order.items||[]).map(item=>`<p>${escapeHtml(item.product_name)} · cỡ ${escapeHtml(item.size)} · x${item.quantity}</p>`).join('')}</div>
+          ${order.status==='pending'?`<button class="portal-button" data-customer-cancel="${order.id}">Hủy đơn</button>`:''}
+          ${['delivered','completed'].includes(order.status)?`<form class="portal-add-form" data-return-form="${order.id}"><label class="portal-field"><span>Lý do đổi trả / hoàn tiền</span><input name="reason" required minlength="5" maxlength="2000"></label><button class="portal-button" type="submit">Gửi yêu cầu hoàn tiền</button></form>`:''}
+          <button class="portal-button" data-reorder="${order.id}">Mua lại</button>
+        </article>`).join(''):'<p class="portal-empty">Chưa có đơn hàng.</p>'}
+      </section>
+      <section class="portal-section"><h2>Danh sách yêu thích</h2>
+        ${favorites.length?`<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Sản phẩm</th><th>Giá</th><th></th></tr></thead><tbody>${favorites.map(item=>`<tr><td>${escapeHtml(item.name)}</td><td>${moneyVnd(item.price)}</td><td><button class="portal-button" data-wishlist-remove="${escapeHtml(item.id)}">Xóa</button></td></tr>`).join('')}</tbody></table></div>`:'<p class="portal-empty">Chưa có sản phẩm yêu thích đã đồng bộ với tài khoản.</p>'}
+      </section>
+    </section>`;
+    $('#customerLogout').onclick=async()=>{
+      try{await logoutCurrentUser();location.hash='#shoes'}catch(error){toast(error.message)}
+    };
+    $('#customerProfileForm').onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      try{
+        const updated=await apiRequest('/api/customer/profile',{method:'PATCH',body:JSON.stringify({
+          fullName:form.elements.fullName.value.trim(),email:form.elements.email.value.trim(),phone:form.elements.phone.value.trim(),
+        })});
+        if(updated.full_name)currentUser.fullName=updated.full_name;
+        if(updated.phone_number)currentUser.phone=updated.phone_number;
+        $('#customerMessage').textContent='Đã cập nhật thông tin cá nhân.';
+      }catch(error){$('#customerMessage').textContent=error.message}
+    };
+    $('#customerAddressForm').onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      try{
+        await apiRequest('/api/customer/addresses',{method:'POST',body:JSON.stringify({
+          recipientName:form.elements.recipientName.value.trim(),phone:form.elements.phone.value.trim(),
+          province:form.elements.province.value.trim(),district:form.elements.district.value.trim(),
+          ward:form.elements.ward.value.trim(),detail:form.elements.detail.value.trim(),isDefault:form.elements.isDefault.checked,
+        })});
+        await viewCustomer();
+      }catch(error){$('#customerMessage').textContent=error.message}
+    };
+    app.onclick=async event=>{
+      const button=event.target.closest('button');
+      if(!button)return;
+      try{
+        if(button.dataset.addressDefault)await apiRequest(`/api/customer/addresses/${button.dataset.addressDefault}/default`,{method:'POST',body:'{}'});
+        else if(button.dataset.addressDelete)await apiRequest(`/api/customer/addresses/${button.dataset.addressDelete}`,{method:'DELETE'});
+        else if(button.dataset.customerCancel)await apiRequest(`/api/customer/orders/${button.dataset.customerCancel}/cancel`,{method:'POST',body:'{}'});
+        else if(button.dataset.wishlistRemove)await apiRequest(`/api/customer/wishlist/${encodeURIComponent(button.dataset.wishlistRemove)}`,{method:'DELETE'});
+        else if(button.dataset.reorder){
+          const order=orders.find(item=>String(item.id)===button.dataset.reorder);
+          if(!order)return;
+          for(const item of order.items||[]){
+            const shoe=SHOES.find(product=>product.id===item.product_id);
+            if(shoe)addToBag(shoe.name,String(item.size),shoe.price);
+          }
+          location.hash='#checkout';
+          return;
+        }else return;
+        await viewCustomer();
+      }catch(error){$('#customerMessage').textContent=error.message}
+    };
+    app.onsubmit=async event=>{
+      const form=event.target.closest('[data-return-form]');
+      if(!form)return;
+      event.preventDefault();
+      try{
+        await apiRequest(`/api/customer/orders/${form.dataset.returnForm}/returns`,{
+          method:'POST',body:JSON.stringify({reason:form.elements.reason.value.trim()}),
+        });
+        $('#customerMessage').textContent='Đã gửi yêu cầu hoàn tiền.';
+        form.reset();
+      }catch(error){$('#customerMessage').textContent=error.message}
+    };
+  }catch(error){
+    app.innerHTML=`<section class="view portal-page"><p class="portal-warning">${escapeHtml(error.message)}</p></section>`;
+  }
+}
+
+async function viewRunner(){
+  app.innerHTML='<section class="view portal-page"><p class="portal-empty">Đang tải công cụ tư vấn...</p></section>';
+  try{
+    const catalogs=await apiRequest('/api/runner/catalogs');
+    let profile=null;
+    if(currentUser?.role==='customer'){
+      const result=await apiRequest('/api/runner/profile');
+      profile=result.profiles?.[0]||null;
+    }
+    const optionList=(items,valueKey,labelKey)=>items.map(item=>`<option value="${escapeHtml(item[valueKey])}">${escapeHtml(item[labelKey])}</option>`).join('');
+    app.innerHTML=`<section class="view portal-page">
+      <div class="portal-hero"><div><p class="portal-eyebrow">Tư vấn chọn giày</p><h1>Tìm đôi phù hợp với hành trình của bạn</h1>
+      <p class="portal-intro">Chọn cân nặng, cự ly, địa hình, kiểu bàn chân và ngân sách để nhận gợi ý.</p></div></div>
+      ${currentUser?.role==='customer'?`<section class="portal-section"><h2>Hồ sơ người chạy</h2>
+        <form class="portal-add-form" id="runnerProfileForm">
+          <label class="portal-field"><span>Tên hồ sơ</span><input name="name" required minlength="2" maxlength="100" value="${escapeHtml(profile?.name||'Hồ sơ mặc định')}"></label>
+          <label class="portal-field"><span>Cân nặng (kg)</span><input name="weightKg" type="number" min="20" max="250" step="0.1" required value="${escapeHtml(profile?.weightKg||'')}"></label>
+          <label class="portal-field"><span>Mục tiêu chạy</span><input name="goal" maxlength="100" value="${escapeHtml(profile?.goal||'')}"></label>
+          <label class="portal-field"><span>Chiều dài bàn chân (mm)</span><input name="footLengthMm" type="number" min="150" max="350" step="0.1" value="${escapeHtml(profile?.footLengthMm||'')}"></label>
+          <label class="portal-field"><span>Chiều rộng bàn chân (mm)</span><input name="footWidthMm" type="number" min="50" max="180" step="0.1" value="${escapeHtml(profile?.footWidthMm||'')}"></label>
+          <label class="portal-field"><span>Kiểu vòm chân</span><select name="archType"><option value="">Chưa đo</option>${optionList(catalogs.arches,'name','name')}</select></label>
+          <button class="portal-button" type="submit">Lưu hồ sơ</button>
+        </form><p id="runnerProfileMessage" class="portal-message" role="status"></p></section>`:''}
+      <section class="portal-section"><h2>Bắt đầu tư vấn</h2>
+        <form class="portal-add-form" id="recommendationForm">
+          <label class="portal-field"><span>Cân nặng (kg)</span><input name="weightKg" type="number" min="20" max="250" step="0.1" required value="${escapeHtml(profile?.weightKg||'')}"></label>
+          <label class="portal-field"><span>Cự ly thường chạy</span><select name="distanceCode" required>${optionList(catalogs.distances,'code','label')}</select></label>
+          <label class="portal-field"><span>Địa hình</span><select name="terrainCode" required>${optionList(catalogs.terrains,'code','name')}</select></label>
+          <label class="portal-field"><span>Kiểu bàn chân</span><select name="archCode" required>${optionList(catalogs.arches,'code','name')}</select></label>
+          <label class="portal-field"><span>Ngân sách</span><select name="budgetCode" required>${optionList(catalogs.budgets,'code','label')}</select></label>
+          <button class="portal-button" type="submit">Xem gợi ý</button>
+        </form><p id="recommendationMessage" class="portal-message" role="status"></p><div id="recommendationResults"></div>
+      </section>
+      <section class="portal-section"><h2>Hướng dẫn đo chân</h2><div id="runnerGuideMeasure" class="portal-note">Đang tải hướng dẫn...</div>
+        <h3>Cách nhận biết vòm chân</h3><div id="runnerGuideArch" class="portal-note">Đang tải hướng dẫn...</div>
+      </section>
+    </section>`;
+    const archField=$('#runnerProfileForm select[name="archType"]');
+    if(archField&&profile?.archType)archField.value=profile.archType;
+    for(const [type,targetId] of [['HOW_TO_MEASURE_FOOT','runnerGuideMeasure'],['HOW_TO_DETERMINE_ARCH','runnerGuideArch']]){
+      try{
+        const guide=await apiRequest(`/api/guides/${type}`);
+        const target=$(`#${targetId}`);
+        if(target)target.textContent=guide.guide?.content_html?.replace(/<[^>]*>/g,' ').replace(/\\s+/g,' ').trim()||'';
+      }catch(error){const target=$(`#${targetId}`);if(target)target.textContent=error.message}
+    }
+    const profileForm=$('#runnerProfileForm');
+    if(profileForm)profileForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const optionalNumber=name=>form.elements[name].value?Number(form.elements[name].value):null;
+      const archCode=form.elements.archType.value;
+      const arch=archCode?catalogs.arches.find(item=>item.name===archCode):null;
+      try{
+        await apiRequest('/api/runner/profile',{method:'PUT',body:JSON.stringify({
+          name:form.elements.name.value.trim(),weightKg:Number(form.elements.weightKg.value),
+          goal:form.elements.goal.value.trim()||null,footLengthMm:optionalNumber('footLengthMm'),
+          footWidthMm:optionalNumber('footWidthMm'),archType:arch?.name||null,
+        })});
+        $('#runnerProfileMessage').textContent='Đã lưu hồ sơ chạy.';
+      }catch(error){$('#runnerProfileMessage').textContent=error.message}
+    };
+    $('#recommendationForm').onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const message=$('#recommendationMessage');
+      message.textContent='Đang tìm sản phẩm phù hợp...';
+      try{
+        const result=await apiRequest('/api/recommendations',{method:'POST',body:JSON.stringify({
+          weightKg:Number(form.elements.weightKg.value),distanceCode:form.elements.distanceCode.value,
+          terrainCode:form.elements.terrainCode.value,archCode:form.elements.archCode.value,
+          budgetCode:form.elements.budgetCode.value,profileId:profile?.id||null,
+        })});
+        const recommendations=result.recommendations||[];
+        $('#recommendationResults').innerHTML=recommendations.length?`
+          <h3>Kết quả tư vấn</h3><div class="collection-grid">${recommendations.map((item,index)=>`<article class="product-card">
+            <div class="product-info"><span class="product-label">PHÙ HỢP ${item.score}%</span><h3>${escapeHtml(item.shoeName)}</h3>
+            <p>${escapeHtml(item.brand)} · ${moneyVnd(item.price)}</p><p>${escapeHtml(item.weightReason)} ${escapeHtml(item.distanceReason)}</p>
+            <p>${escapeHtml(item.terrainReason)} ${escapeHtml(item.archReason)} ${escapeHtml(item.budgetReason)}</p>
+            ${currentUser?.role==='customer'?`<label><input type="checkbox" data-recommendation-code="${escapeHtml(item.shoeCode)}" checked> Lưu kết quả này</label>`:''}
+            <a class="product-open" href="#shoe/${encodeURIComponent(item.shoeCode)}">Xem sản phẩm <span>↗</span></a></div>
+          </article>`).join('')}</div>
+          ${currentUser?.role==='customer'?`<button class="portal-button" id="saveRecommendation" data-session-id="${result.sessionId}">Lưu kết quả tư vấn</button>`:''}`
+          :'<p class="portal-empty">Chưa có sản phẩm phù hợp. Hãy thử thay đổi tiêu chí.</p>';
+        message.textContent='';
+        const saveButton=$('#saveRecommendation');
+        if(saveButton)saveButton.onclick=async()=>{
+          const shoeCodes=[...app.querySelectorAll('[data-recommendation-code]:checked')].map(input=>input.dataset.recommendationCode);
+          try{
+            await apiRequest(`/api/recommendations/${saveButton.dataset.sessionId}/save`,{method:'POST',body:JSON.stringify({shoeCodes})});
+            toast('Đã lưu kết quả tư vấn.');
+          }catch(error){message.textContent=error.message}
+        };
+      }catch(error){message.textContent=error.message;$('#recommendationResults').replaceChildren()}
+    };
+  }catch(error){
+    app.innerHTML=`<section class="view portal-page"><p class="portal-warning">${escapeHtml(error.message)}</p></section>`;
+  }
+}
+function viewLogin(role=''){
+  if(!backendOnline){
+    app.innerHTML=`<section class="view auth-page"><div class="auth-card">
+      <h1>Đăng nhập</h1><p>Đăng nhập quản trị viên hoặc nhân viên để tiếp tục.</p>
+      <div class="portal-warning">Máy chủ chưa chạy. Hãy nhấp đúp vào <code>start-store.bat</code> để khởi động cửa hàng.</div>
+    </div></section>`;
+    return;
+  }
+  if(currentUser){
+    location.hash=currentUser.role==='admin'?'#admin':currentUser.role==='customer'?'#customer':'#staff';
+    return;
+  }
+  app.innerHTML=`<section class="view auth-page"><div class="auth-card">
+    <h1>Đăng nhập</h1><p>Đăng nhập tài khoản khách hàng hoặc tài khoản nội bộ.</p>
+    <form class="auth-form" id="loginForm">
+      <label>Vai trò
+        <select name="role"><option value="customer" ${role==='customer'||!role?'selected':''}>Khách hàng</option><option value="admin" ${role==='admin'?'selected':''}>Quản trị viên</option><option value="staff" ${role==='staff'?'selected':''}>Nhân viên</option></select>
+      </label>
+      <label id="loginIdentityLabel">Số điện thoại<input name="phone" inputmode="numeric" autocomplete="tel" required maxlength="12" pattern="[0-9]{9,12}"></label>
+      <label>Mật khẩu<input name="password" type="password" autocomplete="current-password" required maxlength="256"></label>
+      <button class="auth-submit" type="submit">Đăng nhập</button>
+    </form>
+    <p class="auth-error" id="registerPrompt"><a href="#register">Chưa có tài khoản? Đăng ký ngay</a></p>
+    <p class="auth-error" id="authError" role="alert"></p>
+  </div></section>`;
+  const roleSelect=$('#loginForm').elements.role;
+  const identityLabel=$('#loginIdentityLabel');
+  const syncLoginIdentity=()=>{
+    const customer=roleSelect.value==='customer';
+    identityLabel.innerHTML=customer
+      ?'Số điện thoại<input name="phone" inputmode="numeric" autocomplete="tel" required maxlength="12" pattern="[0-9]{9,12}">'
+      :'Tài khoản<input name="username" autocomplete="username" required maxlength="40">';
+  };
+  roleSelect.onchange=syncLoginIdentity;
+  syncLoginIdentity();
+  $('#loginForm').onsubmit=async event=>{
+    event.preventDefault();
+    const form=event.currentTarget;
+    const submit=form.querySelector('button[type="submit"]');
+    const error=$('#authError');
+    submit.disabled=true;
+    error.textContent='';
+    try{
+      const roleValue=form.elements.role.value;
+      const identity=roleValue==='customer'
+        ?{phone:form.elements.phone.value.trim()}
+        :{username:form.elements.username.value.trim()};
+      const result=await apiRequest('/api/login',{
+        method:'POST',
+        body:JSON.stringify({
+          role:roleValue,
+          ...identity,
+          password:form.elements.password.value,
+        }),
+      });
+      csrfToken=result.csrfToken;
+      adoptCurrentUser(result.user);
+      if(currentUser.role!==form.elements.role.value){
+        await logoutCurrentUser();
+        throw new Error('Tài khoản này không thuộc vai trò đã chọn.');
+      }
+      updateAuthLink();
+      location.hash=currentUser.role==='admin'?'#admin':currentUser.role==='customer'?'#customer':'#staff';
+    }catch(errorValue){
+      error.textContent=errorValue.message;
+      submit.disabled=false;
+    }
+  };
+}
+const ORDER_STATUS_LABELS={
+  pending:'Chờ xác nhận',
+  confirmed:'Đã xác nhận',
+  shipping:'Đang giao',
+  completed:'Hoàn tất',
+  cancelled:'Đã hủy',
+};
+function renderPortalOrders(orders,canUpdate=true){
+  if(!orders.length)return '<p class="portal-empty">Chưa có đơn hàng.</p>';
+  return orders.map(order=>{
+    const nextStatuses={
+      pending:['confirmed','cancelled'],
+      confirmed:['shipping','cancelled'],
+      shipping:['completed','cancelled'],
+      completed:[],
+      cancelled:[],
+    }[order.status]||[];
+    const items=order.items.map(item=>
+      `${escapeHtml(item.product_name)} · Cỡ ${item.size} · SL ${item.quantity}`
+    ).join('<br>');
+    return `<article class="portal-order">
+      <div class="portal-order-head"><strong>${escapeHtml(order.number)} · ${ORDER_STATUS_LABELS[order.status]}</strong><strong>${moneyVnd(order.total)}</strong></div>
+      <div class="portal-order-meta">${escapeHtml(order.customerName)} · ${escapeHtml(order.phone)}<br>${escapeHtml(order.address)}${order.note?`<br>Ghi chú: ${escapeHtml(order.note)}`:''}</div>
+      <div class="portal-order-items">${items}</div>
+      ${canUpdate&&nextStatuses.length?`<div class="portal-order-controls"><label class="portal-field"><span>Trạng thái</span><select data-order-status="${order.id}">${nextStatuses.map(status=>`<option value="${status}">${ORDER_STATUS_LABELS[status]}</option>`).join('')}</select></label><button class="portal-button" data-order-save="${order.id}">Cập nhật đơn</button></div>`:''}
+    </article>`;
+  }).join('');
+}
+function renderPortalProducts(products){
+  if(!products.length)return '<p class="portal-empty">Chưa có sản phẩm.</p>';
+  return `<div class="portal-table-wrap"><table class="portal-table">
+    <thead><tr><th>Mã</th><th>Tên sản phẩm</th><th>Giá (nghìn ₫)</th><th>Tồn kho</th><th>Đang bán</th><th></th></tr></thead>
+    <tbody>${products.map(product=>`<tr data-product-row="${escapeHtml(product.id)}">
+      <td>${escapeHtml(product.id)}</td>
+      <td><input type="text" data-product-name value="${escapeHtml(product.name)}" maxlength="100" aria-label="Tên sản phẩm"></td>
+      <td><input type="number" data-product-price value="${product.price}" min="1" max="100000" aria-label="Giá nghìn đồng"></td>
+      <td><input type="number" data-product-stock value="${product.stock}" min="0" max="100000" aria-label="Tồn kho"></td>
+      <td><input type="checkbox" data-product-active ${product.active?'checked':''} aria-label="Đang bán"></td>
+      <td><button class="portal-button" data-product-save="${escapeHtml(product.id)}">Lưu</button></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function renderPortalUsers(users,roles=[]){
+  const staff=users.filter(user=>user.role==='staff');
+  if(!staff.length)return '<p class="portal-empty">Chưa có tài khoản nhân viên.</p>';
+  return `<div class="portal-table-wrap"><table class="portal-table portal-staff-table">
+    <thead><tr><th>Họ và tên</th><th>Địa chỉ</th><th>Số CCCD</th><th>Ngày sinh</th><th>Tên đăng nhập</th><th>Vai trò</th><th>Mật khẩu mới</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+    <tbody>${staff.map(user=>`<tr data-user-row="${user.id}">
+      <td><input type="text" data-user-full-name value="${escapeHtml(user.full_name||'')}" required minlength="2" maxlength="100" aria-label="Họ và tên"></td>
+      <td><input type="text" data-user-address value="${escapeHtml(user.address||'')}" required minlength="5" maxlength="200" aria-label="Địa chỉ"></td>
+      <td><input type="text" data-user-citizen-id value="${escapeHtml(user.citizen_id||'')}" required inputmode="numeric" pattern="[0-9]{12}" maxlength="12" aria-label="Số CCCD"></td>
+      <td><input type="date" data-user-birth-date value="${escapeHtml(user.birth_date||'')}" required min="1900-01-01" max="${new Date().toISOString().slice(0,10)}" aria-label="Ngày sinh"></td>
+      <td><input type="text" data-user-name value="${escapeHtml(user.username)}" required minlength="3" maxlength="40" pattern="[A-Za-z0-9._\\-]{3,40}" aria-label="Tên đăng nhập"></td>
+      <td><select data-user-role aria-label="Vai trò">${roles.map(role=>`<option value="${role.id}" ${Number(user.role_id)===role.id?'selected':''}>${escapeHtml(role.name)}</option>`).join('')}</select></td>
+      <td><input type="password" data-user-password minlength="12" maxlength="256" autocomplete="new-password" placeholder="Để trống nếu giữ nguyên" aria-label="Mật khẩu mới"></td>
+      <td>${user.active?'Đang hoạt động':'Đã khóa'}</td>
+      <td><div class="portal-user-actions"><button class="portal-button" data-user-save="${user.id}">Lưu chỉnh sửa</button><button class="portal-button" data-user-toggle="${user.id}" data-active="${user.active?'false':'true'}">${user.active?'Khóa':'Mở khóa'}</button></div></td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+function renderAdminVouchers(vouchers){
+  if(!vouchers.length)return '<p class="portal-empty">Chưa có voucher.</p>';
+  return `<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Mã</th><th>Loại</th><th>Giá trị</th><th>Đơn tối thiểu (₫)</th><th>Bắt đầu</th><th>Hết hạn</th><th>Lượt tối đa</th><th>Đã dùng</th><th>Đang bật</th><th></th></tr></thead><tbody>${vouchers.map(voucher=>`<tr data-voucher-row="${escapeHtml(voucher.code)}">
+    <td>${escapeHtml(voucher.code)}</td>
+    <td><select data-voucher-type><option value="percent" ${voucher.discount_type==='percent'?'selected':''}>%</option><option value="fixed" ${voucher.discount_type==='fixed'?'selected':''}>₫</option></select></td>
+    <td><input data-voucher-value type="number" min="1" value="${voucher.discount_value}"></td>
+    <td><input data-voucher-min type="number" min="0" value="${voucher.min_total}"></td>
+    <td><input data-voucher-start type="datetime-local" value="${escapeHtml(dateTimeLocal(voucher.starts_at))}"></td>
+    <td><input data-voucher-expiry type="datetime-local" value="${escapeHtml(dateTimeLocal(voucher.expires_at))}"></td>
+    <td><input data-voucher-limit type="number" min="1" value="${voucher.usage_limit??''}" placeholder="∞"></td>
+    <td>${voucher.used_count}</td><td><input data-voucher-active type="checkbox" ${voucher.active?'checked':''}></td>
+    <td><button class="portal-button" data-voucher-save="${escapeHtml(voucher.code)}">Lưu</button> <button class="portal-button" data-voucher-delete="${escapeHtml(voucher.code)}">Xóa</button></td>
+  </tr>`).join('')}</tbody></table></div>`;
+}
+function renderAdminRoles(roles){
+  return `<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Tên vai trò</th><th>Quyền xem đơn</th><th>Quyền cập nhật đơn</th><th></th></tr></thead><tbody>${roles.map(role=>`<tr data-role-row="${role.id}">
+    <td><input data-role-name value="${escapeHtml(role.name)}" maxlength="60" aria-label="Tên vai trò"></td>
+    <td><input type="checkbox" data-role-read ${role.permissions.includes('orders.read')?'checked':''} aria-label="Xem đơn hàng"></td>
+    <td><input type="checkbox" data-role-update ${role.permissions.includes('orders.update')?'checked':''} aria-label="Cập nhật đơn hàng"></td>
+    <td><button class="portal-button" data-role-save="${role.id}">Lưu</button> ${role.id!==1?`<button class="portal-button" data-role-delete="${role.id}">Xóa</button>`:''}</td>
+  </tr>`).join('')}</tbody></table></div>`;
+}
+function renderAdminLogs(logs){
+  if(!logs.length)return '<p class="portal-empty">Không có hoạt động phù hợp.</p>';
+  return `<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Thời gian</th><th>Người thực hiện</th><th>Hoạt động</th><th>Đối tượng</th><th>Mã</th><th>IP</th></tr></thead><tbody>${logs.map(log=>`<tr>
+    <td>${escapeHtml(new Date(log.created_at).toLocaleString('vi-VN'))}</td><td>${escapeHtml(log.actor)}</td><td>${escapeHtml(log.action)}</td>
+    <td>${escapeHtml(log.entity)}</td><td>${escapeHtml(log.entity_id)}</td><td>${escapeHtml(log.ip_address)}</td>
+  </tr>`).join('')}</tbody></table></div>`;
+}
+function renderAdminLoyalty(data){
+  const tiers=data.tiers;
+  const accounts=data.accounts;
+  return `<h3>Hạng thành viên</h3><div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Hạng</th><th>Mốc điểm</th><th>Quyền lợi</th><th></th></tr></thead><tbody>${tiers.map(tier=>`<tr data-tier-row="${tier.id}">
+    <td><input data-tier-name value="${escapeHtml(tier.name)}" maxlength="40"></td><td><input data-tier-points type="number" min="0" value="${tier.min_points}"></td>
+    <td><input data-tier-benefits value="${escapeHtml(tier.benefits)}" maxlength="200"></td><td><button class="portal-button" data-tier-save="${tier.id}">Lưu</button> ${tier.min_points!==0?`<button class="portal-button" data-tier-delete="${tier.id}">Xóa</button>`:''}</td>
+  </tr>`).join('')}</tbody></table></div>
+  <h3 style="margin-top:24px">Thành viên tích điểm</h3>
+  ${accounts.length?`<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>Số điện thoại</th><th>Khách hàng</th><th>Điểm</th><th>Tham gia</th></tr></thead><tbody>${accounts.map(account=>`<tr><td>${escapeHtml(account.phone)}</td><td>${escapeHtml(account.full_name)}</td><td>${account.points}</td><td>${escapeHtml(new Date(account.created_at).toLocaleDateString('vi-VN'))}</td></tr>`).join('')}</tbody></table></div>`:'<p class="portal-empty">Chưa có thành viên tích điểm.</p>'}`;
+}
+function renderAdminMedia(media){
+  if(!media.length)return '<p class="portal-empty">Chưa có ảnh media.</p>';
+  return `<div class="collection-grid">${media.map(item=>`<article class="product-card"><img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.alt_text)}" loading="lazy" style="width:100%;height:220px;object-fit:contain;background:#eeece8"><div class="product-info"><p>${escapeHtml(item.filename)}</p><button class="portal-button" data-media-delete="${escapeHtml(item.filename)}">Xóa ảnh</button></div></article>`).join('')}</div>`;
+}
+function renderAdminBlog(articles){
+  if(!articles.length)return '<p class="portal-empty">Chưa có bài blog. Hãy tạo bài viết đầu tiên bên dưới.</p>';
+  return `<div class="blog-admin-list">${articles.map(article=>`<article class="blog-admin-item">
+    <div><h3>${escapeHtml(article.title)}</h3><p>${escapeHtml(article.category)} · ${article.status==='PUBLISHED'?'Đã đăng':'Bản nháp'} · ${escapeHtml(new Date(article.created_at).toLocaleDateString('vi-VN'))}</p></div>
+    <div class="blog-admin-actions"><button class="portal-button" data-blog-edit="${article.article_id}">Sửa</button><button class="portal-button" data-blog-delete="${article.article_id}">Xóa</button></div>
+  </article>`).join('')}</div>`;
+}
+function renderAdminCustomers(customers){
+  if(!customers.length)return '<p class="portal-empty">Chưa có khách hàng phù hợp.</p>';
+  return `<div class="portal-table-wrap"><table class="portal-table">
+    <thead><tr><th>Khách hàng</th><th>Số điện thoại</th><th>Số đơn</th><th>Tổng giá trị đơn*</th><th>Điểm</th><th>Hạng thành viên</th><th>Đơn gần nhất</th></tr></thead>
+    <tbody>${customers.map(customer=>`<tr>
+      <td>${escapeHtml(customer.full_name)}</td><td>${escapeHtml(customer.phone)}</td>
+      <td>${customer.order_count}</td><td>${moneyVnd(customer.total_spent)}</td>
+      <td>${customer.points}</td><td>${escapeHtml(customer.tier_name||'Chưa xếp hạng')}</td>
+      <td>${escapeHtml(new Date(customer.last_order_at).toLocaleString('vi-VN'))}</td>
+    </tr>`).join('')}</tbody>
+  </table></div><p class="portal-note">* Không tính các đơn đã hủy. Thông tin được tổng hợp từ lịch sử đặt hàng.</p>`;
+}
+function renderRevenueStatistics(data){
+  const maxRevenue=Math.max(0,...data.daily.map(item=>item.revenue));
+  const dailyRows=data.daily.length
+    ?data.daily.map(item=>{
+      const day=new Date(`${item.day}T00:00:00`).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric'});
+      const width=maxRevenue?Math.round(item.revenue/maxRevenue*100):0;
+      return `<div class="revenue-day">
+        <time datetime="${escapeHtml(item.day)}">${day}</time>
+        <div class="revenue-bar" role="img" aria-label="Doanh thu ${moneyVnd(item.revenue)}"><i style="width:${width}%"></i></div>
+        <div class="revenue-day-total">${moneyVnd(item.revenue)}<small>${item.order_count} đơn hoàn tất</small></div>
+      </div>`;
+    }).join('')
+    :'<p class="portal-empty">Chưa có đơn hàng hoàn tất trong khoảng thời gian này.</p>';
+  return `<div class="revenue-metrics">
+    <article class="revenue-card primary"><span>Doanh thu ghi nhận</span><strong>${moneyVnd(data.revenue)}</strong><small>${data.completedOrderCount} đơn hoàn tất · đã trừ ưu đãi</small></article>
+    <article class="revenue-card"><span>Đơn hoàn tất</span><strong>${data.completedOrderCount}</strong><small>Đơn đã giao thành công trong kỳ</small></article>
+    <article class="revenue-card"><span>Giá trị trung bình / đơn</span><strong>${moneyVnd(data.averageOrderValue)}</strong><small>Tính trên các đơn hoàn tất</small></article>
+    <article class="revenue-card"><span>Đơn đang xử lý</span><strong>${moneyVnd(data.inProgressRevenue)}</strong><small>${data.inProgressOrderCount} đơn đã xác nhận hoặc đang giao · chưa tính vào doanh thu</small></article>
+  </div>
+  <div class="revenue-export"><button class="portal-button" type="button" data-export-revenue>Xuất Excel</button></div>
+  <section class="portal-section"><h2>Doanh thu theo ngày</h2><div class="revenue-chart">${dailyRows}</div></section>`;
+}
+function downloadRevenueWorkbook(data){
+  const xmlEscape=value=>String(value).replace(/[&<>"']/g,char=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;',
+  })[char]);
+  const textCell=(reference,value)=>`<c r="${reference}" t="inlineStr"><is><t xml:space="preserve">${xmlEscape(value)}</t></is></c>`;
+  const numberCell=(reference,value)=>`<c r="${reference}"><v>${Number(value)||0}</v></c>`;
+  const sheet=(rows)=>`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${rows.map((cells,index)=>`<row r="${index+1}">${cells.join('')}</row>`).join('')}</sheetData></worksheet>`;
+  const summary=sheet([
+    [textCell('A1','Báo cáo doanh thu')],
+    [textCell('A2','Từ ngày'),textCell('B2',data.from)],
+    [textCell('A3','Đến ngày'),textCell('B3',data.to)],
+    [textCell('A4','Chỉ tiêu'),textCell('B4','Giá trị')],
+    [textCell('A5','Doanh thu ghi nhận (VND)'),numberCell('B5',data.revenue)],
+    [textCell('A6','Đơn hoàn tất'),numberCell('B6',data.completedOrderCount)],
+    [textCell('A7','Giá trị trung bình / đơn (VND)'),numberCell('B7',data.averageOrderValue)],
+    [textCell('A8','Doanh thu đơn đang xử lý (VND)'),numberCell('B8',data.inProgressRevenue)],
+    [textCell('A9','Đơn đang xử lý'),numberCell('B9',data.inProgressOrderCount)],
+  ]);
+  const dailyRows=[
+    [textCell('A1','Ngày'),textCell('B1','Doanh thu (VND)'),textCell('C1','Số đơn hoàn tất')],
+    ...data.daily.map((item,index)=>[
+      textCell(`A${index+2}`,item.day),
+      numberCell(`B${index+2}`,item.revenue),
+      numberCell(`C${index+2}`,item.order_count),
+    ]),
+  ];
+  const files=[
+    ['[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/><Override PartName="/xl/worksheets/sheet2.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'],
+    ['_rels/.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+    ['xl/workbook.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="Tong quan" sheetId="1" r:id="rId1"/><sheet name="Theo ngay" sheetId="2" r:id="rId2"/></sheets></workbook>'],
+    ['xl/_rels/workbook.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet2.xml"/></Relationships>'],
+    ['xl/worksheets/sheet1.xml',summary],
+    ['xl/worksheets/sheet2.xml',sheet(dailyRows)],
+  ];
+  const encoder=new TextEncoder();
+  const crc32=bytes=>{
+    let crc=0xffffffff;
+    for(const byte of bytes){
+      crc^=byte;
+      for(let bit=0;bit<8;bit++)crc=(crc>>>1)^((crc&1)?0xedb88320:0);
+    }
+    return (crc^0xffffffff)>>>0;
+  };
+  const localParts=[];
+  const centralParts=[];
+  let localOffset=0;
+  for(const [name,content] of files){
+    const nameBytes=encoder.encode(name);
+    const contentBytes=encoder.encode(content);
+    const checksum=crc32(contentBytes);
+    const local=new Uint8Array(30+nameBytes.length+contentBytes.length);
+    const localView=new DataView(local.buffer);
+    localView.setUint32(0,0x04034b50,true);
+    localView.setUint16(4,20,true);
+    localView.setUint16(6,0x0800,true);
+    localView.setUint32(14,checksum,true);
+    localView.setUint32(18,contentBytes.length,true);
+    localView.setUint32(22,contentBytes.length,true);
+    localView.setUint16(26,nameBytes.length,true);
+    local.set(nameBytes,30);
+    local.set(contentBytes,30+nameBytes.length);
+    localParts.push(local);
+    const central=new Uint8Array(46+nameBytes.length);
+    const centralView=new DataView(central.buffer);
+    centralView.setUint32(0,0x02014b50,true);
+    centralView.setUint16(4,20,true);
+    centralView.setUint16(6,20,true);
+    centralView.setUint16(8,0x0800,true);
+    centralView.setUint32(16,checksum,true);
+    centralView.setUint32(20,contentBytes.length,true);
+    centralView.setUint32(24,contentBytes.length,true);
+    centralView.setUint16(28,nameBytes.length,true);
+    centralView.setUint32(42,localOffset,true);
+    central.set(nameBytes,46);
+    centralParts.push(central);
+    localOffset+=local.length;
+  }
+  const centralSize=centralParts.reduce((total,part)=>total+part.length,0);
+  const end=new Uint8Array(22);
+  const endView=new DataView(end.buffer);
+  endView.setUint32(0,0x06054b50,true);
+  endView.setUint16(8,files.length,true);
+  endView.setUint16(10,files.length,true);
+  endView.setUint32(12,centralSize,true);
+  endView.setUint32(16,localOffset,true);
+  const blob=new Blob([...localParts,...centralParts,end],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;
+  link.download=`bao-cao-doanh-thu-${data.from}-${data.to}.xlsx`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+async function viewPortal(role,section='orders'){
+  if(!backendOnline)return viewLogin(role);
+  if(!currentUser)return viewLogin(role);
+  if(currentUser.role!==role){
+    location.hash=currentUser.role==='admin'?'#admin':'#staff';
+    return;
+  }
+  const isAdmin=role==='admin';
+  const activeSection=isAdmin?section:'orders';
+  const adminSections=['orders','revenue','products','staff','customers','vouchers','logs','roles','loyalty','media','blog'];
+  if(isAdmin&&!adminSections.includes(activeSection)){
+    location.hash='#admin';
+    return;
+  }
+  const sectionTitles={
+    orders:'Quản lý đơn hàng',revenue:'Thống kê doanh thu',products:'Quản lý sản phẩm',staff:'Quản lý nhân viên',
+    customers:'Khách hàng',vouchers:'Voucher & khuyến mãi',logs:'Lịch sử hoạt động',roles:'Vai trò & phân quyền',
+    loyalty:'Hạng thành viên & điểm',media:'Thư viện hình ảnh',blog:'Blog',
+  };
+  const sectionDescriptions={
+    orders:isAdmin?'Theo dõi đơn đặt hàng và cập nhật trạng thái xử lý.':'Xem đơn hàng mới và cập nhật trạng thái xử lý.',
+    revenue:'Theo dõi doanh thu các đơn hoàn tất và giá trị đơn đang xử lý theo ngày.',
+    products:'Cập nhật danh mục, giá bán và số lượng tồn kho.',
+    staff:'Quản lý tài khoản, mật khẩu và quyền truy cập nhân viên.',
+    customers:'Tra cứu khách hàng, lịch sử mua hàng và điểm thành viên.',
+    vouchers:'Tạo, bật/tắt và theo dõi mã giảm giá.',
+    logs:'Tra cứu hoạt động quản trị và các cảnh báo đơn hàng.',
+    roles:'Tạo vai trò và cấp quyền xem hoặc xử lý đơn hàng.',
+    loyalty:'Thiết lập hạng thành viên và theo dõi điểm tích lũy.',
+    media:'Tải lên, xem và xóa hình ảnh sản phẩm.',
+    blog:'Viết bài, lưu bản nháp hoặc đăng bài công khai lên Blog.',
+  };
+  const adminNav=isAdmin?`<nav class="portal-nav" aria-label="Quản trị">
+    ${adminSections.map(item=>`<a href="${item==='orders'?'#admin':`#admin/${item}`}" ${activeSection===item?'aria-current="page"':''}>${sectionTitles[item]}</a>`).join('')}
+  </nav>`:'';
+  const pageTitle=isAdmin?sectionTitles[activeSection]:'Quản lý đơn hàng';
+  const today=new Date();
+  const dateTo=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-');
+  const dateFrom=[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),'01'].join('-');
+  app.innerHTML=`<section class="view portal-page ${isAdmin?'portal-admin':'portal-staff'}">
+    <header class="portal-hero">
+      <div>
+        <p class="portal-eyebrow">Swoosh Store · ${isAdmin?'Không gian quản trị':'Khu vực nhân viên'}</p>
+        <h1>${pageTitle}</h1>
+        <p class="portal-intro">${sectionDescriptions[activeSection]}</p>
+      </div>
+      <div class="portal-mark" aria-hidden="true">SS</div>
+    </header>
+    <div class="portal-toolbar"><p><strong>${escapeHtml(currentUser.username)}</strong><span class="portal-role">${isAdmin?'Quản trị viên':'Nhân viên'}</span></p><button class="portal-button" id="logoutButton">Đăng xuất</button></div>
+    ${isAdmin?`<div class="portal-admin-layout">${adminNav}<div class="portal-admin-content">`:''}
+    <p class="portal-message" id="portalMessage" role="status"></p>
+    ${activeSection==='orders'?`<section class="portal-section"><h2>Đơn hàng</h2>
+      <form class="portal-add-form" id="orderFilterForm"><label class="portal-field"><span>Tìm kiếm</span><input name="q" placeholder="Mã đơn, khách hàng, số điện thoại"></label><label class="portal-field"><span>Trạng thái</span><select name="status"><option value="">Tất cả</option>${Object.entries(ORDER_STATUS_LABELS).map(([key,label])=>`<option value="${key}">${label}</option>`).join('')}</select></label><button class="portal-button" type="submit">Lọc đơn</button></form>
+      <div id="portalOrders"><p class="portal-empty">Đang tải đơn hàng...</p></div></section>`:''}
+    ${isAdmin&&activeSection==='revenue'?`<section class="portal-section"><h2>Tổng quan doanh thu</h2>
+      <form class="portal-add-form revenue-filter" id="revenueFilterForm">
+        <label class="portal-field"><span>Từ ngày</span><input name="from" type="date" value="${dateFrom}" max="${dateTo}" required></label>
+        <label class="portal-field"><span>Đến ngày</span><input name="to" type="date" value="${dateTo}" max="${dateTo}" required></label>
+        <button class="portal-button" type="submit">Xem thống kê</button>
+      </form>
+      <p class="portal-note">Doanh thu chỉ tính đơn đã hoàn tất, theo ngày Việt Nam và sau khi trừ giảm giá.</p>
+      <div id="portalRevenue"><p class="portal-empty">Đang tải thống kê...</p></div>
+    </section>`:''}
+    ${isAdmin&&activeSection==='products'?`<section class="portal-section"><h2>Sản phẩm</h2><div id="portalProducts"><p class="portal-empty">Đang tải sản phẩm...</p></div>
+      <form class="portal-add-form" id="productAddForm">
+        <label class="portal-field"><span>Mã sản phẩm</span><input name="id" required pattern="[a-z0-9\\-]{2,40}" placeholder="mau-giay-moi"></label>
+        <label class="portal-field"><span>Tên sản phẩm</span><input name="name" required minlength="2" maxlength="100" placeholder="Tên sản phẩm"></label>
+        <label class="portal-field"><span>Giá (nghìn ₫)</span><input name="price" type="number" required min="1" max="100000"></label>
+        <label class="portal-field"><span>Tồn kho</span><input name="stock" type="number" required min="0" max="100000" value="0"></label>
+        <button class="portal-button" type="submit">Thêm sản phẩm</button>
+      </form>
+    </section>`:''}
+    ${isAdmin&&activeSection==='staff'?`<section class="portal-section"><h2>Nhân viên</h2><div id="portalUsers"><p class="portal-empty">Đang tải tài khoản...</p></div>
+      <form class="portal-add-form portal-staff-form" id="staffAddForm">
+        <label class="portal-field"><span>Họ và tên</span><input name="full_name" required minlength="2" maxlength="100" autocomplete="name" placeholder="Nguyễn Văn A"></label>
+        <label class="portal-field"><span>Địa chỉ</span><input name="address" required minlength="5" maxlength="200" autocomplete="street-address" placeholder="Số nhà, đường, phường/xã, tỉnh/thành"></label>
+        <label class="portal-field"><span>Số CCCD (12 chữ số)</span><input name="citizen_id" type="text" required inputmode="numeric" pattern="[0-9]{12}" maxlength="12" autocomplete="off" placeholder="012345678901"></label>
+        <label class="portal-field"><span>Ngày tháng năm sinh</span><input name="birth_date" type="date" required min="1900-01-01" max="${new Date().toISOString().slice(0,10)}" autocomplete="bday"></label>
+        <label class="portal-field"><span>Tài khoản mới</span><input name="username" required pattern="[A-Za-z0-9._\\-]{3,40}" autocomplete="off"></label>
+        <label class="portal-field"><span>Mật khẩu tạm thời (ít nhất 12 ký tự)</span><input name="password" type="password" required minlength="12" maxlength="256" autocomplete="new-password"></label>
+        <label class="portal-field"><span>Vai trò</span><select name="roleId" id="staffRoleOptions"></select></label>
+        <button class="portal-button" type="submit">Tạo nhân viên</button>
+      </form>
+    </section>`:''}
+    ${isAdmin&&activeSection==='customers'?`<section class="portal-section"><h2>Danh sách khách hàng</h2>
+      <form class="portal-add-form" id="customerFilterForm">
+        <label class="portal-field"><span>Tìm theo tên hoặc số điện thoại</span><input name="q" placeholder="Tên khách hàng, số điện thoại" maxlength="100"></label>
+        <button class="portal-button" type="submit">Tìm khách hàng</button>
+      </form>
+      <div id="portalCustomers"><p class="portal-empty">Đang tải khách hàng...</p></div>
+    </section>`:''}
+    ${isAdmin&&activeSection==='vouchers'?`<section class="portal-section"><h2>Voucher hiện có</h2><div id="portalVouchers"><p class="portal-empty">Đang tải voucher...</p></div>
+      <form class="portal-add-form" id="voucherAddForm">
+        <label class="portal-field"><span>Mã</span><input name="code" required minlength="3" maxlength="30" pattern="[A-Za-z0-9_-]+"></label>
+        <label class="portal-field"><span>Loại giảm</span><select name="discountType"><option value="percent">Phần trăm</option><option value="fixed">Số tiền (₫)</option></select></label>
+        <label class="portal-field"><span>Giá trị</span><input name="discountValue" type="number" min="1" required></label>
+        <label class="portal-field"><span>Đơn tối thiểu (₫)</span><input name="minTotal" type="number" min="0" value="0"></label>
+        <label class="portal-field"><span>Bắt đầu (tùy chọn)</span><input name="startsAt" type="datetime-local"></label>
+        <label class="portal-field"><span>Hết hạn (tùy chọn)</span><input name="expiresAt" type="datetime-local"></label>
+        <label class="portal-field"><span>Giới hạn lượt dùng</span><input name="usageLimit" type="number" min="1" placeholder="Không giới hạn"></label>
+        <button class="portal-button" type="submit">Tạo voucher</button>
+      </form>
+    </section>`:''}
+    ${isAdmin&&activeSection==='logs'?`<section class="portal-section"><h2>Nhật ký kiểm toán</h2><form class="portal-add-form" id="logFilterForm"><label class="portal-field"><span>Tìm kiếm</span><input name="q" placeholder="Người dùng, hành động, đối tượng"></label><button class="portal-button" type="submit">Tìm</button></form><div id="portalLogs"><p class="portal-empty">Đang tải nhật ký...</p></div></section>`:''}
+    ${isAdmin&&activeSection==='roles'?`<section class="portal-section"><h2>Vai trò nhân viên</h2><div id="portalRoles"><p class="portal-empty">Đang tải vai trò...</p></div>
+      <form class="portal-add-form" id="roleAddForm"><label class="portal-field"><span>Tên vai trò</span><input name="name" required minlength="2" maxlength="60"></label><label><input name="ordersRead" type="checkbox" checked> Xem đơn hàng</label><label><input name="ordersUpdate" type="checkbox"> Cập nhật trạng thái đơn</label><button class="portal-button" type="submit">Thêm vai trò</button></form>
+    </section>`:''}
+    ${isAdmin&&activeSection==='loyalty'?`<section class="portal-section"><h2>Hạng và điểm thành viên</h2><div id="portalLoyalty"><p class="portal-empty">Đang tải dữ liệu...</p></div>
+      <form class="portal-add-form" id="tierAddForm"><label class="portal-field"><span>Tên hạng</span><input name="name" required minlength="2" maxlength="40"></label><label class="portal-field"><span>Mốc điểm</span><input name="minPoints" type="number" min="0" required></label><label class="portal-field"><span>Quyền lợi</span><input name="benefits" maxlength="200"></label><button class="portal-button" type="submit">Thêm hạng</button></form>
+    </section>`:''}
+    ${isAdmin&&activeSection==='media'?`<section class="portal-section"><h2>Thư viện media sản phẩm</h2><form class="portal-add-form" id="mediaAddForm"><label class="portal-field"><span>Ảnh (PNG/JPEG/WebP, tối đa 700 KB)</span><input name="image" type="file" accept="image/png,image/jpeg,image/webp" required></label><label class="portal-field"><span>Mô tả ảnh</span><input name="altText" maxlength="150"></label><button class="portal-button" type="submit">Tải ảnh</button></form><div id="portalMedia"><p class="portal-empty">Đang tải ảnh...</p></div></section>`:''}
+    ${isAdmin&&activeSection==='blog'?`<section class="portal-section"><h2>Bài viết Blog</h2><div id="portalBlog"><p class="portal-empty">Đang tải bài viết...</p></div>
+      <form class="portal-add-form blog-editor-form" id="blogAddForm">
+        <input type="hidden" name="articleId">
+        <label class="portal-field"><span>Tiêu đề</span><input name="title" required minlength="3" maxlength="255" placeholder="Tiêu đề bài viết"></label>
+        <label class="portal-field"><span>Danh mục</span><input name="category" required maxlength="100" placeholder="Kỹ thuật chạy, chọn giày..."></label>
+        <label class="portal-field"><span>Đường dẫn ảnh đại diện (tùy chọn)</span><input name="thumbnailUrl" type="url" maxlength="500" placeholder="https://..."></label>
+        <label class="portal-field"><span>Trạng thái</span><select name="status"><option value="PUBLISHED">Đăng công khai</option><option value="DRAFT">Lưu bản nháp</option></select></label>
+        <label class="portal-field blog-editor-wide"><span>Nội dung</span><textarea name="content" required maxlength="100000" placeholder="Viết nội dung bài blog..."></textarea></label>
+        <div class="blog-editor-wide"><button class="portal-button" type="submit" data-blog-submit>Đăng bài</button> <button class="portal-button" type="button" id="blogCancelEdit" hidden>Hủy sửa</button></div>
+      </form>
+    </section>`:''}
+    ${isAdmin?'</div></div>':''}
+  </section>`;
+  let orders=[];
+  let products=[];
+  let blogArticles=[];
+  let users=[];
+  let roles=[];
+  let revenueReport=null;
+  let orderFilter={q:'',status:''};
+  let revenueRange={from:dateFrom,to:dateTo};
+  let logFilter='';
+  let customerFilter='';
+  const loadData=async()=>{
+    const requests=[];
+    const add=(key,path)=>requests.push([key,apiRequest(path)]);
+    if(activeSection==='orders'){
+      const params=new URLSearchParams(Object.fromEntries(Object.entries(orderFilter).filter(([,value])=>value)));
+      add('orders',`/api/orders${params.size?`?${params}`:''}`);
+    }
+    if(isAdmin&&activeSection==='revenue'){
+      const params=new URLSearchParams(revenueRange);
+      add('revenue',`/api/admin/revenue?${params}`);
+    }
+    if(isAdmin&&activeSection==='products')add('products','/api/admin/products');
+    if(isAdmin&&activeSection==='staff'){add('users','/api/admin/users');add('roles','/api/admin/roles')}
+    if(isAdmin&&activeSection==='customers')add('customers',`/api/admin/customers${customerFilter?`?q=${encodeURIComponent(customerFilter)}`:''}`);
+    if(isAdmin&&activeSection==='vouchers')add('vouchers','/api/admin/vouchers');
+    if(isAdmin&&activeSection==='logs')add('logs',`/api/admin/logs${logFilter?`?q=${encodeURIComponent(logFilter)}`:''}`);
+    if(isAdmin&&activeSection==='roles')add('roles','/api/admin/roles');
+    if(isAdmin&&activeSection==='loyalty')add('loyalty','/api/admin/loyalty');
+    if(isAdmin&&activeSection==='media')add('media','/api/admin/media');
+    if(isAdmin&&activeSection==='blog')add('blog','/api/admin/blog');
+    const result=Object.fromEntries(await Promise.all(requests.map(async([key,promise])=>[key,await promise])));
+    if(activeSection==='orders'){
+      orders=result.orders.orders;
+      $('#portalOrders').innerHTML=renderPortalOrders(orders,isAdmin||currentUser.permissions?.includes('orders.update'));
+    }
+    if(isAdmin&&activeSection==='revenue'){
+      revenueReport=result.revenue;
+      $('#portalRevenue').innerHTML=renderRevenueStatistics(revenueReport);
+    }
+    if(isAdmin&&activeSection==='products'){
+      products=result.products.products;
+      $('#portalProducts').innerHTML=renderPortalProducts(products);
+    }
+    if(isAdmin&&activeSection==='staff'){
+      users=result.users.users;
+      roles=result.roles.roles;
+      $('#portalUsers').innerHTML=renderPortalUsers(users,roles);
+      $('#staffRoleOptions').innerHTML=roles.map(role=>`<option value="${role.id}">${escapeHtml(role.name)}</option>`).join('');
+    }
+    if(isAdmin&&activeSection==='customers')$('#portalCustomers').innerHTML=renderAdminCustomers(result.customers.customers);
+    if(isAdmin&&activeSection==='vouchers')$('#portalVouchers').innerHTML=renderAdminVouchers(result.vouchers.vouchers);
+    if(isAdmin&&activeSection==='logs')$('#portalLogs').innerHTML=renderAdminLogs(result.logs.logs);
+    if(isAdmin&&activeSection==='roles')$('#portalRoles').innerHTML=renderAdminRoles(result.roles.roles);
+    if(isAdmin&&activeSection==='loyalty')$('#portalLoyalty').innerHTML=renderAdminLoyalty(result.loyalty);
+    if(isAdmin&&activeSection==='media')$('#portalMedia').innerHTML=renderAdminMedia(result.media.media);
+    if(isAdmin&&activeSection==='blog'){
+      blogArticles=result.blog.articles;
+      $('#portalBlog').innerHTML=renderAdminBlog(blogArticles);
+    }
+  };
+  const showError=error=>{$('#portalMessage').textContent=error.message};
+  $('#logoutButton').onclick=async()=>{
+    try{
+      await logoutCurrentUser();
+      location.hash='#login';
+    }catch(error){showError(error)}
+  };
+  const orderFilterForm=$('#orderFilterForm');
+  if(orderFilterForm)orderFilterForm.onsubmit=async event=>{
+    event.preventDefault();
+    const form=event.currentTarget;
+    orderFilter={q:form.elements.q.value.trim(),status:form.elements.status.value};
+    try{await loadData()}catch(error){showError(error)}
+  };
+  const revenueFilterForm=$('#revenueFilterForm');
+  if(revenueFilterForm)revenueFilterForm.onsubmit=async event=>{
+    event.preventDefault();
+    const form=event.currentTarget;
+    const from=form.elements.from.value;
+    const to=form.elements.to.value;
+    if(from>to){
+      showError(new Error('Ngày kết thúc phải từ ngày bắt đầu trở đi.'));
+      return;
+    }
+    if((new Date(`${to}T00:00:00`)-new Date(`${from}T00:00:00`))/86400000>365){
+      showError(new Error('Mỗi lần thống kê chỉ hỗ trợ tối đa 366 ngày.'));
+      return;
+    }
+    revenueRange={from,to};
+    $('#portalRevenue').innerHTML='<p class="portal-empty">Đang tải thống kê...</p>';
+    try{await loadData()}catch(error){showError(error)}
+  };
+  const logFilterForm=$('#logFilterForm');
+  if(logFilterForm)logFilterForm.onsubmit=async event=>{
+    event.preventDefault();
+    logFilter=event.currentTarget.elements.q.value.trim();
+    try{await loadData()}catch(error){showError(error)}
+  };
+  const customerFilterForm=$('#customerFilterForm');
+  if(customerFilterForm)customerFilterForm.onsubmit=async event=>{
+    event.preventDefault();
+    customerFilter=event.currentTarget.elements.q.value.trim();
+    try{await loadData()}catch(error){showError(error)}
+  };
+  app.onclick=async event=>{
+    const exportRevenueButton=event.target.closest('[data-export-revenue]');
+    const orderButton=event.target.closest('[data-order-save]');
+    const productButton=event.target.closest('[data-product-save]');
+    const userSaveButton=event.target.closest('[data-user-save]');
+    const userButton=event.target.closest('[data-user-toggle]');
+    const voucherSave=event.target.closest('[data-voucher-save]');
+    const voucherDelete=event.target.closest('[data-voucher-delete]');
+    const roleSave=event.target.closest('[data-role-save]');
+    const roleDelete=event.target.closest('[data-role-delete]');
+    const tierSave=event.target.closest('[data-tier-save]');
+    const tierDelete=event.target.closest('[data-tier-delete]');
+    const mediaDelete=event.target.closest('[data-media-delete]');
+    const blogEditButton=event.target.closest('[data-blog-edit]');
+    const blogDeleteButton=event.target.closest('[data-blog-delete]');
+    const blogCancelButton=event.target.closest('#blogCancelEdit');
+    try{
+      if(exportRevenueButton&&activeSection==='revenue'&&revenueReport){
+        downloadRevenueWorkbook(revenueReport);
+      }else if(orderButton&&activeSection==='orders'){
+        const orderId=orderButton.dataset.orderSave;
+        const status=$(`[data-order-status="${orderId}"]`).value;
+        await apiRequest(`/api/orders/${orderId}`,{method:'PATCH',body:JSON.stringify({status})});
+        await loadData();
+        $('#portalMessage').textContent='Đã cập nhật trạng thái đơn hàng.';
+      }else if(productButton&&activeSection==='products'){
+        const row=productButton.closest('[data-product-row]');
+        await apiRequest(`/api/admin/products/${encodeURIComponent(productButton.dataset.productSave)}`,{
+          method:'PATCH',
+          body:JSON.stringify({
+            name:row.querySelector('[data-product-name]').value,
+            price:Number(row.querySelector('[data-product-price]').value),
+            stock:Number(row.querySelector('[data-product-stock]').value),
+            active:row.querySelector('[data-product-active]').checked,
+          }),
+        });
+        await refreshProducts();
+        await loadData();
+        $('#portalMessage').textContent='Đã lưu sản phẩm.';
+      }else if(userSaveButton&&activeSection==='staff'){
+        const row=userSaveButton.closest('[data-user-row]');
+        const password=row.querySelector('[data-user-password]').value;
+        const update={username:row.querySelector('[data-user-name]').value.trim()};
+        if(password)update.password=password;
+        await apiRequest(`/api/admin/users/${userSaveButton.dataset.userSave}`,{
+          method:'PATCH',body:JSON.stringify({
+            ...update,
+            full_name:row.querySelector('[data-user-full-name]').value.trim(),
+            address:row.querySelector('[data-user-address]').value.trim(),
+            citizen_id:row.querySelector('[data-user-citizen-id]').value.trim(),
+            birth_date:row.querySelector('[data-user-birth-date]').value,
+            roleId:Number(row.querySelector('[data-user-role]').value),
+          }),
+        });
+        await loadData();
+        $('#portalMessage').textContent='Đã lưu chỉnh sửa nhân viên.';
+      }else if(userButton&&activeSection==='staff'){
+        await apiRequest(`/api/admin/users/${userButton.dataset.userToggle}`,{
+          method:'PATCH',body:JSON.stringify({active:userButton.dataset.active==='true'}),
+        });
+        await loadData();
+        $('#portalMessage').textContent='Đã cập nhật tài khoản nhân viên.';
+      }else if(voucherSave&&activeSection==='vouchers'){
+        const row=voucherSave.closest('[data-voucher-row]');
+        await apiRequest(`/api/admin/vouchers/${encodeURIComponent(voucherSave.dataset.voucherSave)}`,{
+          method:'PATCH',
+          body:JSON.stringify({
+            discountType:row.querySelector('[data-voucher-type]').value,
+            discountValue:Number(row.querySelector('[data-voucher-value]').value),
+            minTotal:Number(row.querySelector('[data-voucher-min]').value),
+            startsAt:dateTimeUtc(row.querySelector('[data-voucher-start]').value),
+            expiresAt:dateTimeUtc(row.querySelector('[data-voucher-expiry]').value),
+            usageLimit:row.querySelector('[data-voucher-limit]').value?Number(row.querySelector('[data-voucher-limit]').value):null,
+            active:row.querySelector('[data-voucher-active]').checked,
+          }),
+        });
+        await loadData();
+        $('#portalMessage').textContent='Đã lưu voucher.';
+      }else if(voucherDelete&&activeSection==='vouchers'){
+        await apiRequest(`/api/admin/vouchers/${encodeURIComponent(voucherDelete.dataset.voucherDelete)}`,{method:'DELETE'});
+        await loadData();
+        $('#portalMessage').textContent='Đã xóa voucher.';
+      }else if(roleSave&&activeSection==='roles'){
+        const row=roleSave.closest('[data-role-row]');
+        const permissions=[];
+        if(row.querySelector('[data-role-read]').checked)permissions.push('orders.read');
+        if(row.querySelector('[data-role-update]').checked)permissions.push('orders.update');
+        await apiRequest(`/api/admin/roles/${roleSave.dataset.roleSave}`,{
+          method:'PATCH',body:JSON.stringify({name:row.querySelector('[data-role-name]').value.trim(),permissions}),
+        });
+        await loadData();
+        $('#portalMessage').textContent='Đã lưu quyền vai trò.';
+      }else if(roleDelete&&activeSection==='roles'){
+        await apiRequest(`/api/admin/roles/${roleDelete.dataset.roleDelete}`,{method:'DELETE'});
+        await loadData();
+        $('#portalMessage').textContent='Đã xóa vai trò.';
+      }else if(tierSave&&activeSection==='loyalty'){
+        const row=tierSave.closest('[data-tier-row]');
+        await apiRequest(`/api/admin/loyalty/tiers/${tierSave.dataset.tierSave}`,{
+          method:'PATCH',body:JSON.stringify({
+            name:row.querySelector('[data-tier-name]').value.trim(),
+            minPoints:Number(row.querySelector('[data-tier-points]').value),
+            benefits:row.querySelector('[data-tier-benefits]').value.trim(),
+          }),
+        });
+        await loadData();
+        $('#portalMessage').textContent='Đã lưu hạng thành viên.';
+      }else if(tierDelete&&activeSection==='loyalty'){
+        await apiRequest(`/api/admin/loyalty/tiers/${tierDelete.dataset.tierDelete}`,{method:'DELETE'});
+        await loadData();
+        $('#portalMessage').textContent='Đã xóa hạng thành viên.';
+      }else if(mediaDelete&&activeSection==='media'){
+        await apiRequest(`/api/admin/media/${encodeURIComponent(mediaDelete.dataset.mediaDelete)}`,{method:'DELETE'});
+        await loadData();
+        $('#portalMessage').textContent='Đã xóa ảnh.';
+      }else if(blogEditButton&&activeSection==='blog'){
+        const article=blogArticles.find(item=>String(item.article_id)===blogEditButton.dataset.blogEdit);
+        if(!article)throw new Error('Không tìm thấy bài blog cần sửa.');
+        const form=$('#blogAddForm');
+        form.elements.articleId.value=article.article_id;
+        form.elements.title.value=article.title;
+        form.elements.category.value=article.category;
+        form.elements.thumbnailUrl.value=article.thumbnail_url||'';
+        form.elements.status.value=article.status;
+        form.elements.content.value=article.content;
+        $('[data-blog-submit]').textContent='Lưu thay đổi';
+        $('#blogCancelEdit').hidden=false;
+        form.scrollIntoView({behavior:'smooth',block:'center'});
+      }else if(blogDeleteButton&&activeSection==='blog'){
+        if(!window.confirm('Bạn có chắc muốn xóa bài blog này?'))return;
+        await apiRequest(`/api/admin/blog/${blogDeleteButton.dataset.blogDelete}`,{method:'DELETE'});
+        await loadData();
+        $('#portalMessage').textContent='Đã xóa bài blog.';
+      }else if(blogCancelButton&&activeSection==='blog'){
+        const form=$('#blogAddForm');
+        form.reset();
+        form.elements.articleId.value='';
+        $('[data-blog-submit]').textContent='Đăng bài';
+        blogCancelButton.hidden=true;
+      }
+    }catch(error){showError(error)}
+  };
+  if(isAdmin){
+    const productAddForm=$('#productAddForm');
+    if(productAddForm)productAddForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      try{
+        await apiRequest('/api/admin/products',{
+          method:'POST',
+          body:JSON.stringify({
+            id:form.elements.id.value.trim(),
+            name:form.elements.name.value.trim(),
+            price:Number(form.elements.price.value),
+            stock:Number(form.elements.stock.value),
+          }),
+        });
+        form.reset();
+        await refreshProducts();
+        await loadData();
+        $('#portalMessage').textContent='Đã thêm sản phẩm.';
+      }catch(error){showError(error)}
+    };
+    const staffAddForm=$('#staffAddForm');
+    if(staffAddForm)staffAddForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      try{
+        await apiRequest('/api/admin/users',{
+          method:'POST',
+          body:JSON.stringify({
+            username:form.elements.username.value.trim(),
+            password:form.elements.password.value,
+            full_name:form.elements.full_name.value.trim(),
+            address:form.elements.address.value.trim(),
+            citizen_id:form.elements.citizen_id.value.trim(),
+            birth_date:form.elements.birth_date.value,
+            roleId:Number(form.elements.roleId.value),
+          }),
+        });
+        form.reset();
+        await loadData();
+        $('#portalMessage').textContent='Đã tạo tài khoản nhân viên.';
+      }catch(error){showError(error)}
+    };
+    const voucherAddForm=$('#voucherAddForm');
+    if(voucherAddForm)voucherAddForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      try{
+        await apiRequest('/api/admin/vouchers',{
+          method:'POST',
+          body:JSON.stringify({
+            code:form.elements.code.value.trim(),
+            discountType:form.elements.discountType.value,
+            discountValue:Number(form.elements.discountValue.value),
+            minTotal:Number(form.elements.minTotal.value),
+            startsAt:dateTimeUtc(form.elements.startsAt.value),
+            expiresAt:dateTimeUtc(form.elements.expiresAt.value),
+            usageLimit:form.elements.usageLimit.value?Number(form.elements.usageLimit.value):null,
+          }),
+        });
+        form.reset();
+        await loadData();
+        $('#portalMessage').textContent='Đã tạo voucher.';
+      }catch(error){showError(error)}
+    };
+    const roleAddForm=$('#roleAddForm');
+    if(roleAddForm)roleAddForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const permissions=[];
+      if(form.elements.ordersRead.checked)permissions.push('orders.read');
+      if(form.elements.ordersUpdate.checked)permissions.push('orders.update');
+      try{
+        await apiRequest('/api/admin/roles',{
+          method:'POST',
+          body:JSON.stringify({name:form.elements.name.value.trim(),permissions}),
+        });
+        form.reset();
+        await loadData();
+        $('#portalMessage').textContent='Đã tạo vai trò.';
+      }catch(error){showError(error)}
+    };
+    const tierAddForm=$('#tierAddForm');
+    if(tierAddForm)tierAddForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      try{
+        await apiRequest('/api/admin/loyalty/tiers',{
+          method:'POST',
+          body:JSON.stringify({
+            name:form.elements.name.value.trim(),
+            minPoints:Number(form.elements.minPoints.value),
+            benefits:form.elements.benefits.value.trim(),
+          }),
+        });
+        form.reset();
+        await loadData();
+        $('#portalMessage').textContent='Đã thêm hạng thành viên.';
+      }catch(error){showError(error)}
+    };
+    const mediaAddForm=$('#mediaAddForm');
+    if(mediaAddForm)mediaAddForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const file=form.elements.image.files[0];
+      if(!file)return;
+      try{
+        const dataUrl=await new Promise((resolve,reject)=>{
+          const reader=new FileReader();
+          reader.onload=()=>resolve(reader.result);
+          reader.onerror=()=>reject(new Error('Không thể đọc tệp ảnh.'));
+          reader.readAsDataURL(file);
+        });
+        await apiRequest('/api/admin/media',{
+          method:'POST',
+          body:JSON.stringify({dataUrl,altText:form.elements.altText.value.trim()}),
+        });
+        form.reset();
+        await loadData();
+        $('#portalMessage').textContent='Đã tải ảnh lên thư viện.';
+      }catch(error){showError(error)}
+    };
+    const blogAddForm=$('#blogAddForm');
+    if(blogAddForm)blogAddForm.onsubmit=async event=>{
+      event.preventDefault();
+      const form=event.currentTarget;
+      const articleId=form.elements.articleId.value;
+      const article={
+        title:form.elements.title.value.trim(),
+        category:form.elements.category.value.trim(),
+        thumbnailUrl:form.elements.thumbnailUrl.value.trim(),
+        status:form.elements.status.value,
+        content:form.elements.content.value.trim(),
+      };
+      try{
+        await apiRequest(articleId?`/api/admin/blog/${articleId}`:'/api/admin/blog',{
+          method:articleId?'PATCH':'POST',
+          body:JSON.stringify(article),
+        });
+        form.reset();
+        form.elements.articleId.value='';
+        $('[data-blog-submit]').textContent='Đăng bài';
+        $('#blogCancelEdit').hidden=true;
+        await loadData();
+        $('#portalMessage').textContent=articleId?'Đã cập nhật bài blog.':'Đã tạo bài blog.';
+      }catch(error){showError(error)}
+    };
+  }
+  try{await loadData()}catch(error){showError(error)}
+}
+async function refreshProducts(){
+  const result=await apiRequest('/api/products');
+  const appearance=new Map(SHOES.map(shoe=>[shoe.id,{bg:shoe.bg,colors:shoe.colors}]));
+  const next=result.products.map(shoe=>({...shoe,...appearance.get(shoe.id)}));
+  if(!next.length)throw new Error('Cửa hàng cần có ít nhất một sản phẩm đang bán.');
+  SHOES.splice(0,SHOES.length,...next);
+  bag=loadBag();
+  saveBag();
+  renderCart();
+}
+function normalizeSearch(value){
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase().trim();
+}
+function viewSearch(query){
+  const normalizedQuery=normalizeSearch(query);
+  const results=normalizedQuery?SHOES.filter(shoe=>
+    normalizeSearch(`${shoe.name} ${shoe.id}`).includes(normalizedQuery)
+  ):[];
+  app.innerHTML=`<div class="view search-page">
+    <section class="collection-section">
+      <div class="section-heading">
+        <div><span class="section-kicker">TÌM KIẾM</span><h2>Kết quả tìm kiếm</h2></div>
+        <p id="searchQueryLabel"></p>
+      </div>
+      <p class="search-results-meta" id="searchResultCount"></p>
+      ${results.length?`<div class="collection-grid">${productCards(results)}</div>`:`<div class="search-empty"><div><h3 id="searchEmptyTitle"></h3><p>Thử tên sản phẩm hoặc mã giày, ví dụ: Air Jordan, Dunk Low, AF1.</p><a class="hero-link" href="#collection">Xem tất cả sản phẩm <span>→</span></a></div></div>`}
+    </section>
+  </div>`;
+  $('#searchQueryLabel').textContent=query?`Từ khóa: “${query}”`:'Nhập tên hoặc mã giày vào ô tìm kiếm phía trên.';
+  $('#searchResultCount').textContent=query
+    ?`${results.length} sản phẩm phù hợp`
+    :'';
+  if(!results.length){
+    $('#searchEmptyTitle').textContent=query?'Không tìm thấy sản phẩm phù hợp':'Bắt đầu tìm kiếm sản phẩm';
+  }
+}
+function viewCheckout(){
+  if(!bag.length){
+    app.innerHTML=`<section class="view"><div class="checkout-empty"><h1>Giỏ hàng đang trống</h1><p>Hãy chọn sản phẩm trước khi tiến hành thanh toán.</p><a class="hero-link" href="#collection">Khám phá bộ sưu tập <span>→</span></a></div></section>`;
+    return;
+  }
+  const subtotal=bag.reduce((sum,item)=>sum+item.price*item.qty,0);
+  let appliedVoucher=null;
+  app.innerHTML=`<section class="view checkout-page">
+    <h1>Thanh toán</h1>
+    <p class="checkout-intro">Nhập thông tin nhận hàng và kiểm tra lại đơn hàng của bạn.</p>
+    <div class="checkout-layout">
+      <form class="checkout-form" id="checkoutForm">
+        <h2>Thông tin nhận hàng</h2>
+        <div class="checkout-fields">
+          <div class="checkout-field"><label for="checkoutName">Họ và tên</label><input id="checkoutName" name="name" autocomplete="name" required maxlength="100" placeholder="Nguyễn Văn A"></div>
+          <div class="checkout-field"><label for="checkoutPhone">Số điện thoại</label><input id="checkoutPhone" name="phone" type="tel" autocomplete="tel" required pattern="[0-9]{9,12}" maxlength="12" inputmode="numeric" placeholder="09xxxxxxxx"></div>
+          <div class="checkout-field full"><label for="checkoutAddress">Địa chỉ nhận hàng</label><input id="checkoutAddress" name="address" autocomplete="street-address" required maxlength="200" placeholder="Số nhà, đường, phường/xã, quận/huyện, tỉnh/thành"></div>
+          <div class="checkout-field full"><label for="checkoutNote">Ghi chú <span style="font-weight:400;color:#777">(không bắt buộc)</span></label><textarea id="checkoutNote" name="note" maxlength="500" placeholder="Ghi chú cho cửa hàng"></textarea></div>
+          <div class="checkout-field full"><label for="checkoutVoucher">Mã voucher</label><div style="display:flex;gap:8px"><input id="checkoutVoucher" name="voucherCode" maxlength="30" placeholder="Nhập mã giảm giá"><button class="portal-button" id="applyVoucher" type="button">Áp dụng</button></div><p id="voucherMessage" role="status"></p></div>
+        </div>
+        <h2 style="margin-top:24px;margin-bottom:0">Phương thức thanh toán</h2>
+        <label class="payment-option"><input type="radio" name="payment" value="cod" checked><span><strong>Thanh toán khi nhận hàng (COD)</strong><span>Thanh toán trực tiếp cho đơn vị giao hàng khi nhận sản phẩm.</span></span></label>
+        <button class="checkout-submit" type="submit">Xác nhận đặt hàng · ${money(subtotal)}</button>
+        <p class="checkout-disclaimer">Đơn hàng sẽ được lưu để nhân viên xác nhận. Website hiện chỉ nhận thanh toán khi giao hàng (COD).</p>
+        <p class="auth-error" id="checkoutError" role="alert"></p>
+      </form>
+      <aside class="checkout-summary">
+        <h2>Đơn hàng của bạn</h2>
+        <div class="checkout-items">${bag.map(item=>`
+          <article class="checkout-item">
+            <div class="checkout-thumb">${item.image?`<img src="${item.image}" alt="">`:'<span>✦</span>'}</div>
+            <div><div class="checkout-item-name">${item.name}</div><div class="checkout-item-option">Cỡ ${item.opt} · SL ${item.qty}</div></div>
+            <div class="checkout-item-price">${money(item.price*item.qty)}</div>
+          </article>`).join('')}</div>
+        <div class="checkout-totals">
+          <div class="cart-summary"><span>Tạm tính</span><span>${money(subtotal)}</span></div>
+          <div class="cart-summary" id="voucherDiscountRow" hidden><span>Giảm giá</span><span id="voucherDiscount"></span></div>
+          <div class="cart-summary"><span>Phí vận chuyển</span><span class="cart-shipping">Miễn phí</span></div>
+          <div class="cart-summary grand"><span>Tổng cộng</span><span id="checkoutTotal">${money(subtotal)}</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>`;
+  $('#applyVoucher').onclick=async()=>{
+    const code=$('#checkoutVoucher').value.trim();
+    const message=$('#voucherMessage');
+    message.textContent='';
+    if(!code){appliedVoucher=null;$('#voucherDiscountRow').hidden=true;$('#checkoutTotal').textContent=money(subtotal);return}
+    try{
+      const result=await apiRequest('/api/vouchers/check',{
+        method:'POST',
+        body:JSON.stringify({code,subtotal:Math.round(subtotal*1000)}),
+      });
+      appliedVoucher={code:result.code,discount:result.discount};
+      $('#voucherDiscountRow').hidden=false;
+      $('#voucherDiscount').textContent=`− ${moneyVnd(result.discount)}`;
+      $('#checkoutTotal').textContent=moneyVnd(result.total);
+      message.textContent='Đã áp dụng voucher.';
+    }catch(error){
+      appliedVoucher=null;
+      $('#voucherDiscountRow').hidden=true;
+      $('#checkoutTotal').textContent=money(subtotal);
+      message.textContent=error.message;
+    }
+  };
+  $('#checkoutVoucher').oninput=()=>{
+    appliedVoucher=null;
+    $('#voucherDiscountRow').hidden=true;
+    $('#checkoutTotal').textContent=money(subtotal);
+    $('#voucherMessage').textContent='';
+  };
+  $('#checkoutForm').onsubmit=async e=>{
+    e.preventDefault();
+    if(!e.currentTarget.reportValidity())return;
+    if(!bag.length)return viewCheckout();
+    if(!backendOnline)return $('#checkoutError').textContent='Không kết nối được máy chủ. Hãy tải lại trang hoặc thử lại sau.';
+    const formData=new FormData(e.currentTarget);
+    const name=formData.get('name');
+    const orderItems=bag.map(item=>({...item}));
+    const submit=e.currentTarget.querySelector('[type="submit"]');
+    submit.disabled=true;
+    $('#checkoutError').textContent='';
+    let order;
+    try{
+      order=await apiRequest('/api/orders',{
+        method:'POST',
+        body:JSON.stringify({
+          name,
+          phone:formData.get('phone'),
+          address:formData.get('address'),
+          note:formData.get('note'),
+          voucherCode:appliedVoucher?.code||'',
+          items:bag.map(item=>({id:item.id,size:Number(item.opt),quantity:item.qty})),
+        }),
+      });
+    }catch(error){
+      $('#checkoutError').textContent=error.message;
+      submit.disabled=false;
+      return;
+    }
+    bag.length=0;
+    saveBag();
+    renderCart();
+    app.innerHTML=`<section class="view"><div class="checkout-success">
+      <div class="checkout-success-icon">✓</div>
+      <h1>Đã ghi nhận đơn hàng</h1>
+      <p id="checkoutThanks"></p>
+      <div class="checkout-order-id"></div>
+      <div class="checkout-success-items"></div>
+      <p class="cart-summary grand"><span>Tổng cộng</span><strong></strong></p>
+      <p>Phương thức thanh toán: Thanh toán khi nhận hàng (COD).</p>
+      <p>Nhân viên sẽ cập nhật trạng thái đơn hàng sau khi xác nhận.</p>
+      <a class="hero-link" href="#collection">Tiếp tục mua sắm <span>→</span></a>
+    </div></section>`;
+    $('#checkoutThanks').textContent=`Cảm ơn ${name}, thông tin đặt hàng của bạn đã được ghi nhận.`;
+    $('.checkout-order-id').textContent=`Mã đơn: ${order.orderNumber}`;
+    $('.checkout-success-items').replaceChildren(...orderItems.map(item=>{
+      const row=document.createElement('p');
+      const description=document.createElement('span');
+      description.textContent=`${item.name} · Cỡ ${item.opt} · SL ${item.qty}`;
+      const price=document.createElement('strong');
+      price.textContent=money(item.price*item.qty);
+      row.append(description,price);
+      return row;
+    }));
+    $('.checkout-success .grand strong').textContent=moneyVnd(order.total);
+  };
+}
+function layout(){
+  const n=SHOES.length;
+  [...$('#car').children].forEach((el,i)=>{
+    let o=i-idx; if(o>n/2)o-=n; if(o<-n/2)o+=n;
+    const x=o*34, s=o===0?1.35:Math.max(.5,1-Math.abs(o)*.25), y=o===0?0:Math.abs(o)*-6-6;
+    el.style.transform=`translate(-50%,-50%) translate(${x}vw,${y}vh) scale(${s}) rotate(${o*6}deg)`;
+    el.style.opacity=Math.abs(o)>2?0:o===0?1:.7;
+    el.style.filter=o===0?'none':'blur(1.5px)';
+    el.style.zIndex=10-Math.abs(o);
+  });
+  [...$('#dots').children].forEach((d,i)=>d.classList.toggle('on',i===idx));
+  $('#shoeHero').style.backgroundColor=SHOES[idx].bg;
+  const big=$('#big'); big.style.opacity=0;
+  setTimeout(()=>{big.innerHTML=SHOES[idx].name.replace(/ (?=[^ ]+$)/,'<br>');big.style.opacity=1},180);
+}
+addEventListener('keydown',e=>{
+  if(!$('#car'))return;
+  if(e.key==='ArrowRight')$('#next').click();
+  if(e.key==='ArrowLeft')$('#prev').click();
+  if(e.key==='Enter')location.hash='#shoe/'+SHOES[idx].id;
+});
+
+// 2) Product detail ----------------------------------------------------
+function viewDetail(p){
+  let ci=0,size=null;
+  app.innerHTML=`<section class="view"><a class="back" href="#shoes">← Quay lại</a>
+  <div class="detail">
+    <div class="pic"><div id="pic"></div><div class="thumbs" id="thumbs"></div></div>
+    <div class="info">
+      <h1>${p.name}</h1><div class="price">${money(p.price)}</div>
+      <h4>Cỡ (EU)</h4>
+      <div class="sizes" id="sizes">${SIZES.map(s=>`<button>${s}</button>`).join('')}</div>
+      <button class="portal-button" id="sizeGuideToggle" type="button">Xem bảng quy đổi size</button>
+      <div id="sizeGuide" hidden></div>
+      <button class="portal-button" data-wishlist="${p.id}" aria-pressed="${wishlist.includes(p.id)}">${wishlist.includes(p.id)?'♥ Đã yêu thích':'♡ Yêu thích'}</button>
+      <button class="cta" id="add">Thêm vào giỏ</button>
+    </div></div></section>`;
+  const draw=()=>{
+    $('#pic').innerHTML=`<div class="float">${shoeEl(p,ci)}</div>`;
+    [...$('#thumbs').children].forEach((b,i)=>b.classList.toggle('on',i===ci));
+  };
+  $('#thumbs').innerHTML=p.colors.map((c,i)=>`<button>${shoeEl(p,i)}</button>`).join('');
+  [...($('#thumbs').children)].forEach((b,i)=>b.onclick=()=>{ci=i;draw()});
+  [...$('#sizes').children].forEach(b=>b.onclick=()=>{
+    [...$('#sizes').children].forEach(x=>x.classList.remove('on'));b.classList.add('on');size=b.textContent});
+  $('#add').onclick=()=>size?addToBag(p.name,size,p.price,shoeImage(p,ci)):toast('Hãy chọn size');
+  $('#sizeGuideToggle').onclick=async()=>{
+    const guide=$('#sizeGuide');
+    if(!guide.hidden){guide.hidden=true;return}
+    try{
+      const result=await apiRequest('/api/size-chart');
+      guide.innerHTML=`<div class="portal-table-wrap"><table class="portal-table"><thead><tr><th>EU</th><th>US</th><th>UK</th><th>Chiều dài chân (cm)</th></tr></thead><tbody>${result.sizes.map(item=>`<tr><td>${item.eu}</td><td>${escapeHtml(item.us)}</td><td>${escapeHtml(item.uk)}</td><td>${item.cm}</td></tr>`).join('')}</tbody></table></div>`;
+      guide.hidden=false;
+    }catch(error){toast(error.message)}
+  };
+  draw();
+}
+
+/* ===================== ROUTER ===================== */
+function route(){
+  const hash=(location.hash||'#shoes').slice(1);
+  const [path,queryString='']=hash.split('?');
+  const [r,id]=path.split('/');
+  const params=new URLSearchParams(queryString);
+  const searchQuery=params.get('q')||'';
+  $('#siteSearch').value=r==='search'?searchQuery:'';
+  $('#siteFooter').hidden=r==='shoes';
+  updateAuthLink();
+  document.querySelectorAll('[data-route]').forEach(a=>a.classList.toggle('on',a.dataset.route===r||(r==='shoe'&&a.dataset.route==='shoes')||(r==='search'&&a.dataset.route==='collection')));
+  window.scrollTo(0,0);
+  if(r==='login')return viewLogin(params.get('role')||'');
+  if(r==='register')return viewRegister();
+  if(r==='customer')return viewCustomer();
+  if(r==='admin')return viewPortal('admin',id||'orders');
+  if(r==='staff')return viewPortal('staff');
+  if(r==='checkout')return viewCheckout();
+  if(r==='search')return viewSearch(searchQuery);
+  if(r==='runner')return viewRunner();
+  if(r==='blog')return viewBlog(id?decodeURIComponent(id):'');
+  if(r==='size-chart')return viewSizeChart();
+  if(r==='support')return viewSupport();
+  if(r==='policies')return viewPolicies();
+  if(r==='collection')return viewCollection();
+  if(r==='wishlist')return viewWishlist();
+  if(r==='top-products')return viewTopProducts();
+  if(r==='loyalty')return viewLoyalty();
+  if(r==='about')return viewAbout();
+  if(r==='shoe'){
+    const shoe=SHOES.find(s=>s.id===id);
+    if(shoe)return viewDetail(shoe);
+  }
+  viewShoes();
+}
+addEventListener('hashchange',()=>{if(appReady)route()});
+async function bootStore(){
+  try{
+    const session=await apiRequest('/api/session');
+    csrfToken=session.csrfToken;
+    adoptCurrentUser(session.user);
+    backendOnline=true;
+    await refreshProducts();
+    if(currentUser?.role==='customer'){
+      try{await syncCustomerWishlist()}
+      catch(error){console.error('Không thể đồng bộ danh sách yêu thích:',error);toast(error.message)}
+    }
+  }catch(error){
+    backendOnline=false;
+    adoptCurrentUser(null);
+    console.error('Không thể kết nối máy chủ cửa hàng:',error);
+  }
+  appReady=true;
+  updateAuthLink();
+  route();
+}
+bootStore();
+
+</script>
+</body>
+</html>
